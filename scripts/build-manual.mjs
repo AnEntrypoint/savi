@@ -19,6 +19,10 @@ function escapeHtml(value) {
     .replaceAll(String.fromCharCode(39), '&#39;')
 }
 
+function rawPath(rel) {
+  return rel.split('/').map((segment) => segment === '.github' ? '_github' : segment).join('/')
+}
+
 function pageName(rel) {
   return Buffer.from(rel, 'utf8').toString('hex') + '.html'
 }
@@ -134,10 +138,10 @@ function shell(title, body, stylePath) {
 }
 
 for (const item of files) {
-  const rawTarget = path.join(site, 'raw', item.path)
+  const rawTarget = path.join(site, 'raw', rawPath(item.path))
   mkdirSync(path.dirname(rawTarget), { recursive: true })
   writeFileSync(rawTarget, item.data)
-  const rawLink = '../raw/' + item.path.split('/').map(encodeURIComponent).join('/')
+  const rawLink = '../raw/' + rawPath(item.path).split('/').map(encodeURIComponent).join('/')
   const isImage = ['.png', '.jpg', '.jpeg', '.gif', '.webp'].some((ext) => item.path.toLowerCase().endsWith(ext))
   const image = !item.text && isImage ? '<img class="direct" src="' + rawLink + '" alt="' + escapeHtml(item.path) + '">' : ''
   const fileBody = [

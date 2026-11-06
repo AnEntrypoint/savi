@@ -42,7 +42,7 @@ function collectTargets(markup) {
 const excluded = ['.spawn/reference/http/raw/', 'sources/', 'WITHHELD.json']
 for (const item of manifest.files) {
   const source = path.join(root, item.path)
-  const raw = path.join(site, 'raw', item.path)
+  const raw = path.join(site, 'raw', item.path.split('/').map((segment) => segment === '.github' ? '_github' : segment).join('/'))
   const page = path.join(site, 'files', item.page)
   if (excluded.some((prefix) => item.path.startsWith(prefix))) failures.push('excluded file published ' + item.path)
   if (!existsSync(source)) failures.push('missing source ' + item.path)
