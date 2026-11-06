@@ -1,4 +1,4 @@
-# How game-6 uses the engine (rebuilt 2026-11-05 at game 112ec46, engine b5a7587)
+# How game-6 uses the engine (rebuilt 2026-11-05 at game 112ec46, engine eb0aad2)
 
 Raw per-file analyses are in analysis-v2-*.md (and analysis-weather.md). Each one was checked against ENGINE.md and api-a/api-b/skills notes. Calls not in those notes are marked unverified.
 

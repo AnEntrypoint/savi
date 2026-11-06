@@ -53,11 +53,11 @@ lines.insert(insert_at, row + '\n')
 open(p, 'w', encoding='utf-8').write(''.join(lines))
 
 # pin-and-untracked.md: rebuild with live git data.
-count = git(['rev-list', '--count', '899b3bf..HEAD'])
+count = git(['rev-list', '--count', 'HEAD'])
 recent_lines = '\n'.join('- ' + line for line in recent[:6])
 pin = '''# Engine pin and untracked files (refreshed by update-engine-pin.py)
 
-Clone: /workspace/savi/.spawn/engine, HEAD ''' + head + ''' (''' + count + ''' commits past the original 899b3bf pin).
+Clone: /workspace/savi/.spawn/engine, HEAD ''' + head + ''' (''' + count + ''' commits in this shallow clone; the original 899b3bf pin is not present).
 
 Pin (engine.yaml, the only tracked file whose content changes between releases):
 - semver: 6.0.0

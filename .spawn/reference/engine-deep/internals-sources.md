@@ -1,6 +1,6 @@
 # Engine internals: where the source is, and what is verified
 
-Checked 2026-11-05 against engine b5a7587 and client @spawnco/client 0.2.0.
+Checked 2026-11-05 against engine eb0aad2 and client @spawnco/client 0.2.0.
 
 ## Local sources
 

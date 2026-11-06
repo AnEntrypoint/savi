@@ -12,7 +12,7 @@ These notes live at `/workspace/savi/.spawn/reference/`. `/workspace/savi` is no
 | skills-a.md | 36250 | Notes on 12 skill guides: 2d-mode, buyables, cameras, fx, game-ui, geometry, heightmap-terrain, interactive-objects, jev, leaf-sprays, mobile-controls, physics. |
 | skills-b.md | 32360 | Notes on 11 skill guides: platform-systems through voxel-terrain, plus skills.md and the engine README. |
 | world-usage.md | 12678 | How game-6 (the Savi Gallery) uses the engine: file layout, call counts, hook names, scene conventions, inconsistencies. |
-| pin-and-untracked.md | 1785 | The engine.yaml pin, recent engine commits, and the untracked keys.py and probe.sh in the engine clone. Its sha256 is the live pin; ENGINE.md section 1 repeats it. |
+| pin-and-untracked.md | 1582 | The engine.yaml pin, recent engine commits, and the untracked keys.py and probe.sh in the engine clone. Its sha256 is the live pin; ENGINE.md section 1 repeats it. |
 | README.md | this file | This index. |
 | live-probe-results.md | 15733 | Live probe results: hook order, physics, ctx.commit. |
 | internals-sources.md | 3996 | Where the engine source is and what is verified live. |
@@ -78,4 +78,5 @@ Since the API changes recorded in sections 1-4 above, the engine docs repo has k
 | f8965ed | c2b6075fef53 | pin only |
 | a2e33db | d0474735b22d | pin only |
 | 0ff0f3f | c9bc47ece59e | pin only |
-| b5a7587 | b5d10e377d04 | pin only (current) |
+| b5a7587 | b5d10e377d04 | pin only |
+| eb0aad2 | b5d10e377d04 | pin only (current) |

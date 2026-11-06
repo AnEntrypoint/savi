@@ -4,7 +4,7 @@ Entry point for the engine notes in this folder. Built from api-a.md, api-b.md, 
 
 ## 1. What the engine is and how a world uses it
 
-- Spawn engine 6.0.0 is the game runtime. A world's `.spawn/engine.yaml` pins it: `semver: 6.0.0` and an `sha256`. The live pin in the clone is `sha256: b5d10e377d047b1f2d5d303009fe45757aad4abb66fa9ab2a32951676d93b630` (HEAD `b5a7587`, "kernel b5d10e377d04", fetched 2026-11-05; earlier pins are in the README pin history). The README calls the sha256 "the engine build's sha256" and does not say what bytes it covers. (engine.yaml, git log, README)
+- Spawn engine 6.0.0 is the game runtime. A world's `.spawn/engine.yaml` pins it: `semver: 6.0.0` and an `sha256`. The live pin in the clone is `sha256: b5d10e377d047b1f2d5d303009fe45757aad4abb66fa9ab2a32951676d93b630` (HEAD `eb0aad2`, "kernel b5d10e377d04", fetched 2026-11-05; earlier pins are in the README pin history). The README calls the sha256 "the engine build's sha256" and does not say what bytes it covers. (engine.yaml, git log, README)
 - The engine clone is read-only docs published by Spawn CI. The runtime worker (kernel) is cached and SRI-verified by the room host at /tmp/spawn-room-host-engine-cache-1000/; see kernel-worker.md. A 6.0 world clones it shallow with `git clone --depth 1 <url> .spawn/engine`, which is gitignored by the world's `.gitignore`. The docs do not write the URL out. (README, skills/spawn-engine.md)
 - Clone contents: `api-reference.md` (the supported game API, 2277 lines, 68 `##` headings), `skills/<id>.md` (23 guides), `skills.md` (index), `engine.yaml`, `README.md`.
 - Units and frames: meters, Y up, negative Z forward. Rotations are degrees unless a field says otherwise. Hook `dt` is seconds. `ctx.now()` is milliseconds on the world clock. Yaw 0 faces -Z. (api-a, preamble; api-b, builtin/vec3)
@@ -389,7 +389,7 @@ Each recipe names the skill that covers it. Read the skill whole before building
 - Fields: bulk field read is not a save; dug ground keeps by default. A material's weight adds to natural ground. (heightmap-terrain)
 
 ### 6.2 Inconsistencies between the notes and the docs
-1. Pin: `pin-and-untracked.md` and the clone engine.yaml now agree: `sha256: b5d10e377d04...` with HEAD `b5a7587`. The sha256 prefix matches the kernel prefix in each commit subject (observed). Whether "kernel" and "engine build" are the same artifact is inferred from the matching prefix.
+1. Pin: `pin-and-untracked.md` and the clone engine.yaml now agree: `sha256: b5d10e377d04...` with HEAD `eb0aad2`. The sha256 prefix matches the kernel prefix in each commit subject (observed). Whether "kernel" and "engine build" are the same artifact is inferred from the matching prefix.
 2. `api-reference.md` is present in the clone (`.spawn/engine/api-reference.md`, 116.8K, 68 `##` headings). Notes in `skills-b.md` (gaps) and `README.md` say it is not in the clone; that is wrong. The notes' line counts (2277 lines) match the file.
 3. Texture default: `heightmap-terrain.md` says `textureScale` default 2.5 m per tile; api-b `StandardMaterialSpec` says default 1 meter per tile under `wrap: "repeat"`. The two scopes may differ (terrain material vs object material); not resolved by the docs.
 4. Art path form: `scripts/buyables/*.js` and `scripts/ex/car77-gate.js` use `/cdn/...` (leading slash, observed); `places/main/config.yaml` and cell rows use `cdn/texture-...` (no slash, observed). The engine docs write `cdn/...` throughout (api-b, Asset fields in api-a). The resolver's handling of the leading slash is not stated.
