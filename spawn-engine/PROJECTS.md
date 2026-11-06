@@ -1,3 +1,5 @@
+> Correction (FEED_SCOPE.md): this file covers only the first feed block (22 rows, all engine 6.0.0). The feed holds 3421 projects across 66 engine versions. Read FEED_SCOPE.md and data/feed-projects.json for the full list.
+
 # Spawn projects in the public feed
 
 Source: GET https://www.spawn.co/api/feed (anonymous, 200). [verified]

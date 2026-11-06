@@ -64,3 +64,19 @@ So the no-query pointer moved between two reads, and the world query currently r
 | GET /api/agent/v1/worlds | lists both | (not applicable: only ours) |
 
 Conclusion: the engine manifest is queryable for every project by world id (the redirect is the same for all), but the per-world manifest and docs are only readable for worlds we stand on. Other projects' file lists are not reachable with our token. See PROJECTS.md and FAULTS.md.
+
+## Update: the redirect moved again, and it ignores the world's engine [verified]
+
+Client manifest pointer, read later in the session (GET /api/client/manifest, with or without ?world=):
+
+| Read | Target hash | Differs from the earlier build in |
+|---|---|---|
+| early, no query | e8641edd3e95e30ff487e8423fb41dff | (baseline) |
+| middle, no query and ?world= | b7a5a3451fe996f116985ac743c91eae | browser-client.mjs |
+| latest, no query and ?world= | e66271e15431f09c7eaa8f46eafcd5d8 | main.mjs and browser-client.mjs |
+
+The latest build's files: spawn.mjs, session-lib.mjs, main.mjs, browser-client.mjs, each sha256-SRI, bun floor 1.4.0. [verified]
+
+Engine independence: the ?world= redirect was checked on one world per engine version (16 picks: 6.0.0, 5.2.40, 5.2.39, 5.1.5, 5.2.34, 5.2.38, 5.2.21, 5.2.3, 5.2.32, 0.1.0, 5.2.6, 5.2.11, 5.2.13, 5.0.0, 5.1.8, 5.2.33). All 16 answered the same latest hash, e66271e15431f09c7eaa8f46eafcd5d8. So the redirect is one current pointer, not one manifest per engine. [verified]
+
+Correction to section 1 above: "the same for every world on one engine" held only for the 6.0.0 worlds I had, and the feed has 66 engine versions (FEED_SCOPE.md). The redirect does not tell us an engine's own build; that would need the world's docs door, which answers 403 for worlds we do not stand on. [verified]

@@ -1,3 +1,5 @@
+> Correction (FEED_SCOPE.md): this inventory covers only the 22 first-block projects. The feed holds 3421 projects; they are not inventoried here.
+
 # Asset inventory of the public project pages
 
 Method: GET https://www.spawn.co/@<owner>/<slug> for the 22 feed projects (slug = games.adventure_name; two of them, world-of-spawncraft-2 and game-8, differ from their feed names but their page titles match the feed names). All 22 answered 200. [verified]
