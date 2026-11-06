@@ -10,7 +10,7 @@ const skipPrefixes = ['.spawn/reference/http/raw/']
 const skipFiles = new Set(['ENDPOINTS.md'])
 const groups = [
   { key: 'listed', title: 'Listed in the published spec' },
-  { key: 'per-game', title: 'Per-game (listed; 404 means this game has no kit)' },
+  { key: 'per-game', title: 'Listed with a per-game or per-world id (404 can mean no such game, world or room)' },
   { key: 'partial', title: 'Listed but disabled or partial (its children are listed)' },
   { key: 'absent', title: 'Not in the published spec' }
 ]
@@ -20,12 +20,19 @@ export function loadSpecPaths() {
   return new Set(Object.keys(spec.paths || {}))
 }
 
+const uuid = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g
+
 export function normalize(raw) {
-  const cleaned = raw.replace(/[.,;:)\]'"`]+$/, '')
+  const cleaned = raw.replace(/[.,;:)\]'"`/]+$/, '').replace(uuid, '{id}')
   const opens = (cleaned.match(/\{/g) || []).length
   const closes = (cleaned.match(/\}/g) || []).length
   if (opens !== closes || /[<>]/.test(cleaned) || cleaned.length < 6) return null
   return cleaned
+}
+
+function patternRegex(pattern, tail = '') {
+  const body = pattern.split(/(\{[^}]+\})/).map((part) => /^\{[^}]+\}$/.test(part) ? '[^/]+' : part.replace(/[.*+?^$()|[\]\\]/g, '\\$&')).join('')
+  return new RegExp('^' + body + tail + '$')
 }
 
 function walk(dir, root, out) {
@@ -56,8 +63,9 @@ export function namedEndpoints(root) {
 }
 
 export function classify(endpoint, specPaths) {
-  if (specPaths.has(endpoint)) return endpoint.includes('{appId}') ? 'per-game' : 'listed'
-  const hasChildren = [...specPaths].some((known) => known.startsWith(endpoint + '/'))
+  const listed = [...specPaths].some((known) => patternRegex(known).test(endpoint))
+  if (listed) return endpoint.includes('{') ? 'per-game' : 'listed'
+  const hasChildren = [...specPaths].some((known) => patternRegex(endpoint, '/.*').test(known))
   return hasChildren ? 'partial' : 'absent'
 }
 
