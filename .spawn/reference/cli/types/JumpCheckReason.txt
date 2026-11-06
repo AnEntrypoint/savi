@@ -1,0 +1,1 @@
+JumpCheckReason = "rise_exceeds_apex" | "run_exceeds_reach" | "no_floor_at_from" | "no_floor_at_to" | "terrain_unloaded"

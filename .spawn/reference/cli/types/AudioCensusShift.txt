@@ -1,0 +1,5 @@
+AudioCensusShift = {
+  entityId: string
+  music: { clip: string; volume: number } | null
+  ambience: { clip: string; volume: number } | null
+}

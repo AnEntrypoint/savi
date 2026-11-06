@@ -1,0 +1,27 @@
+CompiledBehavior = {
+  onSpawn?: (ctx: ObjectAPI) => void
+  onDestroy?: (ctx: ObjectAPI) => void
+  update?: (ctx: ObjectAPI, dt: number) => void
+  lateUpdate?: (ctx: ObjectAPI, dt: number) => void
+  updateSchedule?: UpdateSchedule
+  ears?: TomeEars
+  onInput?: (ctx: ObjectAPI, input: InputState) => void
+  onInteract?: (ctx: ObjectAPI, other: ObjectQueryResult) => void
+  onCollide?: (ctx: ObjectAPI, other: ObjectQueryResult, contact: Contact) => void
+  onTriggerEnter?: (ctx: ObjectAPI, other: ObjectQueryResult) => void
+  onTriggerExit?: (ctx: ObjectAPI, other: ObjectQueryResult) => void
+  onCross?: (ctx: ObjectAPI, other: ObjectQueryResult, outcome: Extract<CrossOutcome, { crossed: true | "departing" }>) => void
+  onRefuse?: (ctx: ObjectAPI, other: ObjectQueryResult, verdict: CrossVerdict) => void
+  onLiquidEnter?: (ctx: ObjectAPI, other: ObjectQueryResult & { liquidKind?: string; markKind?: string }) => void
+  onLiquidExit?: (ctx: ObjectAPI, other: ObjectQueryResult & { liquidKind?: string; markKind?: string }) => void
+  onNoise?: (ctx: ObjectAPI, noise: NoiseEvent) => void
+  onSay?: (ctx: ObjectAPI, line: SaidLine) => void
+  onSoundEnd?: (ctx: ObjectAPI, sound: SoundEndEvent) => void
+  onAnimationEvent?: (ctx: ObjectAPI, event: AnimationFrameEvent) => void
+  onJointBreak?: (ctx: ObjectAPI, other: ObjectQueryResult, info: JointBreakEvent) => void
+  onOutOfBounds?: (ctx: ObjectAPI, event: OutOfBoundsEvent) => boolean | void
+  onControlBegin?: (ctx: ObjectAPI, player: ObjectQueryResult) => boolean | void
+  onControlEnd?: (ctx: ObjectAPI, player: ObjectQueryResult) => void
+  editor?: (ctx: ObjectAPI, obj: ObjectView) => void
+  visual?: (ctx: ObjectAPI, obj: ObjectView) => GodModeVisualSpec | void
+}

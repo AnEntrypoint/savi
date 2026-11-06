@@ -1,0 +1,6 @@
+OutOfBoundsEvent = {
+  bottom: number
+  position: Vec3
+  placeId: string
+  respawnPoint: Vec3
+}

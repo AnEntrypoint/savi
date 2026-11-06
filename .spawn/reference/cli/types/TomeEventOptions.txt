@@ -1,0 +1,4 @@
+TomeEventOptions = {
+  place?: string
+  once?: boolean
+}

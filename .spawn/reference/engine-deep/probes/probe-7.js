@@ -1,0 +1,20 @@
+
+const out = {};
+const t0 = ctx.now();
+out.worldAssets = Object.keys(ctx.world.assets || {}).length;
+out.assetSample = Object.keys(ctx.world.assets || {}).slice(0, 8);
+out.placeWorldBounds = ctx.place.worldBounds ?? null;
+out.placeDefaultSpawn = ctx.place.defaultSpawnPoint ?? null;
+out.placeMode = ctx.place.mode ?? null;
+out.placeMaterialKeys = Object.keys(ctx.place.material || {}).slice(0, 10);
+out.placeLightingKeys = Object.keys(ctx.place.lighting || {}).slice(0, 10);
+out.placeTerrainKind = ctx.place.terrain ? Object.keys(ctx.place.terrain).slice(0, 12) : null;
+out.heightAt0 = ctx.getTerrainHeight ? ctx.getTerrainHeight(0, 0) : 'n/a';
+out.heightAtSpawnRing = [[10,0],[0,10],[-40,-270]].map(([x,z]) => ctx.getTerrainHeight(x, z));
+out.fieldNames = ctx.place.fields ? Object.keys(ctx.place.fields) : null;
+out.qualityNow = ctx.quality;
+out.sessionKeys = Object.keys(ctx.session || {});
+out.totalObjects = ctx.query({}).length;
+out.tagsTop = Object.entries(ctx.query({}).reduce((m, o) => { for (const t of (o.tags || [])) m[t] = (m[t] || 0) + 1; return m; }, {})).sort((a,b)=>b[1]-a[1]).slice(0, 12);
+out.t0 = t0; out.t1 = ctx.now();
+return out;

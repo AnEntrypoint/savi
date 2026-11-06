@@ -1,0 +1,7 @@
+MusicNowInfo = {
+  ref: string | null
+  layer: string | null
+  positionMs: number
+  since: number
+  layers: Record<string, MusicNowEntry>
+}

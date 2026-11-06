@@ -1,0 +1,6 @@
+AudioCensusEmitter = {
+  entityId: string
+  ref: string
+  bus: string
+  spatial: boolean
+}

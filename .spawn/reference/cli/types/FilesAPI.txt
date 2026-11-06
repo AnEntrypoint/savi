@@ -1,0 +1,5 @@
+FilesAPI = {
+  read(path: string): string | null
+  write(path: string, text: string): void
+  delete(path: string): void
+}

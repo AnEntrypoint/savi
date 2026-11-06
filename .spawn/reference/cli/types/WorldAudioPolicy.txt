@@ -1,0 +1,5 @@
+WorldAudioPolicy = {
+  gains?: Partial<Record<Bus, number>>
+  maxVoices?: number
+  cullBeyond?: number
+}

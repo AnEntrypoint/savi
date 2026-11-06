@@ -1,0 +1,33 @@
+SelfScopeHandle = {
+  id: string
+  objectId: string
+  arrival: ArrivalFact
+  worldFeetPosition: Vec3
+  worldRotation: {
+    x: number
+    y: number
+    z: number
+    w: number
+    yaw: number
+    pitch: number
+    roll: number
+  }
+  state: Record<string, unknown>
+  session: Record<string, unknown>
+  anim: Record<string, unknown>
+  velocity: Vec3
+  angularVelocity: Vec3
+  externalVelocity: Vec3
+  forces: Record<string, ForceEntrySpec | null | undefined>
+  controller: string | null
+  grounded: boolean
+  touching: { readonly wallLeft: boolean; readonly wallRight: boolean; readonly ceiling: boolean }
+  liquid: { readonly in: boolean; readonly level: number | null }
+  overlapping: string[]
+  joints: Record<string, Record<string, unknown> | undefined> & Iterable<Record<string, unknown>>
+  ragdoll: Record<string, unknown> | boolean | null
+  audio: (Record<string, unknown> & { readonly params: Record<string, unknown>; readonly level: number; readonly readout: unknown }) | null
+  faded: Record<string, number | { opacity: number; fade: number }> | undefined
+  hidden: string[] | undefined
+  [key: string]: unknown
+}

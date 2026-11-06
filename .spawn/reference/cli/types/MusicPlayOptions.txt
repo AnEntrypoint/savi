@@ -1,0 +1,6 @@
+MusicPlayOptions = {
+  fade?: number
+  loop?: boolean
+  layer?: string
+  volume?: number
+}

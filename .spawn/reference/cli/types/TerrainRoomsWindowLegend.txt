@@ -1,0 +1,12 @@
+TerrainRoomsWindowLegend = {
+  type: "window"
+  width: number
+  height: number
+  sill?: number
+  frame?: { depth: number; albedo: string }
+  glass?: { albedo: string; collides?: boolean }
+  orientation?: "auto" | "ns" | "ew"
+  state?: TomeState
+  behavior?: BehaviorRef
+  tags?: string[]
+}

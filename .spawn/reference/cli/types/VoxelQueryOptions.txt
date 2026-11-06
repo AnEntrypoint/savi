@@ -1,0 +1,6 @@
+VoxelQueryOptions = {
+  tag: string
+  radius: number
+  center?: Vec3
+  place?: string
+}

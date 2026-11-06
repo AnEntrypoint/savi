@@ -1,0 +1,10 @@
+WispSpec = {
+  color: string
+  state?: "unlit" | "idle" | "weaving" | "settling" | "guttering" | "sleeping"
+  expression?: "auto" | "curious" | "happy" | "sleepy"
+  shape?: "classic" | "slender" | "twin"
+  burnStyle?: "calm" | "crackle" | "pulse" | "wave"
+  seed?: number
+  size?: number
+  mouth?: number
+}

@@ -1,0 +1,8 @@
+CrossingScopeQueryOptions = {
+  scope: "crossings"
+  since?: number
+  state?: CrossingTerminalState | readonly CrossingTerminalState[]
+  world?: string
+  entityId?: string
+  actorId?: string
+}

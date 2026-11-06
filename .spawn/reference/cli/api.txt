@@ -1,0 +1,6 @@
+spawn api [<Type> [<kind> …]] [--engine <semver>] [--origin <site>]
+                                           a spec type's shape, as a room's spawn api prints it: every key
+                                           typed, a union's members inline. No type lists every row; a kind
+                                           prints one member (spawn api PrimitiveSpec box); <Type>.<key> one
+                                           key (spawn api TerrainDef.marks). Inside a clone it reads the
+                                           world's engine (.spawn/engine.yaml), else --engine, else the newest

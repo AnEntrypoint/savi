@@ -1,0 +1,6 @@
+TerrainRoomsSpawnLegend = {
+  type: "spawn"
+  albedo: string
+  normal?: string
+  roughness?: string
+}

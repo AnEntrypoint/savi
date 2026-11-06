@@ -1,0 +1,23 @@
+JumpCheckResult = {
+  reachable: boolean
+  reason?: JumpCheckReason
+  floorFrom: JumpCheckFloor | null
+  floorTo: JumpCheckFloor | null
+  rise?: number
+  run: number
+  apex: number
+  maxRun?: number
+  time?: number
+  approximate: string[]
+  exact?: string
+  mover?: JumpCheckMover
+  params: {
+    speed: number
+    jumpSpeed: number
+    gravity: number
+    capsuleRadius: number
+    capsuleHeight: number
+    maxStep: number
+    body: string | null
+  }
+}

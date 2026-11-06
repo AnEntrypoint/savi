@@ -1,0 +1,1 @@
+TraverseCheckBlockReason = "riser_exceeds_autostep" | "slope_exceeds_max" | "gap" | "ceiling" | "destination_below_floor" | "terrain_unloaded"

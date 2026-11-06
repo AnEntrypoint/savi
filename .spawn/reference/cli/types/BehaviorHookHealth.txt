@@ -1,0 +1,9 @@
+BehaviorHookHealth = {
+  hook: string
+  script: string
+  error: string
+  line?: string
+  tick: number
+  running: "inert" | "running"
+  count?: number
+}

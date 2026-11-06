@@ -1,0 +1,10 @@
+PathSpec = {
+  mode?: "tube"
+  points?: SplinePointSpec[]
+  beziers?: CubicBezierSpec[]
+  radius?: number
+  closed?: boolean
+  samples?: number | "auto"
+  up?: [number, number, number]
+  revision?: number
+}

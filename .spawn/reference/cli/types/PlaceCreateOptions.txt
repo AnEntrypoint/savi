@@ -1,0 +1,3 @@
+PlaceCreateOptions = PlaceDef & {
+  persistence: PlacePersistence
+}

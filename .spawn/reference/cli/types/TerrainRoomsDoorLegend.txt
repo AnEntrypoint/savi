@@ -1,0 +1,11 @@
+TerrainRoomsDoorLegend = {
+  type: "door"
+  width: number
+  height: number
+  albedo: string
+  frame?: { depth: number; albedo: string }
+  orientation?: "auto" | "ns" | "ew"
+  state?: TomeState
+  behavior?: BehaviorRef
+  tags?: string[]
+}

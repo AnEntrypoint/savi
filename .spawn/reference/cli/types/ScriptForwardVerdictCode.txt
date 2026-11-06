@@ -1,0 +1,1 @@
+ScriptForwardVerdictCode = "fence_void_presend_hidden" | "fence_void_no_ack" | "fence_void_ack_hidden" | "no_client" | "room_suspended" | "forward_timeout" | "forward_timeout_suspended" | "forward_timeout_never_sent" | "connection_closed"

@@ -1,0 +1,1 @@
+UnionSolidBlockReason = "not_found" | "not_a_box" | "rotated" | "degenerate" | "has_children" | "has_parent" | "has_behavior" | "unsupported_physics" | "unsupported_material" | "mixed_material_keys" | "mixed_places" | "mixed_audiences"

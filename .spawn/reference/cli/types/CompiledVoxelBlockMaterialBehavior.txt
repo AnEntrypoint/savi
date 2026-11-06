@@ -1,0 +1,9 @@
+CompiledVoxelBlockMaterialBehavior = {
+  ref: string
+  randomTick: boolean
+  scheduledTick: boolean
+  neighborChanged: boolean
+  stateCodec?: StateCodec
+  shapeTable?: CompiledShapeTable
+  hooks: CompiledVoxelBlockBehavior
+}

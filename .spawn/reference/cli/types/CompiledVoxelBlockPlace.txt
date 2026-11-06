@@ -1,0 +1,7 @@
+CompiledVoxelBlockPlace = {
+  randomTicksPerChunk: number
+  maxScheduledTicksPerTick: number
+  materials: Map<string, CompiledVoxelBlockMaterialBehavior>
+  materialTags: Map<string, readonly string[]>
+  tagToMaterials: Map<string, ReadonlySet<string>>
+}

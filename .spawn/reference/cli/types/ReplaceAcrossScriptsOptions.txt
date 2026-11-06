@@ -1,0 +1,7 @@
+ReplaceAcrossScriptsOptions = {
+  regex?: boolean
+  caseSensitive?: boolean
+  includeScripts?: string | string[]
+  excludeScripts?: string | string[]
+  dryRun?: boolean
+}

@@ -1,0 +1,5 @@
+VoxelMarkFillOptions = {
+  color?: Color
+  opacity?: number = 0.14
+  inset?: number = 0.08
+}

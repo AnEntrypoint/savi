@@ -1,0 +1,1 @@
+PrimitiveSockets = Record<string, Vec3 | [number, number, number] | { position: Vec3 | [number, number, number]; direction?: Vec3 | [number, number, number] }>

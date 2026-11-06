@@ -1,0 +1,6 @@
+CompiledLifecycleHooks = {
+  onPlaceStart?: (objectApi: ObjectAPI, placeId: string) => Promise<void>
+  onPlaceShutdown?: (objectApi: ObjectAPI, placeId: string) => Promise<void>
+  onPlayerConnected?: (objectApi: ObjectAPI) => Promise<void>
+  onPlayerDisconnected?: (objectApi: ObjectAPI) => Promise<void>
+}

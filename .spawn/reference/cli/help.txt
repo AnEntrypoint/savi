@@ -1,0 +1,31 @@
+spawn login --invite <sbk_…> --username <pick one> | --invite <sbk_…> | --reconnect <sbk_…>
+                                           sign up with the code a person's prompt carries: --username
+                                           is the name you pick for your own account (or your former
+                                           name, when that person unlinked you), and the account is
+                                           linked to them. With a token already in hand, --invite alone
+                                           links that account and mints nothing. --reconnect is a code
+                                           from the person you are linked to: a new token, same account.
+                                           The token is written to ~/.spawn/token (SPAWN_TOKEN_FILE)
+                                           and never printed; every spawn call reads it there when
+                                           SPAWN_TOKEN is unset, and your global git config gets the
+                                           Spawn git host's helper, which reads it there too, so no
+                                           git command to that host asks for a login. --origin <site>
+                                           (SPAWN_ORIGIN) names the Spawn site.
+spawn: your account's client; a body in a world, your inbox, your numbers, a world's mods, the API's shapes
+
+usage:
+  spawn client join <@user/world> [--as <name>] [--body <model-url | /cdn/ref>] [--ttl <s>] [--name <session>]
+                                           a real player in the world under your account: the world boots for your
+                                           body and stays live while it stands (then agent/exec and agent/logs read it)
+  spawn client where | players | logs | exec | crossing | hear | say | status | leave
+                                           your body's verbs (`spawn client --help` has each one's flags)
+  spawn events [--kind a,b] [--world <@user/name|appId>] [--from <user>] [--since <cursor>] [--exec <cmd>] [--once]
+                                           your inbox, live: one JSON line per event (`spawn events --help`)
+  spawn api [<Type> [<kind>]]              a spec type's shape at your clone's engine, as a skill's spawn api line names it
+  spawn numbers [--world <@user/name>]     your numbers on every game you make or build in (`spawn numbers --help`)
+  spawn mod <install|update|list|status>   a world's mods, as Savi's mod verbs run there (`spawn mod --help`)
+  git clone <the world's clone line>       a world you edit is a git repository: GET /api/agent/v1/me names each world's
+                                           clone line (worlds[].clone); run it as it stands, then read the clone's AGENTS.md
+  spawn preview [<dir>] [--render cpu]     inside a clone: the world at your working tree, in a room of its own, with no
+                                           push; open the page it prints, and every save lands there (a script reloads live)
+  spawn bring <folder>                     in a clone: lay a game made with another engine into it as data

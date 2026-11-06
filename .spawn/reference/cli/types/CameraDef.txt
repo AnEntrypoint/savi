@@ -1,0 +1,3 @@
+CameraDef =
+  | { kind: "custom"; state?: TomeCameraState; orientation?: CameraOrientationDef; sensitivity?: number = 3; minPitch?: number; maxPitch?: number; pointerLock?: boolean | "drag" | { drag: "left" | "right" | "middle" } | { unadjustedMovement: boolean }; hideLocalPlayer?: boolean } & CameraCommon
+  | { kind?: undefined; state?: TomeCameraState; pointerLock?: boolean | "drag" | { drag: "left" | "right" | "middle" } | { unadjustedMovement: boolean }; hideLocalPlayer?: boolean } & CameraCommon

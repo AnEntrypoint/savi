@@ -1,0 +1,1 @@
+AnimationKeyframeValue = number | string | number[] | string[] | { value: number | string; duration?: number; easing?: string }[]

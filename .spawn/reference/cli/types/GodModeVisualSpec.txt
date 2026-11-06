@@ -1,0 +1,4 @@
+GodModeVisualSpec = ObjectProperties & {
+  children?: ObjectSpec[]
+  tags?: string[]
+}

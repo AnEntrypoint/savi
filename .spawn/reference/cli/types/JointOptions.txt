@@ -1,0 +1,15 @@
+JointOptions = {
+  anchor?: Vec3
+  targetAnchor?: Vec3
+  axis?: Vec3
+  limits?: [number, number] | { cone?: number; twist?: [number, number] }
+  motor?: { velocity: number; maxForce: number }
+  target?: number | { x: number; y: number; z: number; w: number }
+  strength?: number
+  restLength?: number
+  stiffness?: number
+  damping?: number
+  contactsEnabled?: boolean
+  breakForce?: number
+  breakTorque?: number
+}

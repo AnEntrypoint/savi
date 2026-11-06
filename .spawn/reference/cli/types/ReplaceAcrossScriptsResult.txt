@@ -1,0 +1,3 @@
+ReplaceAcrossScriptsResult =
+  | { ok: false; error: string }
+  | { ok: true; dryRun: boolean; applied: boolean; totalMatches: number; scriptsSearched: number; scriptsChanged: number; files: ReplaceAcrossScriptsFileReport[]; changes: ReplaceAcrossScriptsChange[] }

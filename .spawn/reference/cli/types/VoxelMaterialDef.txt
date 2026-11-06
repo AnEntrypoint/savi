@@ -1,0 +1,24 @@
+VoxelMaterialDef = {
+  color?: Color
+  texture?: string
+  pbr?: boolean
+  roughness?: number
+  metalness?: number
+  opacity?: number
+  transparent?: boolean
+  emissive?: Color
+  emissiveIntensity?: number
+  liquidKind?: string
+  surfaceInset?: number
+  solid?: boolean
+  cutout?: boolean
+  collision?: "solid" | "none"
+  countsAsTerrainSurface?: boolean
+  wind?: { force?: number }
+  waveIntensity?: number
+  tags?: string[]
+  blockBehavior?: VoxelMaterialBlockBehaviorDef
+  tones?: string[]
+  pattern?: Record<string, unknown>
+  growth?: Array<Record<string, unknown>>
+}

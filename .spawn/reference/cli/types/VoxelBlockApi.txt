@@ -1,0 +1,17 @@
+VoxelBlockApi = {
+  placeId: string
+  x: number
+  y: number
+  z: number
+  tick: number
+  materialId: string
+  state: Record<string, number>
+  get(dx?: number, dy?: number, dz?: number): { materialId: string; state: Record<string, number> } | null
+  set(materialId: string | null, state?: number | Record<string, number>, dx?: number, dy?: number, dz?: number): boolean
+  setState(partial: Record<string, number>, dx?: number, dy?: number, dz?: number): boolean
+  break(dx?: number, dy?: number, dz?: number): boolean
+  isSolid(dx?: number, dy?: number, dz?: number): boolean
+  schedule(delayTicks: number, dx?: number, dy?: number, dz?: number): void
+  random(): number
+  spawn(def?: ObjectSpec): string | null
+}

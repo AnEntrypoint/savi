@@ -1,0 +1,5 @@
+PresenceRow = {
+  userId: string
+  world: string | null | undefined
+  room: string | null | undefined
+}

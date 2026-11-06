@@ -1,0 +1,7 @@
+JointBreakEvent = {
+  jointId: string
+  type: JointType
+  cause: "force" | "torque" | "force-and-torque"
+  force: number
+  torque: number
+}

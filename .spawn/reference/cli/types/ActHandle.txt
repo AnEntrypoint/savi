@@ -1,0 +1,1 @@
+ActHandle = K extends "playSound" | "fx" ? string : void

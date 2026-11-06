@@ -1,0 +1,4 @@
+VoxelFillOptions = {
+  state?: number
+  place?: string
+}

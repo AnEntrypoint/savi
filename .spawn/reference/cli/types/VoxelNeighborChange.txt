@@ -1,0 +1,6 @@
+VoxelNeighborChange = {
+  dx: number
+  dy: number
+  dz: number
+  materialId: string | null
+}

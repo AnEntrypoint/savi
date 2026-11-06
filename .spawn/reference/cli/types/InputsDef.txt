@@ -1,0 +1,11 @@
+InputsDef = {
+  axes?: Record<string, InputAxisDef>
+  actions?: Record<string, InputActionDef>
+  touch?: {
+    enabled?: boolean
+    surfaces?: Record<string, TouchSurfaceDef>
+    active?: ScriptRef
+    style?: string
+  }
+  reservedAxisAliasesReported?: string[]
+}

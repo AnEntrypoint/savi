@@ -1,0 +1,6 @@
+TraverseCheckOptions = {
+  place?: string
+  body?: string
+  includeDynamicBodies?: boolean
+  ignoreEntities?: string[]
+}

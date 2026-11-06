@@ -1,0 +1,5 @@
+Contact = {
+  position?: Vec3
+  normal?: Vec3
+  impulse: number
+}

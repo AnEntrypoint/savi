@@ -1,0 +1,9 @@
+SaidLine = {
+  text: string
+  scope: string
+  by: PlayerQueryResult
+  kind: string
+  at: number
+  nonce: string
+  picture?: SharedPicture
+}

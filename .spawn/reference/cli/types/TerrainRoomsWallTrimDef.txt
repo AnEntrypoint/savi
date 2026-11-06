@@ -1,0 +1,5 @@
+TerrainRoomsWallTrimDef = {
+  height: number
+  depth: number
+  albedo: string
+}

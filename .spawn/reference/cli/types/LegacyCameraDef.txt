@@ -1,0 +1,6 @@
+LegacyCameraDef = CameraCommon & {
+  kind?: undefined
+  state?: TomeCameraState
+  pointerLock?: boolean | "drag" | { drag: "left" | "right" | "middle" } | { unadjustedMovement: boolean }
+  hideLocalPlayer?: boolean
+}

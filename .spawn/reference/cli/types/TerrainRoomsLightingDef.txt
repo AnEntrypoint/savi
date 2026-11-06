@@ -1,0 +1,11 @@
+TerrainRoomsLightingDef = {
+  enabled?: boolean
+  color?: Color
+  intensity?: number
+  range?: number
+  height?: number
+  perRoom?: boolean
+  kind?: "point" | "spot"
+  angle?: number
+  penumbra?: number
+}

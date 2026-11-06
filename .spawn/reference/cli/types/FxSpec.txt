@@ -1,0 +1,7 @@
+FxSpec = {
+  script: ScriptRef
+  params?: Record<string, unknown>
+  seed?: number
+  paused?: boolean
+  enabled?: boolean
+}

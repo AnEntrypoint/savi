@@ -1,0 +1,5 @@
+CompiledCameraBehavior = {
+  update?: (api: CameraAPI, dt: number) => void
+  onInput?: (api: CameraAPI, input: InputState) => void
+  onDestroy?: (api: CameraAPI) => void
+}

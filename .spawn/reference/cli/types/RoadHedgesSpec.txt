@@ -1,0 +1,7 @@
+RoadHedgesSpec = {
+  sides?: RoadsideFeatureSides
+  width?: number
+  height?: number
+  gap?: number
+  style?: "trimmed" | "wild"
+}

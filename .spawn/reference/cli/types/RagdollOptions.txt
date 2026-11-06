@@ -1,0 +1,6 @@
+RagdollOptions = {
+  impulse?: Vec3 | [number, number, number]
+  settleFreeze?: boolean
+  settleSeconds?: number
+  blendSeconds?: number
+}

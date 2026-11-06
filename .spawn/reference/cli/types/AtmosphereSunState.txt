@@ -1,0 +1,7 @@
+AtmosphereSunState = {
+  direction: [number, number, number]
+  rotation: { pitch: number; yaw: number }
+  color: number
+  intensity: number
+  body: "sun" | "moon"
+}

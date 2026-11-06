@@ -1,0 +1,19 @@
+RaycastOptions = {
+  distance?: number
+  radius?: number
+  shape?: { sphere: number } | { capsule: { radius: number; height: number } } | { box: { halfExtents: Vec3 } }
+  ignoreEntities?: string[]
+  tags?: string[]
+  anyTags?: string[]
+  excludeTags?: string[]
+  bodies?: "static" | "dynamic" | "all"
+  minSize?: number
+  ignoreSelf?: boolean
+  includeSensors?: boolean
+  physicsOnly?: boolean
+  visuals?: boolean
+  place?: string
+  verdict?: boolean
+  through?: number
+  hits?: "colliders" | "geometry" | "both"
+}

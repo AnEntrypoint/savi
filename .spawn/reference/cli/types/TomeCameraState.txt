@@ -1,0 +1,4 @@
+TomeCameraState = Record<string, unknown> & {
+  orthoSize?: number
+  orthoSqueeze?: number
+}

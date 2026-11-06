@@ -1,0 +1,9 @@
+TerrainRoomsFloorLegend = {
+  type: "floor"
+  albedo: string
+  normal?: string
+  roughness?: string
+  height?: number
+  descent?: "wall" | "ramp"
+  ceiling?: boolean
+}

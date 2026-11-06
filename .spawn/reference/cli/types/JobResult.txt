@@ -1,0 +1,6 @@
+JobResult = {
+  ok: boolean
+  data?: T
+  error?: JobError
+  durationMs: number
+}

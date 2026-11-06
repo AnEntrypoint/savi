@@ -1,0 +1,5 @@
+CameraOverrideOptions = {
+  audience?: Audience
+  mode?: "merge" | "replace"
+  persist?: boolean
+}

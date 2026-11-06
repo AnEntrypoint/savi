@@ -1,0 +1,1 @@
+ObjectAudience = "local" | "near" | "all"

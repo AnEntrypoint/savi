@@ -1,0 +1,4 @@
+TerrainVoxelBlockTicksDef = {
+  randomTicksPerChunk?: number
+  maxScheduledTicksPerTick?: number
+}

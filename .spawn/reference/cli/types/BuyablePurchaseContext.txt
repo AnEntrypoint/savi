@@ -1,0 +1,10 @@
+BuyablePurchaseContext = {
+  requestId: string
+  transactionId: string
+  buyableId: string
+  buyerEntityId: string
+  buyerUserId?: string
+  variantId: string
+  priceSpoins: number
+  claimedAtMs: number
+}

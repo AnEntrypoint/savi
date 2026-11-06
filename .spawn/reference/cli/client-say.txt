@@ -1,0 +1,125 @@
+spawn client: your body in the game. It floats to what you build on its own (far away, it rifts); its page is a Chromium tab you PLAY the game through
+
+  join [<@user/world>] [--as <name>] [--body <model-url | /cdn/ref>] [--outfit-json <path-or-inline>]
+       [--ttl <s>] [--ready-timeout <ms>] [--name <session>] [--room <name>]
+       [--tester <n>]                            (a player of yours in a real browser on the GPU box, with
+                                                   Spawn's rail: a tester's Settings set its graphics quality)
+       [--tester <n> --latency <ms>]             (that tester on a slow link: <ms> more on each round trip)
+       [--render cpu|gpu|none] [--width <pixels>] [--height <pixels>]
+                                                 (frames default to 640 × 360; gpu draws on this machine's
+                                                   graphics card; cpu draws in software, and on a Mac it
+                                                   draws on the Mac's graphics card)
+       [--actor <agentActorId>] [--origin <site>] [--door <play host>] [--engine <32hex>]
+  where [--name <session>]
+  players [--name <session>]                     (every player body: entity id, name, you, parked)
+  logs [--level log|warn|error] [--object <id>] [--limit <n>] [--name <session>]
+                                                 (the console rail your client holds: a script's
+                                                   faults, the engine's teaching)
+  exec <file> | -e "<source>" [--realm game|browser] [--input <json-file>] [--out <file>]
+       [--module] [--place <id>] [--persist | --read-only] [--name <session>]
+                                                 (an async JavaScript body in the real game or browser;
+                                                   exec --help lists its globals and output formats)
+  crossing [--name <session>]                    (resident world · portal directives the sim posted
+                                                   and what the client did · the world slots)
+  prefetch --world <id> --manifest <hash> --hex <32hex> [--name <session>]
+                                                 (get the portal's far world ready before you
+                                                   walk through it)
+  install-browser                                (download the optional browser runtime once)
+  hear [--scope <name>] [--wait <s>] [--name <session>]
+                                                 (what your body heard since you last looked: the room's chat and
+                                                   the world's chat scopes; with your account token also who came
+                                                   into the room and who left, and your inbox, and join, where and
+                                                   players print those after their own answer (your inbox alone:
+                                                   spawn events --once); --scope reads one chat scope you are in;
+                                                   --wait holds until the next)
+  say "<words>" [--scope <name>] [--reply <line>] [--name <session>]
+                                                 (one line in the room's chat, or with --scope in one of the
+                                                   world's chat scopes; --reply answers a line of that same chat)
+  leave [--name <session>]
+  status
+
+A bare verb drives the FIRST-JOINED live session; every later session is the one you name
+with --name (a second join under a name already live in another world is refused: leave it, or
+name the new one).
+
+A JOIN BOOTS THE ROOM. A world nobody is in boots for YOUR body (a room boots for a player, never
+for a door), and `join` prints the boot verdict (the tree, the session, your body, who is in the room) once
+the body stands. Verify a round without a person: `spawn client join @@you/<slug> --ttl 600`, then
+the agent doors `agent/exec` and `agent/logs` read the live room while the body stands (state,
+spawns, SQL, the script log); `leave` ends it.
+
+THE ROOM IS THE WORLD'S PICK. On a 6.0 world the world's routing picks the room your body lands in,
+as it does every player's: a per-player `pickRoom` can put the creator in another room than yours.
+--room <name> asks for one room by name, as a play link's /room:<name> does (the address's own
+/room:<name> works too, and --room wins over it): a world with no `pickRoom` stands your body in that
+room, and a world's `pickRoom` reads the name as the player's ask (`ctx.requestedRoomId`) and decides.
+A pre-6.0 world has one room and refuses a join that names a room.
+
+TWO WAYS IN. With YOUR ACCOUNT TOKEN (SPAWN_TOKEN=sak_…, the token signup or an invite answered)
+name the world: `spawn client join @alice/gauntlet` mints a session grant for that world at
+Spawn's grant door (your own worlds are answered from your account; any other address is resolved
+by the door itself), and attaches a real player: a body the room sees, wearing your account's
+name. --as <name> stands a BODY OF YOUR OWN under the account: its own player wearing that name,
+its own play; `--as alice` and `--as bob` on one token are two bodies in the room at once
+(the session's handle defaults to the body's name: `where --name alice`), and a name you already
+stand re-joins that body. An unlinked agent account stands 2 bodies at a time; a linked one stands
+more (the refusal names the limit). --origin (SPAWN_ORIGIN) points at another Spawn site; --door (SPAWN_DOOR_ORIGIN)
+names the play host when the site names none; --engine (SPAWN_ENGINE) overrides
+the engine build for this client; --actor is for a person's token playing as an agent it made.
+On a box that already holds a session grant (Savi's workshop), `spawn client join` with no world
+attaches with that grant: the same boot a browser tab performs. There every verb is YOUR body, bare:
+`--name` names nobody else's (a second player for a test is `--tester <n>`, below), and a wisp's join stands a body
+of its own with a page of its own, wearing the name `--as <name>` gives it. Savi's own body always wears her own name.
+Walking into a portal crosses for real: the sim names the session the traveler and the client
+re-dials the session to the target world (where/crossing then report the new world).
+Pre-6.0 rooms join as a DEV-room client. Sessions self-expire at
+--ttl (default 900s; your own body on this box lasts 6 h); leave takes the body out of the world at once
+and returns when its client has stopped, well under a second; `join` stands the body again. The wisps' bodies ride in yours: your leave ends
+them and the plays they were running; after your `join`, each stands in yours again on its own `spawn client join`. --body dresses the
+avatar in a rigged .glb: its https URL, or its /cdn/<name>.glb reference as the game spec carries it (cdn/<name>.glb and the bare
+name too: the spellings every asset verb takes; a name the store does not serve ends the join with one sentence);
+--outfit-json dresses it with { materials?, fx? }: per-part paint (the a3dc/model materials
+map) and effects on its bones ({ bone, script, params? }), a JSON file path or inline JSON;
+requires --body. Spawn seals the outfit into the body's card, so every peer sees it from the first tick.
+
+A TESTER OF YOURS. `spawn client join --tester 1` stands Savi's tester 1 instead of your body: a player account of
+its own in this world, named "Savi's tester 1", signed in on its own grant, in a real browser on the GPU box (the box
+`spawn gpu` holds; the join waits while it starts). It is not you: the world's scripts count it as a player
+(ctx.place.players, the player hooks) and the creator sees it in the room as any player. The join prints its page's
+address, and that page is driven as yours is below (connectOverCDP, keyboard, mouse, screenshot); `--tester 2` is a
+second tester beside it. A tester's page is a player's play page with Spawn's rail, which your body's page has not: the
+tester's quality row under the rail's Settings gear (auto, low, med, high, ultra) sets the graphics quality the tester
+draws at, and a screenshot of the tester's page is the picture at that quality. A tester ends when you say
+`spawn client leave --tester 1`, or with its GPU box, which goes back once the turn (or the helper) that stood it ends
+and nothing else of yours holds it. A tester joined again, by you or a helper in any turn, is the same player with the
+same save in the world, in a new browser with its quality back at auto. Your own body is no player while you build.
+A TESTER ON A SLOW LINK. `spawn client join --tester 2 --latency 250` stands tester 2 with 250 ms more on each round
+trip of every connection its browser makes, the room's socket included, as a player on a slow network meets the world:
+each byte waits half of it each way, and a new connection waits all 250 ms to open, as its handshake is a round trip.
+DevTools network throttling does not reach the room's socket, so this flag is the lag a test can count on. A join with
+another --latency, or none, stands that tester again on the new link.
+In a singleplayer world your body stands in the creator's own save, so what you play there changes their game: a test
+runs as a tester, whose save is its own. After a test in their save, `spawn room reset` starts their room again as
+the tree describes it, their world.state with it.
+
+YOUR BODY'S PAGE. A body with an eye (--render cpu or gpu; on a workshop box your own body has one) IS a
+Chromium page of the game, and any program on this machine plays it with Playwright, at the address the join
+prints and `status` names (on a workshop box, your own body's is http://127.0.0.1:9222):
+  const browser = await chromium.connectOverCDP("http://127.0.0.1:9222");
+  const page = browser.contexts()[0].pages()[0];
+  // … page.keyboard, page.mouse, page.screenshot() …
+  await browser.close(); // the program exits; the body stays
+Its keyboard, mouse and screenshot are a player's: a key the game binds plays it, and so does a mouse
+button the game binds (the world's inputs.actions name each one: left, right, middle). The one click that reaches no
+game is the left click that takes the pointer lock (the first, and the next after Escape or a menu let it go); under
+the lock a bare mouse move turns the look (`where` prints its yaw and pitch), and every other click, with any button,
+is the game's. A camera that looks by drag swallows no click: every press is the game's, and a held button's drag
+turns the look. The game's HTML UI (in its own frames) takes clicks and typing. While a program holds the page your body COUNTS AS A PLAYER (the game's ctx.place.players and
+player hooks list it); it is no player again two minutes after the last one lets go, and whatever it left held goes
+up. What the game writes on your body while it is a player is saved with your body. A join stands your body in the
+game's fresh state, and the next time a program holds the page your body wears what was saved. What the game writes on
+it while it is no player is not saved. The page never navigates away. A replay the game plays to your body plays on this page: while it plays, the page's
+`<html>` carries `data-spawn-replay` (its length in ms), so `page.waitForSelector("html[data-spawn-replay]", { state:
+"attached", timeout: 0 })` waits for the next one, and screenshots until it is gone hold it whole (`spawn see` the files).
+A body with no eye has no page: `where` and `players` read the game.
+

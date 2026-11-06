@@ -1,0 +1,36 @@
+{
+  "generatedFor": "2026-11-06",
+  "workspace": "/workspace/savi",
+  "units": [
+    {
+      "id": "corpus",
+      "angle": "Completeness inventory of the source corpus",
+      "query": "Use gm.list_dir, gm.search and gm.grep on /workspace/savi/.spawn. Identify every information-bearing root, the text/binary split, nested Git metadata, and runtime state that must not be treated as source. Return exact paths, counts and verifiable evidence."
+    },
+    {
+      "id": "structure",
+      "angle": "Manual information architecture",
+      "query": "Read .spawn/reference/README.md, COVERAGE.md, INDEX.md, the guide files and CLI/engine/skill indexes. Propose sections and navigation that expose every source file directly, with no summary replacing source text."
+    },
+    {
+      "id": "automation",
+      "angle": "Every-push regeneration and deployment",
+      "query": "Determine the exact GitHub Actions and GitHub Pages configuration that rebuilds the static manual on every push and deploys main. Include triggers, permissions, concurrency, artifact path, deploy job, and Pages enablement steps. Prefer current official actions and cite observed evidence."
+    },
+    {
+      "id": "design",
+      "angle": "Brutalist direct display",
+      "query": "Design an HTML/CSS manual that shows exact file contents in pre blocks, exact raw-file links, file metadata and a complete index. Use stark monochrome borders, monospace type, no rounded corners or decorative imagery, and handle thousands of files without client-side dependencies."
+    },
+    {
+      "id": "security",
+      "angle": "Safe publication boundary",
+      "query": "Use gm.grep and gm.search to find credential paths, tokens, invite codes, private session logs, debug ports and nested Git configuration. Return exact exclusions and a conservative publication policy that never stores secrets."
+    },
+    {
+      "id": "validation",
+      "angle": "Proof of completeness and update",
+      "query": "Define local checks and CI checks that prove every published source file has an exact raw copy and a direct HTML display, that HTML escaping is correct, that links resolve, and that a new push changes the generated manual. Include exact commands and expected counts."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+CubicBezierSpec = {
+  from: SplinePointSpec
+  c1: SplinePointSpec
+  c2: SplinePointSpec
+  to: SplinePointSpec
+}

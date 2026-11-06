@@ -1,0 +1,9 @@
+SplineSample = {
+  position: Vec3
+  tangent: Vec3
+  normal: Vec3
+  lateral: Vec3
+  rotation: { x: number; y: number; z: number; w: number }
+  distance: number
+  progress: number
+}

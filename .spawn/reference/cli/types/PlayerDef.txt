@@ -1,0 +1,7 @@
+PlayerDef = ObjectProperties & {
+  state?: TomeState
+  behavior?: BehaviorRef
+  tags?: string[]
+  platformState?: string[]
+  children?: ObjectSpec[]
+}

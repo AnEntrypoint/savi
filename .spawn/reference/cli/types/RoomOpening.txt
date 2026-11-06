@@ -1,0 +1,5 @@
+RoomOpening = {
+  side: "north" | "south" | "east" | "west"
+  width: number
+  offset?: number
+}

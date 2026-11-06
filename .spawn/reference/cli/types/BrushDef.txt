@@ -1,0 +1,10 @@
+BrushDef = {
+  paintScript: ScriptRef
+  label: string
+  icon: string
+  color?: string
+  defaultRadius: number
+  defaultStrength: number
+  feather?: number
+  field?: string
+}

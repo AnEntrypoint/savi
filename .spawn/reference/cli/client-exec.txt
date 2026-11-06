@@ -1,0 +1,38 @@
+spawn client exec <file> | -e "<source>" [--realm game|browser]
+                        [--input <json-file>] [--out <file>] [--name <session>]
+                        [--module] [--place <id>] [--persist | --read-only]
+
+Run a JavaScript body in your joined client. Top-level await and return work.
+The file is read on this machine. --input reads a local JSON file into the global input.
+The client uses the world's pinned engine. You do not need its source or a mock context.
+
+game (default): the engine's console, with its real api and ctx and world module imports.
+  spawn client exec -e 'return ctx.query({ tags: ["enemy"] }).length;'
+  Runtime changes are transient by default. --persist saves them into the world's files, which every room of the world starts from. From a room of a place that many rooms share, a thing the run spawns or a field it paints goes into that place's files, so every room of the place gets it. To keep a test in one room, run it without --persist. A write to a place's terrain or config is a file write and saves either way.
+  --read-only refuses game writes. The console runs in the place your body stands in;
+  --place <id> runs it in another place.
+  These flags apply only to the game realm.
+  From your body, authored file writes and explicit commits keep their normal durable effects. A tester's client is a
+  player's: its file writes are never saved.
+
+browser: join with --render cpu or gpu first. The body runs in the real rendered page, with
+  window, document, fetch, canvas and WebGPU. The game's HTML UI is not in this document:
+  it stands in its own frames (Playwright, page.frames()). The client handle supplies:
+  await client.exec(script, options?): the game console; options: input, persist, readOnly, place
+  await client.request(debugRequest): a request to the real simulation
+  await client.capture({ method, params }): the engine's capture API, including preview_object
+  preview_object with scene: true stands the object in the world for that picture, under your camera or views
+  await client.ready(): wait for a rendered frame; capture waits for this itself
+  client.renderer(): the current renderer; client.host(): the browser host
+  await client.sound(): the game's own sound as a live audio track, for MediaRecorder; track.stop() ends it
+  spawn client exec --realm browser -e 'return document.querySelector("canvas").getBoundingClientRect().toJSON();'
+  --module bundles a local browser module and its imports. Export default async (client, input) => result.
+  spawn client exec inspect.mjs --realm browser --module --input params.json
+
+The answer includes ok and result. Game code also returns the engine's logs and save receipt. A script failure exits 1.
+--out writes only the returned value: bytes for ArrayBuffer or typed arrays, exact text
+for a string, JSON for other values. Parent directories are created. A path in the world's tree
+lands at the same path under /workspace, never in the world. The receipt stays on stdout and names the file.
+  spawn client exec --realm browser -e 'return new Uint8Array([0, 127, 255]);' --out bytes.bin
+To play, drive your body's page with Playwright (spawn client --help, YOUR BODY'S PAGE).
+

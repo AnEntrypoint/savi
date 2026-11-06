@@ -1,0 +1,7 @@
+LightSpec =
+  | { kind: "ambient"; color?: Color; intensity?: number }
+  | { kind: "hemisphere"; skyColor?: Color; groundColor?: Color; intensity?: number }
+  | { kind: "directional"; color?: Color; intensity?: number; aim?: LightAimSpec; shadow?: { enabled?: boolean; softness?: number }; castShadow?: boolean; followCamera?: boolean }
+  | { kind: "point"; color?: Color; intensity?: number; distance?: number; decay?: number; fan?: [number, number][]; passes?: ("screen" | "camera")[]; shadow?: { enabled?: boolean }; castShadow?: boolean }
+  | { kind: "spot"; color?: Color; intensity?: number; distance?: number; angle?: number; penumbra?: number; decay?: number; aim?: LightAimSpec; passes?: ("screen" | "camera")[]; shadow?: { enabled?: boolean }; castShadow?: boolean }
+  | { kind: "rect"; color?: Color; intensity?: number; width?: number; height?: number; distance?: number; aim?: LightAimSpec; passes?: ("screen" | "camera")[] }

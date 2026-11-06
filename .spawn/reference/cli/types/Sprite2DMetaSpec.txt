@@ -1,0 +1,10 @@
+Sprite2DMetaSpec = {
+  outline?: [number, number][]
+  world_height?: number
+  target_size?: number
+  style?: "pixel" | "non-pixel"
+  kind?: "sprite" | "texture"
+  anchor_uv?: [number, number]
+  view?: string
+  content_box?: [number, number, number, number]
+}

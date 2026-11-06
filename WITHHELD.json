@@ -1,0 +1,287 @@
+{
+  "policy": "omit",
+  "reason": "The source corpus flags the raw HTTP bodies as containing personal fields, and one fetched research snapshot contains JWT-shaped credentials. These contents are not published; this ledger records their paths, sizes and hashes.",
+  "source": ".spawn/reference/README.md",
+  "files": [
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-access.bearer.body",
+      "bytes": 26,
+      "sha256": "ec57174514be3bfd165152b74c4618002583ff1a68a11203be2a7bfe8d2e897b"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-access.noauth.body",
+      "bytes": 169,
+      "sha256": "676e5f306d687d93f05920d8c7e851d032b523ad9e60d048de66a85978363bf7"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-chat-inbox.bearer.body",
+      "bytes": 43,
+      "sha256": "188f296d0fb64380431a70d26ec521e794f6c7e9869ca42b4f7832c64dfa139f"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-chat-inbox.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-me-numbers.bearer.body",
+      "bytes": 427,
+      "sha256": "7f02877b092e82d36c55cbaccc6bcdbbed1fc40890a495a1d6829008325ffb2a"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-me-numbers.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-me.bearer.body",
+      "bytes": 6999,
+      "sha256": "5bb16ef54ae1de9f996df774a0863fb40684beff164436f85541c1f341b34d9e"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-me.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-worlds.bearer.body",
+      "bytes": 395,
+      "sha256": "8b130ffebe4a2dc4ca51d06173d27b07703146ae2887bb842daf891dd06bb660"
+    },
+    {
+      "path": ".spawn/reference/http/raw/agent-v1-worlds.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/api-types.bearer.body",
+      "bytes": 5712,
+      "sha256": "60c7f5e98ef2529ac0d5ea73ae1fb174d44474122dd461d94db55d315c4e7afb"
+    },
+    {
+      "path": ".spawn/reference/http/raw/api-types.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/feed.bearer.body",
+      "bytes": 33397,
+      "sha256": "c9364432d7967ff83db43f3973aafd3272c3d8912750125f773a679fb48c1539"
+    },
+    {
+      "path": ".spawn/reference/http/raw/feed.noauth.body",
+      "bytes": 33397,
+      "sha256": "c9364432d7967ff83db43f3973aafd3272c3d8912750125f773a679fb48c1539"
+    },
+    {
+      "path": ".spawn/reference/http/raw/games-comments.bearer.body",
+      "bytes": 436,
+      "sha256": "e699e2e6ddbfe3ecdeaff2e94a57b8aec6704aac6ecfed79cca38959aeba5aab"
+    },
+    {
+      "path": ".spawn/reference/http/raw/games-comments.noauth.body",
+      "bytes": 324,
+      "sha256": "9289bc0d49a4ab426a67eda33a7d856447d0fd8d9473ead83c8fcba0bb3c2984"
+    },
+    {
+      "path": ".spawn/reference/http/raw/games-folio.bearer.body",
+      "bytes": 497,
+      "sha256": "19932709567d236e5bfb51b0bf06d4b07de1790eeef2b7d5858c2b52ac1539cd"
+    },
+    {
+      "path": ".spawn/reference/http/raw/games-folio.noauth.body",
+      "bytes": 32,
+      "sha256": "97aac78b90e6d0ee29f54df82a12ec0b3cbf07351b27a5affa4f96d5507418b1"
+    },
+    {
+      "path": ".spawn/reference/http/raw/invites.bearer.body",
+      "bytes": 14,
+      "sha256": "cdd7060ab4bb2b4adf9fb9862762dc16b43d353ca24e9c607b9ba47638cedc5f"
+    },
+    {
+      "path": ".spawn/reference/http/raw/invites.noauth.body",
+      "bytes": 24,
+      "sha256": "3be5b8e53fdc8b0a2996590589456db33504977f3d1ce9bb75016c8a707e1a71"
+    },
+    {
+      "path": ".spawn/reference/http/raw/llms-txt.noauth.body",
+      "bytes": 24124,
+      "sha256": "55bc07ef057118a1ada782dff75520781988e8277a19ea9b4e3e20c34c1ab8e2"
+    },
+    {
+      "path": ".spawn/reference/http/raw/notifications-unread.bearer.body",
+      "bytes": 34,
+      "sha256": "c43fb107bf7307fdc43ea8f4b28a4115129d8c57ac18faca02a43807862a0ce6"
+    },
+    {
+      "path": ".spawn/reference/http/raw/notifications-unread.noauth.body",
+      "bytes": 24,
+      "sha256": "3be5b8e53fdc8b0a2996590589456db33504977f3d1ce9bb75016c8a707e1a71"
+    },
+    {
+      "path": ".spawn/reference/http/raw/resolve-adventure.bearer.body",
+      "bytes": 240,
+      "sha256": "44b1dfc2dda2494ea42f8fb940104acc5623014dab4268cf911f0ecae3d9a9a4"
+    },
+    {
+      "path": ".spawn/reference/http/raw/resolve-adventure.noauth.body",
+      "bytes": 240,
+      "sha256": "44b1dfc2dda2494ea42f8fb940104acc5623014dab4268cf911f0ecae3d9a9a4"
+    },
+    {
+      "path": ".spawn/reference/http/raw/sdk-agent-health.bearer.body",
+      "bytes": 966,
+      "sha256": "38179ab8a4812457a1ae1524710e610afa331de14eeaba0fe76d85f977dd9479"
+    },
+    {
+      "path": ".spawn/reference/http/raw/sdk-agent-health.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/sdk-agent-logs.bearer.body",
+      "bytes": 3869,
+      "sha256": "8dc6def332f5da86297196177660da9259937dfc5f46b557f4992584806f5820"
+    },
+    {
+      "path": ".spawn/reference/http/raw/sdk-agent-logs.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/sdk-agent-rooms.bearer.body",
+      "bytes": 799,
+      "sha256": "7f1d06ab1d99e1f09a5af5bdb54015e554257dc98ca247d2e490936046afcf6b"
+    },
+    {
+      "path": ".spawn/reference/http/raw/sdk-agent-rooms.noauth.body",
+      "bytes": 131,
+      "sha256": "4e3914e3da72ccb201a3f0b8497b5bce1165a925d2b92e86076a8a35aa25ad77"
+    },
+    {
+      "path": ".spawn/reference/http/raw/social-me.bearer.body",
+      "bytes": 363,
+      "sha256": "079664ee5a264b0b534543a0b84cb435dacbcd11d33bb14eda469599850fd99b"
+    },
+    {
+      "path": ".spawn/reference/http/raw/social-me.noauth.body",
+      "bytes": 35,
+      "sha256": "026648e13b53516f53cc63178f16cb19d1fb95d4aca1414f908221c6cc350f5f"
+    },
+    {
+      "path": "sources/0033d94599fd.txt",
+      "bytes": 1259,
+      "sha256": "0033d94599fdad356f33f8783b1e8ca32d868155228c7ef450719ed810b193cf"
+    },
+    {
+      "path": "sources/2f18ca8da7c1.txt",
+      "bytes": 141716,
+      "sha256": "2f18ca8da7c1207bb7d390a5ed8ce6cda80b7f73b35433beab17a9c28fea8a62"
+    },
+    {
+      "path": "sources/400cea61c103.txt",
+      "bytes": 9386,
+      "sha256": "400cea61c1033119d6f218d0fefef40d7893319f9f16d54c5f9f596277dcb592"
+    },
+    {
+      "path": "sources/47aee1135898.txt",
+      "bytes": 2439,
+      "sha256": "47aee1135898b2bb4de3598813b492a2621b4d791ff41ae3cf1211000c5c7f3d"
+    },
+    {
+      "path": "sources/4f50e254a719.txt",
+      "bytes": 118,
+      "sha256": "4f50e254a719a6b1b06b529bdaa08980e4acf0878aad0090cba7771f6ebdf0b9"
+    },
+    {
+      "path": "sources/530e1c4bf86a.txt",
+      "bytes": 154034,
+      "sha256": "530e1c4bf86a4f213098f930d6c255afc7ffdff907130d2350e0f9e234fed67e"
+    },
+    {
+      "path": "sources/55f1486ae390.txt",
+      "bytes": 1529,
+      "sha256": "55f1486ae3901c69be182cea1c1e3313954c78be626751a85b19ddaf14ae8da6"
+    },
+    {
+      "path": "sources/563d97060c24.txt",
+      "bytes": 126,
+      "sha256": "563d97060c2459a0ff950c9fdf8d97e70237ccbc433002dd0c4bd5be7680f166"
+    },
+    {
+      "path": "sources/64c44539fba5.txt",
+      "bytes": 1244,
+      "sha256": "64c44539fba53559a157b5de16c01d3ab91dbc999c1b98b5c0b2fc3528d5d059"
+    },
+    {
+      "path": "sources/668cd3703863.txt",
+      "bytes": 133,
+      "sha256": "668cd3703863b7ce55bb09d2d69eb4035e5d5ebd039008e7511c9259028ff9be"
+    },
+    {
+      "path": "sources/687dee028171.txt",
+      "bytes": 6464,
+      "sha256": "687dee02817159c3ae718d7519008c038b1db8cf10ed4d4451b3da320e12c492"
+    },
+    {
+      "path": "sources/73795d78b337.txt",
+      "bytes": 1609,
+      "sha256": "73795d78b3376fb41aca7d26d5f0e230dfedcc247d453ea5cf329674b6b8af7b"
+    },
+    {
+      "path": "sources/8c81e64dda90.txt",
+      "bytes": 2372,
+      "sha256": "8c81e64dda90d1f337e87d30fab6804b818d155630587358ebaa531b27f2d659"
+    },
+    {
+      "path": "sources/a99f56a7991e.txt",
+      "bytes": 455841,
+      "sha256": "a99f56a7991e6baafaa20a629977b00ef84a716039ef28ef95fd3da857181444"
+    },
+    {
+      "path": "sources/bc11a4ed7384.txt",
+      "bytes": 2933,
+      "sha256": "bc11a4ed7384ad82e04eb62dd03c01bc40afbfec737e376d26637031508b1839"
+    },
+    {
+      "path": "sources/d59219cb7959.txt",
+      "bytes": 5144,
+      "sha256": "d59219cb79590abdb877deaa14e3b65a00c05318bf5a6f3b989b9162b5d08c35"
+    },
+    {
+      "path": "sources/d73c30f0c3c8.txt",
+      "bytes": 2319,
+      "sha256": "d73c30f0c3c8b7569b641bf3dac74841e621bc5f39752fbeb3501f87dd593419"
+    },
+    {
+      "path": "sources/dd69929fd135.txt",
+      "bytes": 4583,
+      "sha256": "dd69929fd135295db176535395d60df4bef00bdf1138d6cf1965d35520cf8c95"
+    },
+    {
+      "path": "sources/e45906ce02e7.txt",
+      "bytes": 127,
+      "sha256": "e45906ce02e79f16fb87a838d86bb4e497e37a9591f97608fa013bbcd8b9cbc2"
+    },
+    {
+      "path": "sources/e8ce828a4f2a.txt",
+      "bytes": 2895,
+      "sha256": "e8ce828a4f2a0e500dc506bc03c706881dab7dc4b7cd527c7ea175c6c0ca6741"
+    },
+    {
+      "path": "sources/f4fe3aa29aa7.txt",
+      "bytes": 7413,
+      "sha256": "f4fe3aa29aa74140d3b37302ce21fac03c2b9552497479eed4da22ee0163c4b4"
+    },
+    {
+      "path": "sources/f84e759011e0.txt",
+      "bytes": 2895,
+      "sha256": "f84e759011e0c497e696f5bce4ebb5fbe9bbdc5aea309b73795283fa139c1558"
+    },
+    {
+      "path": "sources/index.jsonl",
+      "bytes": 5684,
+      "sha256": "15ef091e108be24deab6569f9060d335f93c2ecb33fbf18e7a40884b35880884"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+NormalizedUpdateSchedule = {
+  every?: number | { seconds: number }
+  near?: readonly UpdateScheduleNearRule[]
+}

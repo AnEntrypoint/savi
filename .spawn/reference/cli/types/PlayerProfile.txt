@@ -1,0 +1,12 @@
+PlayerProfile = {
+  displayName: string
+  userId?: string
+  odorId?: string
+  avatarUrl?: string
+  outfit?: SessionOutfit
+  wisps?: readonly SessionWisp[]
+  den?: string
+  portraitUrl?: string
+  isGuest?: boolean
+  isTestAccount?: boolean
+}

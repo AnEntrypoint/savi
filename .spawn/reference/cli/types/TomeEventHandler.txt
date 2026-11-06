@@ -1,0 +1,1 @@
+TomeEventHandler = (ctx: ObjectAPI, payload: unknown, meta: TomeEventMeta) => void

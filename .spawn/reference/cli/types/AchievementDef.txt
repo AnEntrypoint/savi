@@ -1,0 +1,6 @@
+AchievementDef = {
+  name: string
+  description: string
+  hidden?: boolean
+  trophy?: string
+}

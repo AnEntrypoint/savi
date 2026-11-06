@@ -1,0 +1,5 @@
+Ray = {
+  origin: Vec3
+  direction: Vec3
+  source: "pointer" | "camera"
+}

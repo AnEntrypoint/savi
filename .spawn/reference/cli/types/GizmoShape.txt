@@ -1,0 +1,1 @@
+GizmoShape = "arrow" | "square" | "rotation-arc" | "bar" | "icon" | "pad" | "size" | "extrude" | "lift" | "reticle"

@@ -1,0 +1,8 @@
+spawn bring <folder>
+  Lays a game made with another engine into this world as data, from its source, or from its web build when no source
+  came: each scene or level as a place (a 2D game in a 2D mode), each object where it stood, each kind of object as one
+  template, tile layers as tiles, each picture, model and sound uploaded once, tables under scripts/lib/data/. It writes no
+  behavior. bring/<game>/pieces.yml maps its code. A world still on its starter first takes the game's (a 2D game the 2D
+  starter, as spawn starter lays it). A second run lays the same files.
+  It reads Godot 3 and 4, Unity, GameMaker from Studio 1 on, Construct 3, RPG Maker MV and MZ, Tiled, LDtk, PICO-8,
+  LÖVE, Defold, Phaser and three.js, and the web exports of Godot, Unity, GameMaker and Construct 3.

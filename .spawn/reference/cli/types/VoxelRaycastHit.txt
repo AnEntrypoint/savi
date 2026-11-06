@@ -1,0 +1,9 @@
+VoxelRaycastHit = {
+  position: Vec3
+  normal: Vec3
+  distance: number
+  voxel: Vec3
+  adjacentVoxel: Vec3 | null
+  materialId: string
+  state: number
+}

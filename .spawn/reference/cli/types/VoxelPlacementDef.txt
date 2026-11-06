@@ -1,0 +1,5 @@
+VoxelPlacementDef =
+  | { kind: "at"; positions: Array<[number, number, number]> }
+  | { kind: "scatter"; density: number; minSpacing?: number; seedOffset?: string; validSurfaceMaterials?: string[] }
+  | { kind: "grid"; spacing: number; jitter?: number; probability?: number; validSurfaceMaterials?: string[] }
+  | { kind: "cluster"; clusterRadius: number; clustersPerRegion: number; itemsPerCluster: number | [number, number]; validSurfaceMaterials?: string[] }

@@ -1,0 +1,6 @@
+NotifyDmOptions = {
+  wake?: boolean
+  to?: string | { userId?: string | null }
+  link?: string
+  savi?: string | { userId?: string | null }
+}

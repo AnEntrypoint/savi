@@ -1,0 +1,6 @@
+RoutingDef = {
+  script?: ScriptRef
+  maxPlayers?: number
+  persistence?: PlacePersistence
+  alwaysOn?: boolean
+}

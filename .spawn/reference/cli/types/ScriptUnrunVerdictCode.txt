@@ -1,0 +1,1 @@
+ScriptUnrunVerdictCode = "not_authority" | "room_reset" | "exec_worker_lost" | "seat_warming" | "tree_behind" | "spec_moved"

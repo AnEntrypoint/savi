@@ -1,0 +1,5 @@
+Audience =
+  | { kind: "player"; id: string }
+  | { kind: "nearby"; position: Vec3; radius?: number }
+  | { kind: "all" }
+  | { kind: "place"; placeId?: string }

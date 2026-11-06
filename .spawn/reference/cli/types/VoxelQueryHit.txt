@@ -1,0 +1,7 @@
+VoxelQueryHit = {
+  x: number
+  y: number
+  z: number
+  material: string
+  state: number
+}

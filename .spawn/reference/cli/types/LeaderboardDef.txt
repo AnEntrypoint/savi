@@ -1,0 +1,6 @@
+LeaderboardDef = {
+  name: string
+  state: string
+  direction?: "asc" | "desc"
+  format?: "number" | "time"
+}

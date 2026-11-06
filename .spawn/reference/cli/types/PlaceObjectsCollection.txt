@@ -1,0 +1,3 @@
+PlaceObjectsCollection = Iterable<ObjectView> & {
+  [objectId: string]: ObjectView | undefined
+}

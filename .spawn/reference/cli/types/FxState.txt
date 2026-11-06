@@ -1,0 +1,5 @@
+FxState = {
+  populations: Array<{ name: string; rate: number; lifetime: { min: number; max: number } | null; persistentCount: number | null; expectedAlive: number; alive: number | null; maxParticles: number | null; sinks: Array<{ kind: "sprite"; texture: string; blend: "alpha" | "add" | "multiply" | "subtract" | "screen" | "distort" } | { kind: "mesh"; shape: "box" | "cylinder" | "sphere" | "card" } | { kind: "ribbon"; texture: string | null } | { kind: "light"; radius: number; dynamic?: true }>; expectedSize: { start: number; peak: number } }>
+  totalExpectedAlive: number
+  totalAlive: number | null
+}

@@ -1,0 +1,20 @@
+ScatterSpec = {
+  bounds: ScatterBounds
+  sampling?: ScatterSampling
+  count?: number
+  maxDistance?: number
+  seed: number
+  templates: ScatterTemplate[]
+  variation?: {
+    scale?: [number, number]
+    yaw?: [number, number]
+  }
+  surface?: "terrain" | { y: number } | { mesh: string | string[] }
+  filter?: {
+    maxSlope?: number
+    minSlope?: number
+    materials?: string[]
+    avoidStructures?: boolean
+  }
+  instanceOverrides?: Record<string, ScatterInstanceOverride>
+}

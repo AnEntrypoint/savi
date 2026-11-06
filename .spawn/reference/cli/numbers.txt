@@ -1,0 +1,6 @@
+spawn numbers [--world <@user/name|appId>] [--json] [--origin <site>]
+                                           your numbers on every posted game you make or build in, and the
+                                           games summed: players, came back, plays, time played, likes, seals
+                                           and the next one, earnings, this week beside the week before.
+                                           --world prints one game's line; --json prints the record as the
+                                           door answers it

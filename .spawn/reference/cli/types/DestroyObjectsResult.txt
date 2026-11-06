@@ -1,0 +1,7 @@
+DestroyObjectsResult = {
+  requested: number
+  destroyed: number
+  notFound: number
+  refused: number
+  verdicts: DestroyObjectsVerdict[]
+}

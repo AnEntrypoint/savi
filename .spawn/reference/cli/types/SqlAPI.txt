@@ -1,0 +1,6 @@
+SqlAPI = {
+  (strings: TemplateStringsArray, ...params: unknown[]): Promise<SqlQueryResult>
+  size(): Promise<number>
+  backup(label: string): Promise<{ label: string; bookmark: string; ts: number }>
+  restore(target: string | number | { label?: string; ts?: number }): Promise<{ restoredTo: string }>
+}

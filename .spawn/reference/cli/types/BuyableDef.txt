@@ -1,0 +1,9 @@
+BuyableDef = {
+  name: string
+  description?: string
+  imageUrl?: string
+  priceSpoins: number
+  minSpoins?: number
+  onPurchase?: ScriptRef | ScriptRef[]
+  once?: boolean
+}

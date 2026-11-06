@@ -1,0 +1,19 @@
+EngineInputAxes = {
+  lookX?: number
+  lookY?: number
+  aimYawSin?: number
+  aimYawCos?: number
+  aimPitchN?: number
+  camPosX?: number
+  camPosY?: number
+  camPosZ?: number
+  pointerOriginX?: number
+  pointerOriginY?: number
+  pointerOriginZ?: number
+  pointerDirX?: number
+  pointerDirY?: number
+  pointerDirZ?: number
+  touchActive?: number
+  touchTwist?: number
+  pointerLocked?: number
+}

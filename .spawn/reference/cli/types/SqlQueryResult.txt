@@ -1,0 +1,6 @@
+SqlQueryResult = {
+  rows: Record<string, unknown>[]
+  changes: number
+  lastInsertRowid: number | null
+  results: SqlStatementResult[]
+}

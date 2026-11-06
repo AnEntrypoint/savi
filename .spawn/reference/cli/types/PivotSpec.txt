@@ -1,0 +1,6 @@
+PivotSpec =
+  | "feet"
+  | "center"
+  | "top"
+  | [u: number, v: number, w: number]
+  | { x: number; y: number; z: number }

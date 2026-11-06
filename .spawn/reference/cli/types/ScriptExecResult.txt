@@ -1,0 +1,37 @@
+ScriptExecResult = {
+  ok: boolean
+  result?: unknown
+  error?: string
+  code?: ScriptForwardVerdictCode | ScriptUnrunVerdictCode | ScriptPartialRunVerdictCode | ScriptCompileVerdictCode | ScriptEngineFaultVerdictCode | ScriptValueVerdictCode | ScriptStopVerdictCode
+  verdict?: {
+    code: string
+    message: string
+    retriable: boolean
+    fault?: string
+    decider?: string
+    afterRevision?: number
+    heldRevision?: number
+  }
+  teaching?: ScriptTeachingFault[]
+  says?: string
+  ops?: TreeOp[]
+  droppedOps?: { count: number; reasons: Array<{ reason: string; targets: string[] }> }
+  register?: RegisterRow[]
+  tick?: number
+  answeredFromLatch?: true
+  behind?: { updates: number; forS: number }
+  build?: string
+  changesApplied?: boolean
+  logs?: Array<{ level: string; message: string; verdict?: string; fault?: string; data?: string }>
+  specVersion?: number
+  specMovedDuringExec?: boolean
+  worldMutated?: boolean
+  receipts?: PropertyWriteReceipt[]
+  receiptsOmitted?: number
+  landed?: Record<string, string[]>
+  landedOmitted?: number
+  readFrom?: Record<string, string[]>
+  readFromOmitted?: number
+  destroyedSpawnProvenance?: DestroyedSpawnProvenance[]
+  discarded?: { world: number; sql: number }
+}

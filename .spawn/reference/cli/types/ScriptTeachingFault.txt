@@ -1,0 +1,6 @@
+ScriptTeachingFault = {
+  code: string
+  message: string
+  file?: string
+  line?: number
+}

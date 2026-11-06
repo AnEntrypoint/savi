@@ -1,0 +1,3 @@
+VoxelTemplateDef =
+  | { kind: "builder"; source: ScriptRef }
+  | { kind: "serialized"; data: SerializedVoxelTemplate }

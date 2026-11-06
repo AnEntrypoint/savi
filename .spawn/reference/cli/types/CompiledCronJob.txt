@@ -1,0 +1,5 @@
+CompiledCronJob = {
+  handler: (objectApi: ObjectAPI) => Promise<void>
+  schedule: string
+  scriptRef?: string
+}

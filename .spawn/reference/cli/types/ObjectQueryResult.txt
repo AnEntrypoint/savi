@@ -1,0 +1,8 @@
+ObjectQueryResult = {
+  id: string
+  tags: string[]
+  feetPosition: Vec3
+  state: Record<string, unknown>
+  userId?: string | null
+  objectId?: string
+}

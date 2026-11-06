@@ -1,0 +1,17 @@
+ObjectSpec = ObjectProperties & {
+  id?: string
+  tags?: string[]
+  place?: string
+  audience?: ObjectAudience
+  simulatedBy?: PlatformDial
+  visibility?: ObjectVisibility
+  lifetime?: number
+  scope?: "session" | "world"
+  retention?: ObjectRetention
+  state?: TomeState
+  behavior?: BehaviorRef
+  children?: ObjectSpec[]
+  parent?: string
+  template?: string
+  overrides?: Record<string, unknown>
+}

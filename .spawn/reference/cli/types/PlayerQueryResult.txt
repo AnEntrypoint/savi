@@ -1,0 +1,23 @@
+PlayerQueryResult = ObjectQueryResult & {
+  displayName: string | null
+  userId: string | null
+  portraitUrl: string | null
+  place: string
+  isLocal: boolean
+  isEditor: boolean
+  isGodMode: boolean
+  isGuest: boolean
+  isTestAccount: boolean
+  party: PlayerParty | null
+  partyMembership: PlayerParty | null | undefined
+  guild: PlayerGuild | null
+  latencyMs: number | null
+  inputHeld: boolean
+  talking: boolean
+  mail: readonly PlayerMail[]
+  friends: readonly PlayerFriend[]
+  spectating: boolean
+  wisps: readonly SessionWisp[]
+  den: string | null
+  region: EdgeHint | null
+}

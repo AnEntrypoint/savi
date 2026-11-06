@@ -1,0 +1,13 @@
+Terrain2DTilemapDef = {
+  kind: "tilemap"
+  tileSize?: number
+  width?: number
+  height?: number
+  tileset: string
+  tilesetColumns?: number
+  tilesetFrames?: number
+  tilesetFps?: number
+  generator?: ScriptRef
+  solidTiles?: number[]
+  material?: ScriptedMaterialSpec
+}

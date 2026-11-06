@@ -1,0 +1,15 @@
+GodModeConfig = {
+  enabled?: boolean
+  scope?: "editors" | "owner"
+  behavior?: ScriptRef | ScriptRef[]
+  brushes?: Record<string, BrushDef>
+  movement?: {
+    flySpeed?: number
+    sprintMultiplier?: number
+    verticalSpeed?: number
+  }
+  camera?: { fov?: number }
+  visuals?: {
+    disableFog?: boolean
+  }
+}

@@ -1,0 +1,7 @@
+MusicAPI = {
+  play(ref: string, opts?: MusicPlayOptions): void
+  crossfade(ref: string, ms?: number): void
+  stop(opts?: { fade?: number; layer?: string }): void
+  duck(gain: number, opts?: { duration?: number }): void
+  now(): MusicNowInfo | null
+}

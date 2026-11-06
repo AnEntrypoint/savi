@@ -1,0 +1,8 @@
+ViewCameraPose = {
+  eye: Vec3
+  aim: Vec3 | string
+  fov?: number
+  projection?: "perspective" | "orthographic"
+  orthoSize?: number
+  layers?: string[]
+}

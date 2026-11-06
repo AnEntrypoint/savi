@@ -1,0 +1,16 @@
+RaycastHit = {
+  position: Vec3
+  normal: Vec3
+  distance: number
+  id: string | null
+  objectId: string | null
+  world?: string
+  address?: string
+  durableId?: string | null
+  doors?: ReadonlyArray<{ id: string; link: string; world: string; exit: string | null }>
+  far?: { position: Vec3; normal: Vec3 }
+  door?: { link: string; verdict: "through-spent" | "unheld" | "no-exit"; message: string }
+  approximate?: true
+  faceIndex?: number
+  bone?: { name: string; position: Vec3; normal: Vec3 }
+}

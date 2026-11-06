@@ -1,0 +1,6 @@
+InputAxisDef = {
+  keys?: string
+  mouse?: string
+  gamepad?: string
+  deadzone?: number
+}

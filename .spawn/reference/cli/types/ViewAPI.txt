@@ -1,0 +1,18 @@
+ViewAPI = {
+  camera: ViewCameraPose | { parent: string; eye?: Vec3; aim?: Vec3 | "forward" | string; fov?: number; projection?: "perspective" | "orthographic"; orthoSize?: number; layers?: string[] } | null
+  pixel: number
+  fps: number
+  drawCalls: number
+  triangles: number
+  cpuMs: number
+  gpuMs: number
+  frames: { cpuMs: number; gpuMs?: number }[]
+  memoryMB: number | null
+  gpuMemoryMB: number
+  renderScale: number
+  netInBytes: number
+  netOutBytes: number
+  netInMessages: number
+  netOutMessages: number
+  site: string | null
+}

@@ -1,0 +1,33 @@
+PlaceDef = {
+  mode?: PlaceMode
+  gravity?: Vec3
+  tickBase?: number
+  damping?: number
+  terrain?: TerrainDef
+  atmosphere?: AtmosphereDef
+  camera?: CameraDef
+  material?: MaterialSpec
+  lighting?: string
+  sky?: string
+  inputs?: InputsDef
+  ui?: GameUIDef
+  listenerEntity?: string
+  acoustics?: { reverb?: number }
+  fields?: Record<string, SerializedField>
+  fieldConfig?: Record<string, FieldConfig>
+  objects?: ObjectSpec[]
+  defaultSpawnPoint?: PositionSpec
+  defaultSpawnRotation?: RotationSpec
+  arrival?: string
+  returnDoor?: false | { lifetime?: number }
+  pregenerate?: boolean
+  mintedFrom?: string
+  instance?: PlaceInstance
+  persistence?: PlacePersistence
+  policy?: {
+    admits?: string
+    onArrive?: string
+    onLeave?: string
+  }
+  worldBounds?: WorldBoundsDef
+}

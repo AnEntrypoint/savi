@@ -1,0 +1,9 @@
+JobError = {
+  message: string
+  code?: string
+  retriable?: boolean
+  attempts: number
+  deadlineExceeded?: boolean
+  retryAfterMs?: number
+  details?: unknown
+}

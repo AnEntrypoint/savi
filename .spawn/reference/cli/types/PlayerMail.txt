@@ -1,0 +1,10 @@
+PlayerMail = {
+  id: string
+  from: PlayerMailPerson
+  to: PlayerMailPerson
+  topic: string
+  text: string
+  at: number
+  read: boolean
+  retracted: boolean
+}

@@ -1,0 +1,4 @@
+TerrainOffDef = {
+  kind: "off"
+  decorations?: DecorationDef
+}

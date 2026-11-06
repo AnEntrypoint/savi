@@ -1,0 +1,4 @@
+CameraOrientationDef = {
+  source: "look" | "script"
+  authoredAxes?: ("yaw" | "pitch")[]
+}

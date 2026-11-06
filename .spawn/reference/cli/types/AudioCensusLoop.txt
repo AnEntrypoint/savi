@@ -1,0 +1,6 @@
+AudioCensusLoop = {
+  soundId: string
+  ref: string
+  entityId?: string
+  bus: string
+}

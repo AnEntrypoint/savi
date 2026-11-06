@@ -1,0 +1,40 @@
+ObjectView = ObjectQueryResult & Omit<Partial<ObjectProperties>, keyof ObjectQueryResult> & {
+  worldFeetPosition: Vec3
+  worldRotation: {
+    x: number
+    y: number
+    z: number
+    w: number
+    yaw: number
+    pitch: number
+    roll: number
+  }
+  place: string
+  audience: ObjectAudience
+  visibility: ObjectVisibility | null
+  scope: "session" | "world"
+  retention: ObjectRetention | "current"
+  lifetime?: number
+  template?: string
+  name: string | null
+  simulatedBy: string | null
+  sleeping: boolean | null
+  awake: boolean | null
+  measure: { readonly volume: number; readonly mass: number } | null
+  triangles: number | null
+  skeleton: BoneInfoResult
+  destination: { readonly onlineCount: number | null } | null
+  env: EnvView
+  velocity: Vec3
+  angularVelocity: Vec3
+  forces: Record<string, ForceEntrySpec | null | undefined>
+  controller: string | null
+  controlling: ObjectView | null
+  anim: Record<string, unknown>
+  behavior: string[]
+  behaviorHealth?: BehaviorHealth
+  spectating: boolean
+  gains?: Partial<Record<Bus, number>>
+  parent: ObjectView | null
+  children: ObjectView[]
+}

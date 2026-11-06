@@ -1,0 +1,16 @@
+CompiledSpec = {
+  objects: Map<string, CompiledBehavior>
+  stateScopes?: { rows: Map<string, readonly NormalizedScopeDeclaration[]>; flat: readonly NormalizedScopeDeclaration[] | null }
+  anySpecHasOnNoise?: boolean
+  arriving?: readonly string[]
+  player?: CompiledBehavior
+  playerRefs?: readonly string[]
+  camera?: CompiledCameraBehavior
+  lifecycle?: CompiledLifecycleHooks
+  crons?: CompiledCronJob[]
+  voxelBlocks?: Map<string, CompiledVoxelBlockPlace>
+  ui?: (ctx: WorldView, player: LocalPlayerView) => string
+  touchActive?: CompiledTouchActiveSelector
+  uiModName?: string
+  creatorTabs?: Array<{ id: string; title: string; icon: string; modName?: string; shortcut?: string; render?: (ctx: WorldView, player: LocalPlayerView) => string; onMount?: (container: HTMLElement, player: LocalPlayerView, ctx: WorldView) => void; onDestroy?: (container: HTMLElement) => void }>
+}

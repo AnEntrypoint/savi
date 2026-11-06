@@ -1,0 +1,13 @@
+RoomSpec = {
+  width: number
+  depth: number
+  height?: number
+  wallThickness?: number
+  floorThickness?: number
+  ceiling?: boolean
+  material?: MaterialSpec
+  wallMaterial?: MaterialSpec
+  floorMaterial?: MaterialSpec
+  ceilingMaterial?: MaterialSpec
+  openings?: RoomOpening[]
+}

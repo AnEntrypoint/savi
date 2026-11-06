@@ -1,0 +1,12 @@
+ObjectDef = ObjectProperties & {
+  id: string
+  parent?: string
+  children?: ObjectSpec[]
+  state?: Record<string, unknown>
+  tags?: string[]
+  behavior?: BehaviorRef
+  audience?: ObjectAudience
+  simulatedBy?: PlatformDial
+  visibility?: ObjectVisibility
+  lifetime?: number
+}

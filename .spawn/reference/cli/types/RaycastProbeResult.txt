@@ -1,0 +1,5 @@
+RaycastProbeResult = {
+  hit: RaycastHit | null
+  hits: RaycastHit[]
+  verdict: RaycastVerdict
+}

@@ -1,0 +1,5 @@
+TrophyFile = {
+  size: [number, number, number]
+  palette: string[]
+  layers: string[][]
+}

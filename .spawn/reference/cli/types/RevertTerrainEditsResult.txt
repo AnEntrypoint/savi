@@ -1,0 +1,8 @@
+RevertTerrainEditsResult = {
+  reverted: number
+  chunks: number
+  persona: string | null
+  unresolved?: string
+  since?: number
+  unstamped?: number
+}

@@ -1,0 +1,8 @@
+JumpCheckOptions = {
+  speed: number
+  jumpSpeed: number
+  place?: string
+  body?: string
+  includeDynamicBodies?: boolean
+  ignoreEntities?: string[]
+}

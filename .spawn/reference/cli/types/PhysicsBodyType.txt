@@ -1,0 +1,1 @@
+PhysicsBodyType = "none" | "static" | "dynamic" | "kinematic" | "character"

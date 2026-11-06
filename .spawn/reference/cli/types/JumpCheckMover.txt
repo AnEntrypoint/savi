@@ -1,0 +1,16 @@
+JumpCheckMover = {
+  id: string
+  side: "from" | "to" | "both"
+  period: number | null
+  periodFit?: number
+  sampledSeconds: number
+  share: number
+  windows: [number, number][]
+  closest?: {
+    rise: number
+    run: number
+    maxRun?: number
+    reason: JumpCheckReason
+    in: number
+  }
+}

@@ -1,0 +1,14 @@
+CompiledVoxelBlockBehavior = {
+  stateSchema?: StateSchema
+  geometry?: (state: Record<string, number>) => unknown
+  collider?: (state: Record<string, number>) => unknown
+  raycastShape?: (state: Record<string, number>) => unknown
+  surface?: (state: Record<string, number>) => unknown
+  onInteract?: (block: VoxelBlockApi, player?: ObjectQueryResult | null) => void
+  onBreak?: (block: VoxelBlockApi) => void
+  onOverlapEnter?: (block: VoxelBlockApi, entity: ObjectQueryResult) => void
+  onOverlapExit?: (block: VoxelBlockApi, entity: ObjectQueryResult) => void
+  onRandomTick?: (block: VoxelBlockApi) => void
+  onScheduledTick?: (block: VoxelBlockApi) => void
+  onNeighborChanged?: (block: VoxelBlockApi, change: VoxelNeighborChange) => void
+}

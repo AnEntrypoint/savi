@@ -1,0 +1,9 @@
+InputActionDef = {
+  keys?: string[]
+  mouse?: string
+  gamepad?: string
+  modifiers?: string[]
+  activeOn?: "keydown" | "hold" | "keyup" | (string & {})
+  touch?: InputActionTouchDef
+  active?: ScriptRef
+}

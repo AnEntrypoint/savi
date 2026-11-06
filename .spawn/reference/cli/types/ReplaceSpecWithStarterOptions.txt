@@ -1,0 +1,6 @@
+ReplaceSpecWithStarterOptions = {
+  convert?: boolean
+  dryRun?: boolean
+  consent?: Partial<Record<string, boolean>>
+  wipe?: boolean
+}

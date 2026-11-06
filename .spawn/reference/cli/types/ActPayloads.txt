@@ -1,0 +1,145 @@
+ActPayloads = {
+  damageNumber: {
+    position: Vec3
+    value?: number
+    text?: string
+    color?: Color
+    crit?: boolean
+    size?: number = 1
+    lifetime?: number = 1.5
+  }
+  playSound: {
+    clip: string
+    position?: Vec3
+    volume?: number = 1
+    pitch?: number = 1
+    loop?: boolean
+    mode?: "overlap" | "restart"
+    bus?: string
+    priority?: number
+    maxDistance?: number
+    refDistance?: number
+    follow?: boolean
+  }
+  stopSound: { soundId: string }
+  preload: { refs: string[] }
+  fx: {
+    position: Vec3
+    script: string
+    params?: Record<string, unknown>
+    seed?: number
+    tags?: string[]
+    attachTo?: string
+  }
+  decal: {
+    position: Vec3
+    normal: Vec3
+    texture: string
+    size?: number | [number, number] | [number | [number, number], number | [number, number]] = 0.5
+    rotation?: number | [number, number]
+    lifetime?: number = 30
+    fade?: number
+    color?: Color
+    opacity?: number | [number, number] = 1
+    attachTo?: string
+  }
+  slash: {
+    position: Vec3
+    size?: number
+    shape?: "tightUniform" | "broadUniform" | "tightWidening" | "broadWidening" | "crescent" | "longCrescent" | "circle"
+    noise?: "none" | "forward" | "backward" | "stableDissolve"
+    glow?: "none" | "light" | "medium" | "intense" | "max"
+    timing?: "quick" | "standard" | "slow" | "verySlow"
+    body?: number
+    edge?: number
+    fade?: number
+    edgeColor?: Color
+    edgeAlpha?: number
+    bodyColor1?: Color
+    bodyColor1Alpha?: number
+    bodyColor2?: Color
+    bodyColor2Alpha?: number
+    bodyColor3?: Color
+    bodyColor3Alpha?: number
+    outwardGlow?: number
+    outwardGlowWidth?: number
+    outwardGlowSpeed?: number
+    rotation?: { yaw?: number; pitch?: number; roll?: number }
+    velocity?: { x?: number; y?: number; z?: number }
+    scaleVelocity?: number
+    rotationVelocity?: { yaw?: number; pitch?: number; roll?: number }
+  }
+  shockwave: {
+    position: Vec3
+    speed?: number = 0.5
+    thickness?: number = 0.5
+    intensity?: number = 0.5
+    edgeFade?: number = 0.5
+    scale?: number = 1
+    easing?: "linear" | "easeOut" | "easeIn" = "linear"
+  }
+  screenShake: { intensity: number; duration?: number = 0.2 }
+  screenFlash: { color?: Color; duration?: number = 0.15; intensity?: number = 0.35 }
+  hitstop: { duration: number }
+  cameraPunch: { direction: Vec3; intensity?: number = 0.3 }
+  slowMo: { scale: number; duration: number; easing?: boolean | string }
+  replay: {
+    from: number
+    to: number
+    camera?: ViewCameraPose | { parent: string; eye?: Vec3; aim?: Vec3 | "forward" | string; fov?: number; projection?: "perspective" | "orthographic"; orthoSize?: number; layers?: string[] }
+    scale?: number
+    cue?: boolean
+    hud?: boolean
+  }
+  zoomTo: {
+    target: Vec3 | string
+    duration?: number = 0.5
+    easing?: string = "easeOut"
+    offset?: Vec3
+    hold?: number
+  }
+  flash: { target: string; color?: Color; duration?: number = 0.1; intensity?: number = 0.9 }
+  shake: { target: string; intensity: number; duration: number }
+  squash: { target: string; axis?: "x" | "y" | "z" = "y"; intensity?: number = 0.3; duration?: number = 0.15 }
+  impulse: { target: string; impulse?: Vec3; position?: Vec3; angularImpulse?: Vec3 }
+  highlightSet: {
+    target: string
+    color?: Color
+    style?: "outline" | "glow" | "pulse" | "xray" = "outline"
+    duration?: number
+    width?: number
+    intensity?: number
+  }
+  highlightClear: { target: string }
+  outlinePage: { color?: Color; duration?: number = 0.45; width?: number = 3; pulses?: number = 1 }
+  uiEvent: { name: string; payload?: unknown }
+  haptic: {
+    kind: HapticKind | "dual-rumble" | "trigger-rumble"
+    startDelay?: number
+    duration?: number
+    strongMagnitude?: number
+    weakMagnitude?: number
+    leftTrigger?: number
+    rightTrigger?: number
+  }
+  milestone: { step?: number; name?: string }
+  stat: { name: string; value?: number; by?: string; vs?: string }
+  voxelMarkSet: {
+    markId: string
+    voxel: VoxelCoord
+    outline?: VoxelMarkOutlineOptions | null
+    fill?: VoxelMarkFillOptions | null
+    pulse?: VoxelMarkPulseOptions | null
+    duration?: number
+  }
+  voxelMarkClear: { markId: string }
+  partyAdd: { player: string | { readonly id: string } }
+  partyLeave: {}
+  partyJoin: { player: string | { readonly id: string } }
+  partyPortal: {}
+  guildAdd: { player: string | { readonly id: string } }
+  guildKick: { player: string | { readonly id: string } }
+  guildRank: { player: string | { readonly id: string }; rank: "member" | "officer" }
+  openSettings: { page?: "sound" | "voice" | "look" | "keys" | "screen" | "live" }
+  openAvatarEditor: {}
+}

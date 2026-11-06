@@ -1,0 +1,6 @@
+ScatterInstanceOverride = {
+  removed?: boolean
+  positionOffset?: Vec3
+  rotation?: RotationSpec
+  scale?: number | Vec3
+}

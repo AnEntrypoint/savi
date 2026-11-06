@@ -1,0 +1,33 @@
+CameraAPI = {
+  self: {
+    id: string
+    state: TomeCameraState
+    session: Record<string, unknown>
+    feetPosition: Vec3
+    rotation: RotationSpec
+    up: Vec3 | null
+    frame: RotationSpec | string | { readonly id: string } | null
+    target: CameraTargetView | null
+    view: { yaw: number; pitch: number } | undefined
+    pointerLock?: boolean | "drag" | { drag: "left" | "right" | "middle" } | { unadjustedMovement: boolean } | null
+    fov?: number | null
+    clip?: { near?: number | null; far?: number | null } | null
+    orientation?: CameraOrientationDef | null
+    sensitivity?: number | null
+    minPitch?: number | null
+    maxPitch?: number | null
+    pixelSnap?: boolean | null
+    hideLocalPlayer?: boolean | null
+    projection?: "perspective" | "orthographic" | null
+    layers?: string[] | null
+  }
+  player: SelfScopeHandle | undefined
+  place: PlaceScopeHandle
+  world: ObjectAPI["world"]
+  now(): number
+  random(): number
+  readField(name: string, x: number, z: number, place?: string): number
+  getTerrainNormal(x: number, z: number, place?: string): Vec3 | null
+  query(opts: ObjectQueryOptions & { select: "ids" }): string[]
+  query(opts: ObjectQueryOptions): ObjectView[]
+}

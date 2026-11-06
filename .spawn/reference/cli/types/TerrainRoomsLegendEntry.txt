@@ -1,0 +1,6 @@
+TerrainRoomsLegendEntry =
+  | { type: "wall"; albedo: string; normal?: string; roughness?: string; crown?: TerrainRoomsWallTrimDef; baseboard?: TerrainRoomsWallTrimDef }
+  | { type: "floor"; albedo: string; normal?: string; roughness?: string; height?: number; descent?: "wall" | "ramp"; ceiling?: boolean }
+  | { type: "spawn"; albedo: string; normal?: string; roughness?: string }
+  | { type: "door"; width: number; height: number; albedo: string; frame?: { depth: number; albedo: string }; orientation?: "auto" | "ns" | "ew"; state?: TomeState; behavior?: BehaviorRef; tags?: string[] }
+  | { type: "window"; width: number; height: number; sill?: number; frame?: { depth: number; albedo: string }; glass?: { albedo: string; collides?: boolean }; orientation?: "auto" | "ns" | "ew"; state?: TomeState; behavior?: BehaviorRef; tags?: string[] }

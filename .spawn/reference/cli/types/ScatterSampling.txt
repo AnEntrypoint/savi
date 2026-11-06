@@ -1,0 +1,6 @@
+ScatterSampling =
+  | { strategy: "poisson"; minDistance: number }
+  | { strategy: "grid"; spacing: number | [number, number]; jitter?: number }
+  | { strategy: "random" }
+  | { strategy: "clustered"; clusters: number; radius: number }
+  | { strategy: "edge"; band?: number }

@@ -1,0 +1,8 @@
+CameraCommon = {
+  fov?: number
+  clip?: { near?: number; far?: number } | null
+  behavior?: BehaviorRef
+  pixelSnap?: boolean
+  projection?: "perspective" | "orthographic"
+  layers?: string[]
+}

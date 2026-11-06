@@ -1,0 +1,6 @@
+spawn preview [<dir>] [--room <name>] [--render none|cpu|gpu] [--base <commit>] [--ttl <s>] [--origin <site>]
+                                           the world at your working tree, in a room of its own, with no push: run it
+                                           inside a clone, open the page it prints in a browser, and every save lands
+                                           in that room (a changed script reloads live). Ctrl-C ends it, and so does
+                                           --ttl (six hours by default); the room goes with it, and the world's rooms
+                                           never see the preview's files.

@@ -1,0 +1,27 @@
+EngineConfig = {
+  networking?: {
+    mode?: "singleplayer" | "multiplayer"
+  }
+  ui?: {
+    theme?: {
+      font?: string
+    }
+    targetFps?: number
+    referenceHeight?: number
+  }
+  graphics?: {
+    perfectPixelArt?: boolean | number
+    antialias?: boolean
+  }
+  playerSettings?: {
+    defaults?: {
+      accessibility?: { reduceFlashing?: boolean; reduceMotion?: boolean }
+    }
+    caps?: {
+      controls?: { lookSensitivity?: boolean; invertY?: boolean; fov?: boolean }
+    }
+  }
+  simulation?: { tickRateHz?: number }
+  behaviors?: ScriptRef[]
+  crons?: { schedule: string; script: ScriptRef }[]
+}

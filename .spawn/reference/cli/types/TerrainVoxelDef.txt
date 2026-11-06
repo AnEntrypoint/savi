@@ -1,0 +1,19 @@
+TerrainVoxelDef = {
+  kind: "voxel"
+  seed?: number
+  cellSize?: number
+  lodRanges?: readonly number[]
+  verticalRange?: { min: number; max: number }
+  defaultSlices?: {
+    topY?: number
+    sideZ?: number
+  }
+  blockTicks?: TerrainVoxelBlockTicksDef
+  materials?: Record<string, VoxelMaterialDef>
+  generator?: ScriptRef
+  params?: Record<string, number>
+  marks?: VoxelTerrainMarkMap
+  structures?: VoxelStructureDef[]
+  meshing?: { style?: "blocky" | "smooth" }
+  decorations?: DecorationDef
+}

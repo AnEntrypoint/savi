@@ -1,0 +1,1 @@
+BlendEquation = "add" | "subtract" | "reverse-subtract" | "min" | "max"

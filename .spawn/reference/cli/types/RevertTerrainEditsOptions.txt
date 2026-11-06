@@ -1,0 +1,4 @@
+RevertTerrainEditsOptions = {
+  by: string
+  since?: number
+}

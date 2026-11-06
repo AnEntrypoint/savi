@@ -1,0 +1,10 @@
+InputState = {
+  axes: EngineInputAxes & Record<string, number>
+  held: Record<string, boolean>
+  pressed: Record<string, boolean> & { pointerLockLost?: boolean }
+  released: Record<string, boolean>
+  pressedAt: Readonly<Record<string, number>>
+  actions: Record<string, boolean>
+  actionData?: Record<string, unknown>
+  pointer?: InputPointer
+}

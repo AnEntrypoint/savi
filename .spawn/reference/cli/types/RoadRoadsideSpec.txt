@@ -1,0 +1,6 @@
+RoadRoadsideSpec = {
+  sidewalks?: boolean | RoadSidewalksSpec
+  hedges?: boolean | RoadHedgesSpec
+  lampPosts?: boolean | RoadLampPostsSpec
+  markings?: boolean | RoadMarkingsSpec
+}

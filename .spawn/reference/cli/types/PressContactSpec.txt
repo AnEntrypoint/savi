@@ -1,0 +1,6 @@
+PressContactSpec = {
+  radius: number
+  strength?: number
+  at?: [number, number, number]
+  below?: number
+}

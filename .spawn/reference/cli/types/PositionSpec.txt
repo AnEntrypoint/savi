@@ -1,0 +1,7 @@
+PositionSpec =
+  | { x: number; z: number }
+  | { x: number; y: number; z: number }
+  | { x: number; z: number; y: TerrainOffset }
+  | { x: number; z: number; y: "surface" }
+  | { tile: [number, number]; offset?: [number, number, number] }
+  | { attach: "camera"; x?: number; y?: number; depth?: number; fov?: number }

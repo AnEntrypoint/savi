@@ -1,0 +1,1 @@
+PlaceInstance = "shared" | "party" | "solo"

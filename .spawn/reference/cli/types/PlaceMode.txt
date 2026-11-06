@@ -1,0 +1,1 @@
+PlaceMode = "3d" | "2d-side" | "2d-top" | "ui"

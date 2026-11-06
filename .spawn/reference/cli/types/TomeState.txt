@@ -1,0 +1,1 @@
+TomeState = Record<string, unknown>

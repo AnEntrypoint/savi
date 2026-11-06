@@ -1,0 +1,7 @@
+VoxelMarkOptions = {
+  outline?: VoxelMarkOutlineOptions | null
+  fill?: VoxelMarkFillOptions | null
+  pulse?: VoxelMarkPulseOptions | null
+  duration?: number
+  audience?: Audience
+}

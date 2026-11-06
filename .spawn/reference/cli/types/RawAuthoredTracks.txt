@@ -1,0 +1,6 @@
+RawAuthoredTracks = {
+  name: string
+  duration?: number
+  fps?: number
+  tracks: { bone: string; prop: "position" | "rotation" | "scale"; times: number[]; values: number[] }[]
+}

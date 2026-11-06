@@ -1,0 +1,7 @@
+ScatterBounds =
+  | { shape: "circle"; radius: number }
+  | { shape: "rectangle"; width: number; depth: number }
+  | { shape: "polygon"; points: [number, number][] }
+  | { shape: "ring"; innerRadius: number; outerRadius: number }
+  | { shape: "path"; points: [number, number][]; width: number }
+  | { shape: "field"; field: string; threshold?: number; density?: number }

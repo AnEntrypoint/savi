@@ -1,0 +1,18 @@
+AssetMetadata = {
+  boundsVersion?: number
+  triangles?: number
+  skinned?: boolean
+  clips?: string[]
+  gait?: Record<string, number>
+  gaitVersion?: number
+  bounds?: { min: [number, number, number]; max: [number, number, number]; size: [number, number, number]; center: [number, number, number] }
+  sockets?: Record<string, AssetSocketEntry>
+  parts?: Record<string, AssetPartEntry>
+  partsVersion?: number
+  sprite2d?: AssetSprite2DEntry
+  duration?: number
+  kind?: string
+  name?: string
+  uploadedAt?: string
+  bytes?: number
+}

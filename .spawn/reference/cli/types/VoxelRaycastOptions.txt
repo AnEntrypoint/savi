@@ -1,0 +1,5 @@
+VoxelRaycastOptions = {
+  distance?: number
+  includeLiquids?: boolean
+  place?: string
+}

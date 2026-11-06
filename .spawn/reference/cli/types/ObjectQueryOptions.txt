@@ -1,0 +1,11 @@
+ObjectQueryOptions = {
+  radius?: number
+  center?: Vec3
+  tags?: string[]
+  anyTags?: string[]
+  excludeTags?: string[]
+  ignoreSelf?: boolean
+  place?: string
+  select?: "objects" | "ids"
+  objectId?: string
+}

@@ -1,0 +1,5 @@
+SoundEndEvent = {
+  soundId: string
+  clip: string
+  durationSeconds: number
+}

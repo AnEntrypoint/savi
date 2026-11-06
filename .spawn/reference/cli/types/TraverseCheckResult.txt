@@ -1,0 +1,24 @@
+TraverseCheckResult = {
+  traversable: boolean
+  blockedAt?: Vec3
+  reason?: TraverseCheckBlockReason
+  blockedBy?: string
+  detail?: {
+    riser?: number
+    maxStep?: number
+    slopeDeg?: number
+    maxSlopeDeg?: number
+    clearance?: number
+    requiredClearance?: number
+    drop?: number
+  }
+  approximate: string[]
+  exact?: string
+  params: {
+    maxStep: number
+    maxSlopeDeg: number
+    capsuleRadius: number
+    capsuleHeight: number
+    body: string | null
+  }
+}

@@ -1,0 +1,8 @@
+TerrainRoomsWallLegend = {
+  type: "wall"
+  albedo: string
+  normal?: string
+  roughness?: string
+  crown?: TerrainRoomsWallTrimDef
+  baseboard?: TerrainRoomsWallTrimDef
+}

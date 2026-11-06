@@ -1,0 +1,53 @@
+StandardMaterialSpec = {
+  texture?: string | null
+  time?: number
+  timeAt?: number
+  paused?: boolean
+  speed?: number
+  view?: { link: string; oneWay?: boolean; spill?: number; sound?: number } | { camera: ViewCamera; cadence?: string } | null
+  canvas?: string | null
+  pbr?: boolean | "fal1"
+  normalMap?: string
+  roughnessMap?: string
+  metalnessMap?: string
+  alphaMap?: string
+  normalScale?: number
+  alphaTest?: number
+  color?: Color
+  repeat?: [number, number]
+  textureScale?: number
+  wrap?: "repeat" | "clamp"
+  filter?: "pixel" | "linear"
+  metalness?: number
+  roughness?: number
+  opacity?: number
+  transparent?: boolean
+  emissive?: Color
+  emissiveIntensity?: number
+  emissiveMap?: string
+  unlit?: boolean
+  dissolve?: number
+  side?: "front" | "back" | "double"
+  vertexColors?: boolean
+  depthWrite?: boolean
+  depthTest?: boolean
+  renderOrder?: number
+  drawsOver?: string[] | { parts: string[]; strength?: number; angle?: number }
+  outline?: boolean | { color?: Color; width?: number; warm?: number; lightness?: number } | null
+  polygonOffset?: boolean
+  polygonOffsetFactor?: number
+  polygonOffsetUnits?: number
+  blending?: "none" | "normal" | "additive" | "subtractive" | "multiply" | "custom"
+  blendSrc?: BlendFactor
+  blendDst?: BlendFactor
+  blendEquation?: BlendEquation
+  blendSrcAlpha?: BlendFactor
+  blendDstAlpha?: BlendFactor
+  blendEquationAlpha?: BlendEquation
+  premultipliedAlpha?: boolean
+  colorWrite?: boolean
+  clippingPlanes?: ClipPlane[] | null
+  clipIntersection?: boolean
+  clipShadows?: boolean
+  overrides?: MaterialOverridesSpec
+}

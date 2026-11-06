@@ -1,0 +1,3 @@
+TradeReceipt =
+  | { offered: true; id: string; give: string; with: string; for: string }
+  | { offered: false; refused: "unknown-target" | "not-held" | "not-mine" | "same-party" | "withdrawn"; message: string }

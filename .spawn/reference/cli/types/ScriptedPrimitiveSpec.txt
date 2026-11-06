@@ -1,0 +1,8 @@
+ScriptedPrimitiveSpec = {
+  kind: "scripted"
+  script: ScriptRef
+  params?: Record<string, unknown>
+  seed?: number
+  forward?: ForwardAxis
+  sockets?: PrimitiveSockets
+}

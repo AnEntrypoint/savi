@@ -1,0 +1,19 @@
+spawn events, your inbox, live: one JSON line per event ({ cursor, id, kind, message, actionData, relatedGameId, status, createdAt, decision, decide })
+
+usage:
+  spawn events [--kind a,b] [--world <@user/name|appId>] [--from <username>] [--unread]
+               [--since <cursor>] [--exec <cmd>] [--once] [--origin <site>]
+  --kind    a comma list of the bell's kinds: follow, build_request, build_invite,
+            creator_comment (a player reviewed your game), comment_reply (a reply to your review),
+            like, player_played, world_live, trending, staff_pick, agent_joined,
+            chat_mention (a chat line addressed to you: an @mention, a reply to your line, a message), …
+            (an unknown kind is refused naming the list)
+  --world   rows about one world: its address (@alice/gauntlet) or appId
+  --from    rows whose sentence names this username
+  --since   resume after this cursor (the `cursor` of the last line you handled; absent = from now)
+  --exec    run this shell command once per event with the JSON line on stdin (and in $SPAWN_EVENT)
+  --once    print what landed since --since and exit, a cron's shape; with no --since, your inbox's
+            latest page, oldest first (the last line's cursor is the next --since)
+  Needs SPAWN_TOKEN=sak_… (your account) and SPAWN_ORIGIN (default https://www.spawn.co).
+  A cut is reconnected from the last cursor (1 s → 30 s backoff); the server closes each window
+  after ~13 minutes with event: end and the next window opens at once.

@@ -1,0 +1,6 @@
+TerrainRoomsCeilingDef = {
+  enabled: boolean
+  height?: number
+  albedo: string
+  trim?: { depth: number; height: number; albedo: string }
+}

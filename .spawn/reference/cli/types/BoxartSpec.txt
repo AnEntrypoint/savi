@@ -1,0 +1,3 @@
+BoxartSpec = {
+  game: string
+}

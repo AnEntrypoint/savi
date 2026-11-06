@@ -1,0 +1,5 @@
+ViewCamera =
+  | "mirror"
+  | { mirror: true; layers?: string[] }
+  | { place?: string } & ViewCameraPose
+  | { parent: string; eye?: Vec3; aim?: Vec3 | "forward" | string; fov?: number; projection?: "perspective" | "orthographic"; orthoSize?: number; layers?: string[]; place?: string }

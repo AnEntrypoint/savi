@@ -1,0 +1,9 @@
+{
+  "name": "savi-direct-manual",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-manual.mjs .",
+    "check": "node scripts/check-manual.mjs ."
+  }
+}

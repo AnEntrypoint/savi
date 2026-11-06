@@ -1,0 +1,6 @@
+InputActionTouchDef = {
+  button?: boolean
+  label?: string
+  slot?: 1 | 2 | 3 | 4
+  gesture?: "tap" | "double-tap" | "hold" | "press"
+}

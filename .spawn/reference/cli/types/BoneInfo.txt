@@ -1,0 +1,17 @@
+BoneInfo = {
+  index: number
+  name: string
+  parentName: string | null
+  localPosition: Vec3
+  modelPosition: Vec3
+  currentWorldPosition: Vec3 | null
+  currentWorldRotation: { x: number; y: number; z: number; w: number } | null
+  currentWorldScale: Vec3 | null
+  timestamp: number | null
+  fist: {
+    position: Vec3
+    grip: Vec3
+    fingers: Vec3
+    palm: Vec3
+  } | null
+}

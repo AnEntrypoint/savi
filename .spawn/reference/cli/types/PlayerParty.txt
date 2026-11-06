@@ -1,0 +1,4 @@
+PlayerParty = {
+  id: string
+  leader: boolean
+}

@@ -1,0 +1,40 @@
+PlaceScopeHandle = {
+  id: string
+  name: string
+  players: PlayerQueryResult[]
+  playerCount: number
+  objects: PlaceObjectsCollection
+  state: Record<string, unknown>
+  atmosphere: Record<string, unknown> & { readonly sunState?: AtmosphereSunState | null }
+  terrain: Record<string, unknown> & { readonly marks: Record<string, unknown>; readonly materials: Record<string, unknown> | Array<Record<string, unknown> & { id: string }>; runtimeEdits?: undefined; readonly spacing: number | null; heightAt(x: number, z: number): number | null; materialAt(x: number, z: number): string | null; colorAt(x: number, y: number, z: number, normal: Vec3 | readonly [number, number, number]): { color: Color; roughness: number; metalness: number; emissive: Color; emissiveIntensity: number } | null; scatterIn(min: { x: number; z: number }, max: { x: number; z: number }): ScatterInstance[]; stroke(field: string, brush: TerrainBrush): TreeOpsVerdict | undefined }
+  voxels: {
+    [x: number]: { readonly [y: number]: { [z: number]: string | null } }
+    solid(x: number, y: number, z: number): boolean | null
+    raycast(origin: Vec3, direction: Vec3, options?: VoxelRaycastOptions): VoxelRaycastHit | null
+    fill(min: Vec3, max: Vec3, material: string | null, opts?: VoxelFillOptions): boolean
+    stamp(structure: VoxelStructureSource, cell: Vec3, opts?: PlaceStructureOptions): boolean
+    query(options: VoxelQueryOptions): VoxelQueryHit[]
+    interact(x: number, y: number, z: number): boolean
+    read(min: Vec3 | readonly [number, number, number], max: Vec3 | readonly [number, number, number]): { min: [number, number, number]; size: [number, number, number]; palette: Array<string | null>; cells: Int16Array; states: Uint16Array }
+  }
+  tiles: { readonly [x: number]: { [y: number]: number | null } }
+  fields: PlaceFieldsHandle
+  mode: PlaceMode | undefined
+  gravity: Vec3
+  tickBase: number
+  damping: number
+  listenerEntity: string | undefined
+  acoustics: Record<string, unknown>
+  fieldConfig: Record<string, unknown>
+  defaultSpawnPoint: Record<string, unknown>
+  defaultSpawnRotation: Record<string, unknown>
+  arrival: string | undefined
+  returnDoor: false | Record<string, unknown>
+  pregenerate: boolean | undefined
+  persistence: PlacePersistence | undefined
+  policy: Record<string, unknown>
+  worldBounds: Record<string, unknown>
+  mintedFrom: string | undefined
+  owner: string | null
+  timeScale: number
+}

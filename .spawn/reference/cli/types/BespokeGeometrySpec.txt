@@ -1,0 +1,20 @@
+BespokeGeometrySpec = {
+  positions: number[]
+  indices?: number[]
+  normals?: number[]
+  uvs?: number[]
+  colors?: number[]
+  emissive?: number[]
+  metalness?: number[]
+  roughness?: number[]
+  textureRuns?: { texture: string; start: number; count: number }[]
+  instances?: {
+    layout?: Record<string, string>
+    data?: number[]
+    count?: number
+    lods?: { indices: [number, number]; distance?: number }[]
+    bounds?: { min: [number, number, number]; max: [number, number, number] }
+  }
+  bounds?: { min: [number, number, number]; max: [number, number, number] }
+  revision?: number
+}

@@ -1,0 +1,6 @@
+VoxelMaterialBlockBehaviorDef = {
+  script: ScriptRef
+  randomTick?: boolean
+  scheduledTick?: boolean
+  neighborChanged?: boolean
+}

@@ -1,0 +1,3 @@
+CameraTargetView = ObjectView & {
+  effectiveScale: Vec3
+}

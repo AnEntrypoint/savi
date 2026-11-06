@@ -1,0 +1,5 @@
+RotationSpec =
+  | number
+  | { yaw?: number; pitch?: number; roll?: number }
+  | { x: number; y: number; z: number; w: number }
+  | { lookAt: PositionSpec; include?: ("yaw" | "pitch" | "roll")[] }

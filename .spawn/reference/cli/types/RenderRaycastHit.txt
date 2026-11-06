@@ -1,0 +1,3 @@
+RenderRaycastHit = RaycastHit & {
+  role: RenderPickRole
+}

@@ -1,0 +1,19 @@
+LocalPlayerView = ControlTargetView & {
+  controlling: ControlTargetView | null
+  displayName?: string
+  portraitUrl?: string
+  avatarUrl?: string
+  userId?: string
+  isLocal?: boolean
+  isEditor?: boolean
+  isGodMode?: boolean
+  isGuest?: boolean
+  isTestAccount?: boolean
+  mail?: PlayerMail[]
+  friends?: PlayerFriend[]
+  partyMembership?: PlayerParty | null
+  party?: PlayerParty | null
+  guild?: PlayerGuild | null
+  den?: string | null
+  wisps?: readonly SessionWisp[]
+}

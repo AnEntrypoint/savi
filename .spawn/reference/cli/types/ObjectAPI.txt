@@ -1,0 +1,89 @@
+ObjectAPI = {
+  state: Record<string, unknown>
+  world: {
+    state: Record<string, unknown>
+    camera: Record<string, unknown>
+    inputs: Record<string, unknown>
+    assets: Record<string, AssetMetadata | undefined>
+    mode: "dev" | "live"
+    version: number | null
+    id: string | null
+    address: string | null
+    players: PlayerQueryResult[]
+    playerCount: number
+    onlineCount: number
+    date: string
+    places: PlacesCollection
+    engine: EngineConfig
+    passThrough: Record<string, string[]>
+    routing: RoutingDef
+    ui: Record<string, unknown>
+    player: Record<string, unknown>
+    godMode: Record<string, unknown>
+    creatorTabs: CreatorTabDef[]
+    defaultPlace: string
+    settling: boolean
+    files: readonly string[]
+  }
+  session: Record<string, unknown>
+  files: FilesAPI
+  view: ViewAPI
+  quality: LightingQualityTier
+  self: SelfScopeHandle
+  place: PlaceScopeHandle
+  getWaterLevelAt(x: number, z: number, place?: string): number | null
+  readField(name: string, x: number, z: number, place?: string): number
+  getTerrainNormal(x: number, z: number, place?: string): Vec3 | null
+  worldToScreen(position: Vec3): { x: number; y: number; depth: number; onScreen: boolean } | null
+  after(seconds: number, hookExport: string, payload?: unknown): string
+  cancel(id: string): void
+  getTimers(ownerId?: string): Array<{ id: number | string; ownerId: string; dueInTicks: number; dueInSeconds: number; engineOwned: boolean; hook?: string }>
+  job(jobId: string, args: Record<string, unknown>, callback?: (result: JobResult<T>) => void, options?: JobOptions): string
+  job(jobId: string, args: Record<string, unknown>, hookExport: string, payload?: unknown): string
+  awaitJob(requestId: string): Promise<JobResult<T>>
+  proposePurchase(buyer: string | { readonly id: string }, itemId: string): string
+  sql: SqlAPI
+  now(): number
+  changed(glob: string): ChangedRow[]
+  random(): number
+  log(...args: unknown[]): void
+  warn(...args: unknown[]): void
+  error(...args: unknown[]): void
+  emit(name: K, payload: ActPayloads[K], options?: { audience?: Audience }): string | void
+  emit(name: string, payload?: unknown, options?: { place?: string; to?: string; via?: string; audience?: Audience }): string | void
+  on(name: string, handler: TomeEventHandler, options?: TomeEventOptions): () => void
+  resolveControls(surface?: string): { surface: TouchSurfaceDef; diagnostics: Array<{ code: string; message: string }> }
+  query(opts: ObjectQueryOptions & { select: "ids" }): string[]
+  query(opts: CrossingScopeQueryOptions): CrossingRecord[]
+  query(opts: ObjectQueryOptions): ObjectView[]
+  enterPlace(options: EnterPlaceOptions): string | null
+  enterPlace(entityId: string, options: EnterPlaceOptions): string | null
+  getRoomId(): string
+  presence(userIds: ReadonlyArray<string | { readonly userId: string }>): Promise<readonly PresenceRow[]>
+  getObject(id: string): ObjectView | null
+  getVibeAudio(id: string): VibeAudioSnapshot | null
+  getObjectBoneNames(id: string): BoneNamesResult
+  getObjectMorphTargetNames(id: string): MorphTargetNamesResult
+  getObjectSocket(id: string, name: string): { position: Vec3; direction: Vec3; confidence: number } | null
+  spawn(spec: ObjectSpec): string
+  spawn(id: string, spec: ObjectSpec): string
+  destroy(id?: string): void
+  destroy(ids: string[]): void
+  destroy(id: string, options: { force?: boolean }): void
+  destroy(ids: string[], options: { force?: boolean }): void
+  commit(message: string | undefined, callback: () => void): void
+  commit(callback: () => void): void
+  trade(mine: string, opts: { with: string; for: string } | null): TradeReceipt
+  attach(entity: string | { readonly id: string }, parent: string | { readonly id: string } | null, offset?: { position?: Vec3; rotation?: RotationSpec; scale?: Vec3; pivot?: PivotSpec; attachment?: ObjectAttachmentSpec | null; replaces?: string }): void
+  sleep(seconds?: number): void
+  notifyDm(message: string, options?: NotifyDmOptions): void
+  notifyDmOnce(key: string, message?: string, options?: NotifyDmOptions): void
+  stopFx(id: string): void
+  pulseFx(id: string, name: string, opts?: { at?: Vec3; data?: Record<string, unknown> }): void
+  getFxState(id: string): FxState | null
+  music: MusicAPI
+  audio: {
+    duration(ref: string): number | null
+    playing(): AudioCensus
+  }
+}

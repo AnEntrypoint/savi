@@ -1,0 +1,11 @@
+TerrainHeightmapDef = {
+  kind: "heightmap"
+  seed?: number
+  materials?: Array<{ id: string; albedo?: string; pbr?: boolean | "fal1"; tint?: number | string; normal?: string; roughness?: string; textureScale?: number; metalness?: number; normalStrength?: number; roughnessIntensity?: number; antiTiling?: "none" | "stochastic"; filter?: "pixel" | "linear"; macro?: { scale?: number; hue?: number; value?: number } }>
+  generator?: ScriptRef
+  verticalRange?: { min: number; max: number }
+  marks?: HeightmapTerrainMarkMap
+  decorations?: DecorationDef
+  water?: LiquidSpec
+  material?: ScriptedMaterialSpec
+}

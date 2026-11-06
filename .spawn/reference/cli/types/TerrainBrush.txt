@@ -1,0 +1,5 @@
+TerrainBrush = {
+  center: Vec3
+  radius: number
+  fn: (p: { x: number; z: number }, inset: number, current: number) => number
+}

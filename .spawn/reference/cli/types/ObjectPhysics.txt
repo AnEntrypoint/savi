@@ -1,0 +1,8 @@
+ObjectPhysics =
+  | false
+  | "none"
+  | "static"
+  | "dynamic"
+  | "kinematic"
+  | "character"
+  | { body: PhysicsBodyType; trigger?: boolean; collider?: "auto" | "box" | "sphere" | "capsule" | "cylinder" | "mesh" | "none"; mass?: number; centerOfMass?: [number, number, number]; friction?: number; frictionCombine?: "average" | "min" | "multiply" | "max"; restitution?: number; restitutionCombine?: "average" | "min" | "multiply" | "max"; rollingResistance?: number; surfaceVelocity?: [number, number, number]; linearDamping?: number; angularDamping?: number; gravityScale?: number; lockedAxes?: ("x" | "y" | "z" | "rotX" | "rotY" | "rotZ")[]; layer?: string; density?: number; autostep?: { maxHeight: number; minWidth: number } | false; maxSlopeClimbAngle?: number; minSlopeSlideAngle?: number; slideEnabled?: boolean; snapToGroundDistance?: number | false; characterMass?: number; applyImpulsesToDynamicBodies?: boolean; offset?: number; up?: [number, number, number]; capsule?: { height?: number; radius?: number } }

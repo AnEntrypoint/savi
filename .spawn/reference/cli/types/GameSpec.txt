@@ -1,0 +1,31 @@
+GameSpec = {
+  buyables?: Record<string, BuyableDef>
+  achievements?: Record<string, AchievementDef>
+  leaderboards?: Record<string, LeaderboardDef>
+  inputs?: InputsDef
+  player?: PlayerDef
+  camera?: CameraDef
+  material?: MaterialSpec
+  lighting?: string
+  sky?: string
+  audio?: WorldAudioPolicy
+  passThrough?: Record<string, string[]>
+  ui?: GameUIDef
+  godMode?: GodModeConfig
+  creatorUi?: UIDef
+  creatorTabs?: CreatorTabDef[]
+  engine?: EngineConfig
+  routing?: RoutingDef
+  places?: Record<string, PlaceDef>
+  defaultPlace?: string
+  earshot?: number
+  voiceMood?: "cave" | "hall" | "open"
+  nameplates?: boolean
+  voice?: boolean
+  nametag?: string
+  chat?: string
+  assets?: {
+    metadata?: Record<string, AssetMetadata>
+    authoredClips?: Record<string, AuthoredClipEntry | null>
+  }
+}

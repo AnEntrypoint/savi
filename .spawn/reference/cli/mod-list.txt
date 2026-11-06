@@ -1,0 +1,12 @@
+spawn mod <verb> — the mods of a world you build in, as Savi's mod verbs run there
+
+  spawn mod install <name>[@<version>]     install a published mod into the world's mods/<name>/ (bare = the latest)
+  spawn mod update [<name>] [--version <x.y.z>] [--changelog <text>]
+                                           release the next version of a mod you made, from its folder here
+  spawn mod list                           the mods installed here, and whether a newer version exists
+  spawn mod status [<name>]                what an update of the folder would release
+
+  --world <@user/name|worldId>             the world; default: the clone this shell stands in
+  --origin <site>                          the Spawn site; default: the clone's own
+
+Publishing a mod is Savi's turn: ask her in your world's chat.

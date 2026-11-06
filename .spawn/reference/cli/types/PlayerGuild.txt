@@ -1,0 +1,5 @@
+PlayerGuild = {
+  id: string
+  name: string
+  rank: "member" | "officer" | "leader"
+}

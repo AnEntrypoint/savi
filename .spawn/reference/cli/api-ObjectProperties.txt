@@ -1,0 +1,68 @@
+ObjectProperties = {
+  feetPosition?: PositionSpec
+  rotation?: RotationSpec
+  yaw?: number
+  scale?: number | Vec3
+  attachment?: ObjectAttachmentSpec | null
+  pivot?: PivotSpec
+  visible?: boolean
+  render?: boolean
+  visibleRange?: { min?: number; max?: number } | null
+  visibleInFirstPerson?: boolean | null
+  layers?: string[] | null
+  visibleTo?: "all" | "editors"
+  castShadow?: boolean
+  receiveShadow?: boolean
+  primitive?: PrimitiveSpec
+  spline?: SplineSpec
+  vector?: string
+  model?: | string | { id: string; offset?: [number, number, number]; forward?: ForwardAxis; animation?: { clip?: string; speed?: number; loop?: "once" | "loop" | "pingpong" }; materials?: Record<string, Omit<StandardMaterialSpec, "time" | "timeAt" | "paused" | "speed"> | ScriptedMaterialSpec>; parts?: Record<string, ModelPartStateSpec> }
+  mixer?: Record< string, { clip: string; weight?: number; duration?: number; speed?: number; loop?: "once" | "loop" | "pingpong"; blendIn?: number; blendOut?: number; direction?: "normal" | "reverse" | "alternate"; mask?: { from: string } | { bones: string[] }; blend?: "normal" | "override" | "additive"; time?: number; timeAt?: number; talking?: true; clampWhenFinished?: true } > | null
+  jiggle?: boolean | JiggleSpecValue | JiggleSpecValue[] | null
+  morph?: MorphSpecValue | null
+  bones?: BonesSpecValue | null
+  sprite?: {
+    texture: AssetID
+    size?: [number, number]
+    pixelsPerUnit?: number
+    anchor?: [number, number]
+    tint?: Color
+    opacity?: number
+    blend?: SpriteBlendMode
+    lit?: boolean
+    emissive?: number
+    normalStrength?: number
+    billboard?: "none" | "yaw" | "full"
+    upright?: boolean
+    flipX?: boolean
+    flipY?: boolean
+    sortingLayer?: number
+    sortingOrder?: number
+    ySort?: boolean
+    alphaCutoff?: number
+    cutout?: boolean
+    filter?: "pixel" | "linear"
+    parallax?: [number, number]
+    repeatX?: boolean
+    uvRect?: SpriteUvRect
+    events?: Record<string, Record<number, string>> | null
+    trail?: { interval?: number; life?: number; count?: number; tint?: Color | [Color, Color]; fade?: "alpha" | "shrink" | "both"; blend?: "normal" | "additive" } | null
+    material?: ScriptedMaterialSpec
+  }
+  wisp?: WispSpec | null
+  boxart?: BoxartSpec | null
+  collider2d?: { outline: [number, number][] }
+  ui?: string | null
+  room?: RoomSpec
+  layout?: LayoutSpec
+  material?: MaterialSpec
+  light?: LightSpec
+  audio?: AudioIntentValue
+  voice?: { gain: number } | null
+  fx?: FxSpec
+  interpolation?: { teleportThreshold: number } | null
+  physics?: ObjectPhysics
+  press?: PressContactSpec | PressContactSpec[] | null
+  scatter?: ScatterSpec
+  blueprint?: { label?: string; category?: string; icon?: string }
+}

@@ -1,0 +1,9 @@
+JobOptions = {
+  priority?: "low" | "normal" | "high" = "normal"
+  deadlineMs?: number
+  dedupeKey?: string
+  retries?: number
+  onPart?: (part: unknown) => void
+  count?: number
+  room?: string
+}

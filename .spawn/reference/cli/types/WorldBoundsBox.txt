@@ -1,0 +1,8 @@
+WorldBoundsBox = {
+  min: Vec3
+  max: Vec3
+  size: Vec3
+  center: Vec3
+  obb: { axes: { x: Vec3; y: Vec3; z: Vec3 }; halfExtents: Vec3 }
+  geometryPending?: true
+}

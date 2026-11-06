@@ -1,0 +1,31 @@
+WaterMaterialSpec = {
+  kind: "water"
+  underwater?: UnderwaterSpec
+  color?: Color
+  opacity?: number
+  waveIntensity?: number
+  waveFrequency?: number
+  waveHeightScale?: number
+  flowDirection?: [number, number]
+  flowSpeed?: number
+  roughness?: number
+  normalScale?: number
+  detailNormalStrength?: number
+  foamColor?: Color
+  foamStrength?: number
+  foamScale?: number
+  contactFoamWidth?: number
+  shorelineFoamStrength?: number
+  shorelineFoamSoftness?: number
+  crestFoamCoverage?: number
+  crestFoamStrength?: number
+  causticsEnabled?: boolean
+  causticStrength?: number
+  causticScale?: number
+  depthColorDistance?: number
+  refractionStrength?: number
+  swellAmplitude?: number
+  swellDirection?: [number, number]
+  surfWidth?: number
+  wakeSeconds?: number
+}

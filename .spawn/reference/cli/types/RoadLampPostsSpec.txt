@@ -1,0 +1,7 @@
+RoadLampPostsSpec = {
+  sides?: RoadsideFeatureSides
+  spacing?: number
+  offset?: number
+  poleHeight?: number
+  style?: | "streetlight-classic" | "streetlight-curved" | "streetlight-lantern" | "streetlight-double" | "streetlight-globe" | "streetlight-modern" | "streetlight-pendant" | "streetlight-industrial" | "streetlight-victorian" | "streetlight-art-deco" | "streetlight-harbor" | "streetlight-park" | "streetlight-neon" | "streetlight-rustic" | "streetlight-campus" | "streetlight-gaslamp" | "streetlight-boulevard" | "streetlight-solar" | "streetlight-transit" | "streetlight-pagoda"
+}

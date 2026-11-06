@@ -1,0 +1,5 @@
+FieldChunkGrid = {
+  cellSize: number
+  chunkCells: number
+  quant: number
+}

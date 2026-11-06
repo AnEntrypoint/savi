@@ -1,0 +1,14 @@
+TomeEventMeta = {
+  name: string
+  sourceId: string
+  placeId: string
+  to?: string
+  origin?: {
+    world: string
+    actor: string
+    script: string | null
+    door: string | null
+    exit: string | null
+    address: string
+  }
+}

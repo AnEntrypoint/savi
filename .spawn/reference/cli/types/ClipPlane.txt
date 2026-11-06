@@ -1,0 +1,4 @@
+ClipPlane = {
+  normal: [number, number, number]
+  constant: number
+}

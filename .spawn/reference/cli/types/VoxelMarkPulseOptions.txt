@@ -1,0 +1,4 @@
+VoxelMarkPulseOptions = {
+  speed?: number = 2
+  intensity?: number = 0.18
+}

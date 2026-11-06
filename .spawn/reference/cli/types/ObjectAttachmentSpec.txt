@@ -1,0 +1,6 @@
+ObjectAttachmentSpec = {
+  bone?: string
+  skin?: true | { map?: Record<string, string> }
+  socket?: string
+  part?: string
+}

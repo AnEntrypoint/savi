@@ -1,0 +1,11 @@
+TerrainRoomsDef = {
+  kind: "3d-rooms"
+  tileSize: number
+  wallHeight: number
+  wallThickness?: number
+  origin?: TerrainRoomsOrigin
+  ceiling?: TerrainRoomsCeilingDef
+  lighting?: TerrainRoomsLightingDef
+  layout: string
+  legend: Record<string, TerrainRoomsLegendEntry | "void">
+}

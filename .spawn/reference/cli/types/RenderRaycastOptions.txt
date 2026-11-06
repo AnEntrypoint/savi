@@ -1,0 +1,15 @@
+RenderRaycastOptions = {
+  distance?: number
+  ignoreEntities?: string[]
+  tags?: string[]
+  anyTags?: string[]
+  excludeTags?: string[]
+  place?: string
+  screen?: {
+    x: number
+    y: number
+    space?: "pixels" | "ndc"
+    width?: number
+    height?: number
+  }
+}

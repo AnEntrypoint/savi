@@ -1,0 +1,4 @@
+SplinePlacementOptions = SplineSampleOptions & {
+  orient?: boolean
+  offset?: Vec3 | [number, number, number]
+}

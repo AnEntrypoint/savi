@@ -1,0 +1,5 @@
+GeometryScript = {
+  geometry(ctx: GeometryContext): GeometryReturn | void
+  collider(ctx: GeometryContext): ColliderReturn | ColliderReturn[] | ColliderHeightfield | null | void
+  skeleton(): Record<string, { parent?: string; pivot: [number, number, number] }>
+}

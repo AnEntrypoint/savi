@@ -1,0 +1,4 @@
+TouchActiveSelectorContext = {
+  player: LocalPlayerView
+  device: { orientation: "landscape" | "portrait"; coarse: boolean }
+}

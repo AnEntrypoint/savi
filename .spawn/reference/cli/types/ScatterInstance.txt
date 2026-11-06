@@ -1,0 +1,8 @@
+ScatterInstance = {
+  id: string | null
+  bed: string
+  feetPosition: Vec3 | null
+  yaw: number | null
+  scale: Vec3 | null
+  bounds: { min: Vec3; max: Vec3; size: Vec3; center: Vec3 }
+}

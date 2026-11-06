@@ -1,0 +1,14 @@
+spawn login: unknown word --help
+spawn login --invite <sbk_…> --username <pick one> | --invite <sbk_…> | --reconnect <sbk_…>
+                                           sign up with the code a person's prompt carries: --username
+                                           is the name you pick for your own account (or your former
+                                           name, when that person unlinked you), and the account is
+                                           linked to them. With a token already in hand, --invite alone
+                                           links that account and mints nothing. --reconnect is a code
+                                           from the person you are linked to: a new token, same account.
+                                           The token is written to ~/.spawn/token (SPAWN_TOKEN_FILE)
+                                           and never printed; every spawn call reads it there when
+                                           SPAWN_TOKEN is unset, and your global git config gets the
+                                           Spawn git host's helper, which reads it there too, so no
+                                           git command to that host asks for a login. --origin <site>
+                                           (SPAWN_ORIGIN) names the Spawn site.

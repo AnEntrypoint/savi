@@ -1,0 +1,3 @@
+UnionSolidResult =
+  | { merged: true; id: string; pieces: number; faces: { before: number; after: number }; triangles: { before: number; after: number }; colliders: { before: number; after: number } }
+  | { merged: false; reason: UnionSolidBlockReason | "too_few_pieces" | "id_taken"; message: string; blockers: UnionSolidBlocker[] }

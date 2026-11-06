@@ -1,0 +1,35 @@
+SplineSpec = {
+  kind: "road" | "pipe" | "fence" | "hedge" | "powerline" | "wall" | "guardrail" | "handrail" | "railway" | "streetlight" | "stringlight" | "bannerline" | "conveyor" | "canal" | "curb" | "stairs" | "boardwalk" | "bollard" | "barrier" | "zipline" | "aqueduct" | "coaster" | "data-only" | "scripted"
+  script?: ScriptRef
+  params?: Record<string, unknown>
+  seed?: number
+  points?: SplinePointSpec[]
+  beziers?: CubicBezierSpec[]
+  shape?: SplineShapeSpec
+  samples?: number | "auto"
+  closed?: boolean
+  cornerMode?: "smooth" | "hard"
+  style?: SplineStyle
+  snapToTerrain?: boolean
+  yOffset?: number
+  up?: [number, number, number]
+  width?: number | number[]
+  radius?: number
+  spacing?: number
+  bulbSpacing?: number
+  overlap?: number
+  beltSpeed?: number
+  lightStrips?: boolean | SplineLightStripsSpec
+  roadside?: RoadRoadsideSpec
+  tangentAxis?: "x" | "z"
+  height?: number
+  thickness?: number
+  poleHeight?: number
+  poles?: boolean
+  wireCount?: number
+  wireHeight?: number
+  wireSag?: number
+  wireRadius?: number
+  rolls?: number[]
+  revision?: number
+}

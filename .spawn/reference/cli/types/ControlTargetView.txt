@@ -1,0 +1,8 @@
+ControlTargetView = {
+  id: string
+  place?: string
+  tags: string[]
+  state: Record<string, unknown>
+  feetPosition?: { x: number; y: number; z: number }
+  position?: { x: number; y: number; z: number }
+}

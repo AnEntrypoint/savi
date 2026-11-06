@@ -1,0 +1,22 @@
+
+const out = {};
+out.engine = ctx.world.engine;
+out.worldVersion = ctx.world.version;
+out.worldName = ctx.world.name;
+out.worldId = ctx.world.id;
+out.tickBase = ctx.place.tickBase;
+out.timeScale = ctx.place.timeScale;
+out.gravity = ctx.place.gravity;
+out.damping = ctx.place.damping;
+out.mode = ctx.world.mode;
+out.playerCount = ctx.place.playerCount;
+out.now = ctx.now ? ctx.now() : null;
+const all = ctx.query({});
+out.totalEntities = all.length;
+const byTag = {};
+for (const e of all) for (const t of (e.tags || [])) byTag[t] = (byTag[t] || 0) + 1;
+out.tagCounts = byTag;
+out.sample = all.slice(0, 3).map((e) => ({ id: e.id, tags: e.tags, name: e.name, state: e.state, template: e.template, visible: e.visible }));
+out.worldStateKeys = Object.keys(ctx.world.state || {});
+out.placeStateKeys = Object.keys(ctx.place.state || {});
+return out;

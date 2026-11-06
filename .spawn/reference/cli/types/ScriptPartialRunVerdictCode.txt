@@ -1,0 +1,1 @@
+ScriptPartialRunVerdictCode = "spec_moved_while_waiting" | "bytes_missing_after_wait" | "asker_left" | "stopped_during_wait"

@@ -1,0 +1,3 @@
+RaycastVerdict =
+  | { queryable: false; reason: "colliders-not-loaded"; message: string; terrain: boolean | null; pendingGeometry?: string[] }
+  | { queryable: true; pendingColliders: string[]; pendingColliderCount: number; terrain: boolean | null; pendingGeometry?: string[] }

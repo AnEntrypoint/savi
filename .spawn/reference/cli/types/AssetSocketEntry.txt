@@ -1,0 +1,8 @@
+AssetSocketEntry = {
+  position: [number, number, number]
+  groundOffsetY: number
+  bone?: string
+  boneOffset?: [number, number, number]
+  confidence: number
+  version: number
+}

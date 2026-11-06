@@ -1,0 +1,5 @@
+SplineLightStripsSpec = {
+  color?: Color
+  intensity?: number
+  width?: number
+}

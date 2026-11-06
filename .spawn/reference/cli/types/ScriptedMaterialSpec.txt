@@ -1,0 +1,36 @@
+ScriptedMaterialSpec = {
+  kind: "scripted"
+  color?: Color
+  emissive?: Color
+  emissiveIntensity?: number
+  metalness?: number
+  roughness?: number
+  opacity?: number
+  transparent?: boolean
+  alphaTest?: number
+  side?: "front" | "back" | "double"
+  depthWrite?: boolean
+  depthTest?: boolean
+  renderOrder?: number
+  polygonOffset?: boolean
+  polygonOffsetFactor?: number
+  polygonOffsetUnits?: number
+  blending?: "none" | "normal" | "additive" | "subtractive" | "multiply" | "custom"
+  blendSrc?: BlendFactor
+  blendDst?: BlendFactor
+  blendEquation?: BlendEquation
+  blendSrcAlpha?: BlendFactor
+  blendDstAlpha?: BlendFactor
+  blendEquationAlpha?: BlendEquation
+  premultipliedAlpha?: boolean
+  colorWrite?: boolean
+  clippingPlanes?: ClipPlane[] | null
+  clipIntersection?: boolean
+  clipShadows?: boolean
+  underwater?: UnderwaterSpec
+  drawsOver?: string[] | { parts: string[]; strength?: number; angle?: number }
+  outline?: boolean | { color?: Color; width?: number; warm?: number; lightness?: number } | null
+  script: ScriptRef
+  params?: Record<string, number | boolean | string | DrawMaterialParamTable>
+  view?: { link: string; oneWay?: boolean; spill?: number; sound?: number } | { camera: ViewCamera; cadence?: string } | null
+}
