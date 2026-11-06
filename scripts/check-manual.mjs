@@ -1,6 +1,8 @@
 import { createHash } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import path from 'node:path'
+import { buildEndpointsPage } from './endpoints.mjs'
 
 const root = path.resolve(process.argv[2] || '.')
 const site = path.join(root, 'site')
@@ -78,6 +80,14 @@ for (const marker of ['push:', 'workflow_dispatch:', 'node scripts/build-manual.
   if (!workflow.includes(marker)) failures.push('missing workflow marker ' + marker)
 }
 if (manifest.textCount + manifest.binaryCount !== manifest.files.length) failures.push('manifest kind count mismatch')
+let head = ''
+try {
+  head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
+} catch {
+  head = ''
+}
+if (head && manifest.commit !== head) failures.push('site built from ' + manifest.commit + ' but checkout is at ' + head)
+if (readFileSync(path.join(root, 'ENDPOINTS.md'), 'utf8') !== buildEndpointsPage(root)) failures.push('ENDPOINTS.md is out of date; run node scripts/endpoints.mjs .')
 
 const result = {
   ok: failures.length === 0,
