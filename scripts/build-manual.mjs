@@ -7,8 +7,8 @@ const LF = String.fromCharCode(10)
 const TAB = String.fromCharCode(9)
 const root = path.resolve(process.argv[2] || '.')
 const site = path.join(root, 'site')
-const excluded = new Set(['.git', '.playwriter', 'runs', 'site', 'node_modules', 'sources'])
-const withheldPrefix = '.spawn/reference/http/raw/'
+const excludedDirs = new Set(['.git', '.playwriter', 'runs', 'site', 'node_modules', 'sources'])
+const withheldPrefixes = ['.spawn/reference/http/raw/']
 
 function escapeHtml(value) {
   return String(value)
@@ -17,10 +17,6 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll(String.fromCharCode(39), '&#39;')
-}
-
-function urlPath(rel) {
-  return rel.split('/').map(encodeURIComponent).join('/')
 }
 
 function pageName(rel) {
@@ -33,10 +29,10 @@ function walk(dir, items) {
     const full = path.join(dir, entry.name)
     const rel = path.relative(root, full).split(path.sep).join('/')
     if (entry.isDirectory()) {
-      if (excluded.has(entry.name)) continue
+      if (excludedDirs.has(entry.name)) continue
       walk(full, items)
     } else if (entry.isFile()) {
-      if (rel.startsWith(withheldPrefix)) continue
+      if (withheldPrefixes.some((prefix) => rel.startsWith(prefix))) continue
       items.push(rel)
     }
   }
@@ -63,42 +59,26 @@ function git(args) {
 
 const commit = git(['rev-parse', 'HEAD']) || 'NO_COMMIT'
 const branch = git(['branch', '--show-current']) || 'DETACHED'
-const historyRaw = git(['log', '--date=iso-strict', '--pretty=format:%H%x09%an%x09%ad%x09%s%x09%D'])
+const historyRaw = git(['log', '--date=short', '--pretty=format:%h%x09%ad%x09%s'])
 const history = historyRaw ? historyRaw.split(LF).map((line) => {
-  const fields = line.split(TAB)
-  return { hash: fields[0] || '', author: fields[1] || '', date: fields[2] || '', subject: fields[3] || '', refs: fields[4] || '' }
+  const [hash = '', date = '', subject = ''] = line.split(TAB)
+  return { hash, date, subject }
 }) : []
-
-let withheld = { policy: 'omit', reason: '', source: '', files: [] }
-try {
-  withheld = JSON.parse(readFileSync(path.join(root, 'WITHHELD.json'), 'utf8'))
-} catch {
-  withheld = { policy: 'omit', reason: 'WITHHELD.json was not found.', source: '', files: [] }
-}
 
 const sourcePaths = []
 walk(root, sourcePaths)
 const files = sourcePaths.map((rel) => {
   const data = readFileSync(path.join(root, rel))
-  let text = null
-  if (!data.includes(0)) {
-    try {
-      text = data.toString('utf8')
-    } catch {
-      text = null
-    }
-  }
-  const isText = text !== null
-  const lineCount = isText ? (text.length === 0 ? 0 : text.split(LF).length - (text.endsWith(LF) ? 1 : 0)) : 0
+  const isText = !data.includes(0)
+  const text = isText ? data.toString('utf8') : null
   return {
     path: rel,
     bytes: data.length,
-    lines: lineCount,
+    lines: isText ? (text.length === 0 ? 0 : text.split(LF).length - (text.endsWith(LF) ? 1 : 0)) : 0,
     sha256: createHash('sha256').update(data).digest('hex'),
     text: isText,
     page: pageName(rel),
-    raw: urlPath(rel),
-    data: data,
+    data,
     body: isText ? text : hexDump(data)
   }
 })
@@ -111,32 +91,27 @@ writeFileSync(path.join(site, '.nojekyll'), '', 'utf8')
 const style = [
   ':root { color-scheme: light; --ink: #000; --paper: #fff; }',
   '* { box-sizing: border-box; }',
-  'html { background: var(--paper); color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; }',
+  'html { background: var(--paper); color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 15px; }',
   'body { margin: 0; }',
-  'a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }',
-  'a:hover, a:focus { background: var(--ink); color: var(--paper); outline: 3px solid var(--ink); }',
+  'a { color: var(--ink); }',
+  'a:hover, a:focus { background: var(--ink); color: var(--paper); }',
   'header { border-bottom: 8px solid var(--ink); padding: 1rem; }',
-  'h1 { font-size: clamp(2rem, 7vw, 5rem); line-height: 0.95; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: -0.06em; }',
-  'h2 { font-size: 1.4rem; margin: 2rem 0 0.5rem; text-transform: uppercase; border-top: 6px solid var(--ink); padding-top: 0.5rem; }',
-  'h3 { font-size: 1rem; margin: 1rem 0 0.5rem; text-transform: uppercase; }',
+  'h1 { font-size: clamp(2rem, 6vw, 4rem); line-height: 1; margin: 0 0 0.75rem; text-transform: uppercase; }',
+  'h2 { font-size: 1.1rem; margin: 2rem 0 0.75rem; text-transform: uppercase; border-top: 4px solid var(--ink); padding-top: 0.5rem; }',
   'main { padding: 1rem; }',
-  '.bar { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; border: 3px solid var(--ink); padding: 0.75rem; margin-bottom: 1rem; }',
-  '.bar span { font-weight: 700; }',
-  '.notice { border: 5px solid var(--ink); padding: 1rem; margin: 1rem 0; background: var(--paper); }',
-  'table { width: 100%; border-collapse: collapse; margin: 0 0 2rem; }',
-  'th, td { border: 2px solid var(--ink); padding: 0.45rem; vertical-align: top; text-align: left; word-break: break-word; }',
-  'th { background: var(--ink); color: var(--paper); text-transform: uppercase; }',
-  'tr:nth-child(even) td { background: #eee; }',
-  'pre { border: 3px solid var(--ink); padding: 1rem; margin: 0 0 1rem; background: var(--paper); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }',
-  '.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }',
-  '.meta div { border: 3px solid var(--ink); padding: 0.75rem; }',
-  '.meta strong { display: block; text-transform: uppercase; }',
-  '.links { display: flex; flex-wrap: wrap; gap: 0.75rem; border-bottom: 3px solid var(--ink); padding-bottom: 0.75rem; margin-bottom: 1rem; }',
-  '.links a { border: 2px solid var(--ink); padding: 0.35rem 0.6rem; font-weight: 700; }',
+  'ul { list-style: none; padding: 0; margin: 0; }',
+  'li { border-bottom: 1px solid var(--ink); padding: 0.4rem 0; display: flex; justify-content: space-between; gap: 1rem; }',
+  'table { width: 100%; border-collapse: collapse; }',
+  'th, td { border: 2px solid var(--ink); padding: 0.4rem; text-align: left; vertical-align: top; }',
+  'th { text-transform: uppercase; }',
+  'pre { border: 3px solid var(--ink); padding: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 1rem; }',
+  '.meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }',
+  '.meta span { border: 2px solid var(--ink); padding: 0.3rem 0.6rem; }',
+  '.links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }',
+  '.links a { border: 2px solid var(--ink); padding: 0.3rem 0.6rem; text-decoration: none; font-weight: 700; }',
   'img.direct { display: block; max-width: 100%; border: 3px solid var(--ink); margin-bottom: 1rem; }',
   'footer { border-top: 8px solid var(--ink); padding: 1rem; }',
-  '@media (max-width: 700px) { html { font-size: 12px; } header { border-bottom-width: 5px; } h2 { border-top-width: 4px; } }',
-  '@media (prefers-color-scheme: dark) { :root { --ink: #fff; --paper: #000; } tr:nth-child(even) td { background: #222; } }'
+  '@media (prefers-color-scheme: dark) { :root { --ink: #fff; --paper: #000; } }'
 ].join(LF)
 writeFileSync(path.join(site, 'style.css'), style + LF, 'utf8')
 
@@ -147,12 +122,12 @@ function shell(title, body, stylePath) {
     '<head>',
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    '<title>' + escapeHtml(title) + ' | SAVI DIRECT MANUAL</title>',
+    '<title>' + escapeHtml(title) + ' | Savi Manual</title>',
     '<link rel="stylesheet" href="' + stylePath + '">',
     '</head>',
     '<body>',
     body,
-    '<footer>SAVI DIRECT MANUAL / EXACT BYTES / EVERY PUSH TO MAIN REBUILDS THIS SITE</footer>',
+    '<footer>SAVI MANUAL / ' + escapeHtml(commit.slice(0, 7)) + ' / REBUILT ON EVERY PUSH TO MAIN</footer>',
     '</body>',
     '</html>'
   ].join(LF)
@@ -162,107 +137,71 @@ for (const item of files) {
   const rawTarget = path.join(site, 'raw', item.path)
   mkdirSync(path.dirname(rawTarget), { recursive: true })
   writeFileSync(rawTarget, item.data)
-  const rawFromPage = '../raw/' + item.raw
+  const rawLink = '../raw/' + item.path.split('/').map(encodeURIComponent).join('/')
   const isImage = ['.png', '.jpg', '.jpeg', '.gif', '.webp'].some((ext) => item.path.toLowerCase().endsWith(ext))
-  const image = !item.text && isImage ? '<img class="direct" src="' + rawFromPage + '" alt="' + escapeHtml(item.path) + '">' : ''
+  const image = !item.text && isImage ? '<img class="direct" src="' + rawLink + '" alt="' + escapeHtml(item.path) + '">' : ''
   const fileBody = [
     '<header>',
     '<h1>' + escapeHtml(item.path) + '</h1>',
-    '<div class="links"><a href="../index.html">INDEX</a><a href="' + rawFromPage + '">RAW BYTES</a><a href="../manifest.json">MANIFEST</a></div>',
+    '<div class="meta"><span>' + item.bytes + ' BYTES</span><span>' + item.lines + ' LINES</span><span>' + (item.text ? 'TEXT' : 'BINARY, HEX') + '</span></div>',
+    '<div class="links"><a href="../index.html">INDEX</a><a href="' + rawLink + '">RAW</a></div>',
     '</header>',
     '<main>',
-    '<div class="meta">',
-    '<div><strong>bytes</strong>' + item.bytes + '</div>',
-    '<div><strong>lines</strong>' + item.lines + '</div>',
-    '<div><strong>kind</strong>' + (item.text ? 'TEXT' : 'BINARY HEX DUMP') + '</div>',
-    '<div><strong>sha256</strong>' + item.sha256 + '</div>',
-    '<div><strong>commit</strong>' + escapeHtml(commit) + '</div>',
-    '</div>',
-    '<h2>EXACT DISPLAY</h2>',
     image,
-    '<pre class="bytes" id="exact-bytes">' + escapeHtml(item.body) + '</pre>',
+    '<pre>' + escapeHtml(item.body) + '</pre>',
     '</main>'
   ].join(LF)
   writeFileSync(path.join(site, 'files', item.page), shell(item.path, fileBody, '../style.css'), 'utf8')
 }
 
-const inventoryRows = files.map((item) => [
-  '<tr>',
-  '<td><a href="files/' + item.page + '">' + escapeHtml(item.path) + '</a></td>',
-  '<td>' + item.bytes + '</td>',
-  '<td>' + item.lines + '</td>',
-  '<td>' + item.sha256 + '</td>',
-  '<td>' + (item.text ? 'TEXT' : 'BINARY') + '</td>',
-  '<td><a href="raw/' + item.raw + '">RAW</a></td>',
-  '</tr>'
-].join('')).join(LF)
+const groups = new Map()
+for (const item of files) {
+  const top = item.path.includes('/') ? item.path.split('/')[0] : '(root)'
+  if (!groups.has(top)) groups.set(top, [])
+  groups.get(top).push(item)
+}
+const fileSections = [...groups.entries()].map(([top, items]) => [
+  '<h2>' + escapeHtml(top) + ' / ' + items.length + ' FILES</h2>',
+  '<ul>',
+  items.map((item) => '<li><a href="files/' + item.page + '">' + escapeHtml(item.path) + '</a><span>' + item.bytes + '</span></li>').join(LF),
+  '</ul>'
+].join(LF)).join(LF)
 
-const withheldRows = withheld.files.map((item) => [
-  '<tr>',
-  '<td>' + escapeHtml(item.path) + '</td>',
-  '<td>' + item.bytes + '</td>',
-  '<td>' + item.sha256 + '</td>',
-  '<td>WITHHELD / PERSONAL FIELDS</td>',
-  '</tr>'
-].join('')).join(LF)
-
-const historyRows = history.map((row) => [
-  '<tr>',
-  '<td>' + escapeHtml(row.hash) + '</td>',
-  '<td>' + escapeHtml(row.author) + '</td>',
-  '<td>' + escapeHtml(row.date) + '</td>',
-  '<td>' + escapeHtml(row.subject) + '</td>',
-  '<td>' + escapeHtml(row.refs) + '</td>',
-  '</tr>'
-].join('')).join(LF)
-
+const historyRows = history.map((row) => '<tr><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.hash) + '</td><td>' + escapeHtml(row.subject) + '</td></tr>').join(LF)
 const totalBytes = files.reduce((n, item) => n + item.bytes, 0)
-const withheldBytes = withheld.files.reduce((n, item) => n + item.bytes, 0)
 const indexBody = [
   '<header>',
-  '<h1>SAVI / DIRECT MANUAL</h1>',
-  '<div class="bar"><span>COMMIT ' + escapeHtml(commit) + '</span><span>BRANCH ' + escapeHtml(branch) + '</span><span>FILES ' + files.length + '</span><span>BYTES ' + totalBytes + '</span><span>WITHHELD ' + withheld.files.length + '</span></div>',
-  '<div class="links"><a href="#inventory">INVENTORY</a><a href="#withheld">WITHHELD</a><a href="#history">COMMIT HISTORY</a><a href="manifest.json">MANIFEST JSON</a></div>',
+  '<h1>Savi Manual</h1>',
+  '<div class="meta"><span>COMMIT ' + escapeHtml(commit.slice(0, 7)) + '</span><span>BRANCH ' + escapeHtml(branch) + '</span><span>' + files.length + ' FILES</span><span>' + totalBytes + ' BYTES</span></div>',
+  '<div class="links"><a href="#files">FILES</a><a href="#history">HISTORY</a><a href="manifest.json">MANIFEST</a></div>',
   '</header>',
   '<main>',
-  '<div class="notice">EVERY COMMITTED FILE IS DISPLAYED DIRECTLY. TEXT FILES APPEAR AS EXACT ESCAPED TEXT. BINARY FILES APPEAR AS FULL HEX DUMPS AND IMAGES. EVERY FILE HAS AN EXACT RAW COPY. RAW HTTP BODIES AND FETCHED RESEARCH SNAPSHOTS ARE WITHHELD BECAUSE THEY CONTAIN PERSONAL FIELDS OR JWT-SHAPED CREDENTIALS; WITHHELD.json LISTS THEIR PATHS, SIZES AND HASHES. A PUSH TO MAIN RUNS publish.yml, REBUILDS THIS SITE, CHECKS IT, AND DEPLOYS IT TO GITHUB PAGES.</div>',
-  '<h2 id="inventory">SOURCE INVENTORY</h2>',
-  '<table><thead><tr><th>PATH</th><th>BYTES</th><th>LINES</th><th>SHA256</th><th>KIND</th><th>RAW</th></tr></thead><tbody>',
-  inventoryRows,
-  '</tbody></table>',
-  '<h2 id="withheld">WITHHELD</h2>',
-  '<div class="notice">' + escapeHtml(withheld.reason) + ' POLICY: ' + escapeHtml(withheld.policy) + '. SOURCE: ' + escapeHtml(withheld.source) + '. TOTAL WITHHELD BYTES: ' + withheldBytes + '.</div>',
-  '<table><thead><tr><th>PATH</th><th>BYTES</th><th>SHA256</th><th>STATUS</th></tr></thead><tbody>',
-  withheldRows,
-  '</tbody></table>',
-  '<h2 id="history">COMMIT HISTORY</h2>',
-  '<table><thead><tr><th>HASH</th><th>AUTHOR</th><th>DATE</th><th>SUBJECT</th><th>REFS</th></tr></thead><tbody>',
+  '<h2 id="files">FILES</h2>',
+  fileSections,
+  '<h2 id="history">HISTORY</h2>',
+  '<table><thead><tr><th>DATE</th><th>COMMIT</th><th>SUBJECT</th></tr></thead><tbody>',
   historyRows,
   '</tbody></table>',
   '</main>'
 ].join(LF)
-writeFileSync(path.join(site, 'index.html'), shell('INDEX', indexBody, 'style.css'), 'utf8')
+writeFileSync(path.join(site, 'index.html'), shell('Index', indexBody, 'style.css'), 'utf8')
 
 const notFoundBody = [
-  '<header><h1>NOT FOUND</h1></header>',
-  '<main><div class="links"><a href="index.html">INDEX</a><a href="manifest.json">MANIFEST</a></div><p>THIS PATH IS NOT IN THE MANUAL.</p></main>'
+  '<header><h1>Not found</h1><div class="links"><a href="index.html">INDEX</a></div></header>',
+  '<main><p>This path is not in the manual.</p></main>'
 ].join(LF)
-writeFileSync(path.join(site, '404.html'), shell('404', notFoundBody, 'style.css'), 'utf8')
+writeFileSync(path.join(site, '404.html'), shell('Not found', notFoundBody, 'style.css'), 'utf8')
 
 const manifest = {
-  site: 'SAVI DIRECT MANUAL',
+  site: 'Savi Manual',
   commit: commit,
   branch: branch,
   sourceCount: files.length,
   textCount: files.filter((item) => item.text).length,
   binaryCount: files.filter((item) => !item.text).length,
   sourceBytes: totalBytes,
-  sourceLines: files.reduce((n, item) => n + item.lines, 0),
-  withheldCount: withheld.files.length,
-  withheldBytes: withheldBytes,
-  withheld: withheld,
-  files: files.map((item) => ({ path: item.path, bytes: item.bytes, lines: item.lines, sha256: item.sha256, text: item.text, page: item.page, raw: item.raw })),
+  files: files.map((item) => ({ path: item.path, bytes: item.bytes, lines: item.lines, sha256: item.sha256, text: item.text, page: item.page })),
   history: history
 }
 writeFileSync(path.join(site, 'manifest.json'), JSON.stringify(manifest, null, 2) + LF, 'utf8')
-console.log(JSON.stringify({ commit: commit, branch: branch, files: files.length, bytes: totalBytes, text: manifest.textCount, binary: manifest.binaryCount, withheld: withheld.files.length }))
+console.log(JSON.stringify({ commit: commit, branch: branch, files: files.length, bytes: totalBytes, text: manifest.textCount, binary: manifest.binaryCount }))

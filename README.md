@@ -1,10 +1,10 @@
-# SAVI / DIRECT MANUAL
+# Savi Manual
 
-This repository is the source of a brutalist static manual. Every committed file is displayed directly: exact text, full binary hex dumps, exact raw copies, a complete file inventory, a withheld ledger, and the full commit history.
+A static manual built from this repository. Every committed file is shown as exact text, or as a hex dump when binary, with a raw copy and a commit history.
 
-Every push runs .github/workflows/publish.yml. Pushes to main rebuild the site, run its completeness check, and deploy it through GitHub Pages. The index carries the current commit SHA and history, so every main push changes the published manual.
+Every push to main runs .github/workflows/publish.yml, which rebuilds the site, checks it, and deploys it to GitHub Pages.
 
-Raw HTTP bodies under .spawn/reference/http/raw/ are not committed or displayed because the source corpus flags them as containing personal fields. WITHHELD.json records their paths, sizes, and SHA-256 hashes. Fetched research snapshots under sources/ are also withheld because one contains JWT-shaped credentials.
+Some files are not published and are left out of the build.
 
 ## Build locally
 
