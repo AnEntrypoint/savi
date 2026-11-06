@@ -10,7 +10,7 @@ const skipPrefixes = ['.spawn/reference/http/raw/']
 const skipFiles = new Set(['ENDPOINTS.md'])
 const groups = [
   { key: 'listed', title: 'Listed in the published spec' },
-  { key: 'per-game', title: 'Listed with a per-game or per-world id (404 can mean no such game, world or room)' },
+  { key: 'per-game', title: 'Listed with a per-game or per-world id (folio per-game behaviour observed on one bearer-authenticated read, games-folio.bearer.body; not confirmed unauthenticated)' },
   { key: 'partial', title: 'Listed but disabled or partial (its children are listed)' },
   { key: 'absent', title: 'Not in the published spec' }
 ]
