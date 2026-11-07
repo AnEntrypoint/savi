@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 const SPEC_URL = 'https://www.spawn.co/openapi.json'
 const here = path.dirname(fileURLToPath(import.meta.url))
 const specFile = path.join(here, 'openapi.json')
-const skipDirs = new Set(['.git', '.playwriter', 'runs', 'site', 'node_modules', 'sources', 'scripts'])
+const skipDirs = new Set(['.git', '.playwriter', 'runs', 'site', 'node_modules', 'sources', 'scripts', 'spawn-evidence'])
 const skipPrefixes = ['.spawn/reference/http/raw/']
 const skipFiles = new Set(['ENDPOINTS.md'])
 const groups = [

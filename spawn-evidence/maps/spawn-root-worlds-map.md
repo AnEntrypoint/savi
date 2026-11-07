@@ -1,6 +1,6 @@
 # spawn.co root-linked worlds: read-only map
 
-Provenance note: paths under `/tmp/spawn-probe/` in this file are the ephemeral original run locations, cited as provenance only. Durable copies are under `spawn-evidence/probe-scripts/` and `spawn-evidence/data/` where they exist. Three inputs have no durable copy: `chunk-a.js`, `worldscan.sh` and `enum-feed.log`.
+Provenance note: paths under `/tmp/spawn-probe/` in this file are the ephemeral original run locations, cited as provenance only. Durable copies are under `spawn-evidence/probe-scripts/` and `spawn-evidence/data/` where they exist. Inputs with no durable copy, labelled ephemeral where cited: `chunk-a.js`, `worldscan.sh`, `enum-feed.log`, `root-profiles.txt`, the openapi and llms saves, and the spawnfile scan output.
 
 Source: browser reads of https://www.spawn.co/ and each world page, 2026-11-07 (about 10:50 to 11:05 UTC). Run ids: 2026-11-07-10-49-42-a2cf05 (actionSeq 28, 33, 38, 43), log at /workspace/spawn/runs/2026-11-07-10-49-42-a2cf05/log.jsonl.
 
@@ -94,7 +94,7 @@ Not mapped in this file:
 
 ## World-store GLB scan (read-only, public GET)
 
-Method: `/tmp/spawn-probe/worldscan.sh <uuid>`. Fetches `play.spawn.co/world-store/git/<uuid-no-dashes>/head.json`, then `world-store/manifests/<manifest>` (regex `{"v":1,"hashes":[...]}` after a binary prefix), then `world-store/values/<hash>` for each hash. A value counts as direct GLB when its body starts with `glTF`.
+Method: `(ephemeral, no durable copy) /tmp/spawn-probe/worldscan.sh <uuid>`. Fetches `play.spawn.co/world-store/git/<uuid-no-dashes>/head.json`, then `world-store/manifests/<manifest>` (regex `{"v":1,"hashes":[...]}` after a binary prefix), then `world-store/values/<hash>` for each hash. A value counts as direct GLB when its body starts with `glTF`.
 World UUIDs come from the world page HTML, field `play.spawn.co/session/world%3A<uuid>%40live`.
 
 | # | URL path | world uuid | manifest | values fetched | direct glTF | ref count | witness |
@@ -112,7 +112,7 @@ Model URLs are therefore not in the world-store values. The GLB naming rule `val
 
 ## Creator profiles (37 root-linked, read-only GET)
 
-Source: `curl https://www.spawn.co/` `href="/@handle"` links, then each `https://www.spawn.co/@handle`. The root link list gave 37 handles, not 38; recount later if the root changes. Files: `/tmp/spawn-probe/root-profiles.txt`, `profiles/*.html`, `profiles-summary.txt`, `profile-witness.tsv`.
+Source: `curl https://www.spawn.co/` `href="/@handle"` links, then each `https://www.spawn.co/@handle`. The root link list gave 37 handles, not 38; recount later if the root changes. Files: `(ephemeral, no durable copy) /tmp/spawn-probe/root-profiles.txt`, `profiles/*.html`, `profiles-summary.txt`, `profile-witness.tsv`.
 
 | field | value | witness |
 |---|---|---|
@@ -127,7 +127,7 @@ donutfrumjupitr's `magic-assets` entries are `.mp4` values. Its `spawn-clips` en
 
 ## Public API routes (openapi.json, llms.txt)
 
-Source: `curl https://www.spawn.co/openapi.json` and `https://www.spawn.co/llms.txt`. Both saved in `/tmp/spawn-probe/`.
+Source: `curl https://www.spawn.co/openapi.json` and `https://www.spawn.co/llms.txt`. Both saved in (ephemeral, no durable copy) `/tmp/spawn-probe/`.
 
 - GET routes with no credential: `/api/feed`, `/api/resolve-adventure`, `/api/games/{appId}/comments`, `/api/agent/v1/pfp/{username}`.
 - Asset write (not used, write route): `PUT /api/sdk/v1/{variantId}/assets/{name}` (llms.txt line 39). It puts a file on the CDN and returns its URL, so no GET lists assets.
@@ -139,7 +139,7 @@ Worldid from address, verified:
 Feed enumeration:
 - `GET https://www.spawn.co/api/feed?sort=hot|top|recent&limit=48&offset=N`. Each row has `games.world_id`, `games.adventure_name`, `games.name`, `profiles.username`, `app_id`.
 - Offsets page up to about 2064 per sort. `offset=4000` returns 0 rows.
-- Union across the three sorts: 2848 unique worlds, 1002 creators (`/tmp/spawn-probe/feed-worlds.json`, enumeration log `enum-feed.log`).
+- Union across the three sorts: 2848 unique worlds, 1002 creators (`/workspace/savi/spawn-evidence/data/feed-worlds.json`, enumeration log (ephemeral, no durable copy) `enum-feed.log`).
 
 ## World-store contents (scan drift and value types)
 
@@ -149,7 +149,7 @@ Feed enumeration:
 
 ## Spatial storage and world-store to local-store ties (chunk witnesses)
 
-Source chunks, read from `/tmp/spawn-probe/chunk-a.js` and `chunk-c.mjs` (the pool chunks from play.spawn.co/v4/client/pool). Each row below quotes the minified code; these are witnesses, not a full decode.
+Source chunks, read from `(ephemeral, no durable copy) /tmp/spawn-probe/chunk-a.js` and `chunk-c.mjs` (the pool chunks from play.spawn.co/v4/client/pool). Each row below quotes the minified code; these are witnesses, not a full decode.
 
 Store-name table (chunk-c.mjs, object `f`):
 - `values: "spawn-world-values-v1"`, `derivedGeometry: _9`, `postcards: "spawn-world-postcards"`, `clips: "spawn-clip-files-v1"`, `assets: "spawn-asset-values-v1"`, `terrainChunks: "spawn-terrain-chunks-v2"`, `farTiles: "spawn-far-tiles-v1"`, `nearCells: "spawn-near-cells-v2"`, `landDayKeys: "spawn-land-day-keys-v1"`, `cellWork: "spawn-cell-work-v1"`, `shapeForms: "spawn-shape-forms-v2"`, `bespokeBuilds: "spawn-bespoke-builds-v4"`, `colliderAnswers: R9`, `scriptedTextures: "spawn-scripted-text…"`.
@@ -195,13 +195,13 @@ GTA Manhattan, all nine GLB candidates from the file map (HEAD, all `200 model/g
 
 GTA Manhattan also has 31 `.jpg` values under `cdn/value.<sha>.jpg` (HEAD 200 `image/jpeg`). Its scan record is `scan-cdn.jsonl`: `values 69, refs 40, glb 9, jpg 31`.
 
-Method (scratch, `/tmp/spawn-probe/scan-cdn.mjs`): for each world, fetch `head.json` → `manifests/<manifest>` → each value, regex `~2fcdn~2fvalue\.([0-9a-f]{64})\.([a-z0-9]{1,6})\.yaml|cdn\/value\.([0-9a-f]{64})\.([a-z0-9]{1,6})` over the JSON text → HEAD `play.spawn.co/cdn/value.<sha>.<ext>`, and for `glb` a range GET for the magic. Output per world: `cdn-scan-<shard>.jsonl`.
+Method (scratch, `/workspace/savi/spawn-evidence/probe-scripts/scan-cdn.mjs`): for each world, fetch `head.json` → `manifests/<manifest>` → each value, regex `~2fcdn~2fvalue\.([0-9a-f]{64})\.([a-z0-9]{1,6})\.yaml|cdn\/value\.([0-9a-f]{64})\.([a-z0-9]{1,6})` over the JSON text → HEAD `play.spawn.co/cdn/value.<sha>.<ext>`, and for `glb` a range GET for the magic. Output per world: `cdn-scan-<shard>.jsonl`.
 
 The earlier `scan-fast.mjs` / `scan-urls.mjs` results are superseded for GLB purposes: they only checked values' magic and found 0 GLBs, which was a false negative.
 
 ## Full CDN scan result (2848 feed worlds, 16 shards, completed)
 
-Full GLB list: `maps/glb-urls-all.tsv` (2416 rows; one per world and GLB sha, with the world uuid, sha256, the URL `https://play.spawn.co/cdn/value.<sha256>.glb`, the file-map value hash it came from, HTTP status, content type and magic). Witness for each row: the HEAD status and range 0-3 magic recorded in `/tmp/spawn-probe/cdn-scan-*.jsonl`, `cdn-retry.jsonl` and `glb-recheck.json`.
+Full GLB list: `maps/glb-urls-all.tsv` (2416 rows; one per world and GLB sha, with the world uuid, sha256, the URL `https://play.spawn.co/cdn/value.<sha256>.glb`, the file-map value hash it came from, HTTP status, content type and magic). Witness for each row: the HEAD status and range 0-3 magic recorded in `/workspace/savi/spawn-evidence/data/cdn-scan-*.jsonl`, `cdn-retry.jsonl` and `glb-recheck.json`.
 
 Totals:
 - Feed worlds: 2848. Worlds with at least one verified GLB: 399.
@@ -220,7 +220,7 @@ Model URL naming: the only witnessed rule is `world.assets/<xx>/~2fcdn~2fvalue.<
 
 ## Spawnfile-family scan and missing-head reconciliation (completed)
 
-Scanner: /tmp/spawn-probe/scan-spawnfile.mjs. Output: /tmp/spawn-probe/sf/spawnfile-scan-*.jsonl. Keys matched: `world.assets/<xx>/https~3a~2f~2f…\.(ext)\.yaml`.
+Scanner: /workspace/savi/spawn-evidence/probe-scripts/scan-spawnfile.mjs. Output: (ephemeral, no durable copy) /tmp/spawn-probe/sf/spawnfile-scan-*.jsonl. Keys matched: `world.assets/<xx>/https~3a~2f~2f…\.(ext)\.yaml`.
 Totals over the 2848 feed worlds: scanned 2848. Spawnfile-family refs: 0 (0 worlds, 0 unique URLs). The spawnfile.io family is not present in any feed world the scanner reached, and the complete key path is still ELIDED (no full example exists). So "spawnfile.io bytes" stays UNCONFIRMED.
 Stage failures: head 404 ×256 (all `head_not_found`), head status 0 ×1 (world 9f7b1a067caa46e2b2c1c7dceb48bc2b, not in the 259 list, HEAD 200 on re-check), manifest 404 ×3 (head present, see below).
 
