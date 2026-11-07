@@ -55,6 +55,7 @@ Tag: required-in-jayzee
 Claim: "all GLBs served only from play.spawn.co/cdn/" is INFERRED, not witnessed.
 Status: INFERRED
 Observation (scoped to spawn's probe of 308 named `/cdn/` keys, not universal): with `.yaml` stripped, 304 of 308 return 302 to a `value-origin` path that is not under `/cdn/`; 302 of those 304 targets return 200 model/gltf-binary and 2 time out. Controls: `.yaml` kept 10 of 10 return 401; value-sha controls 20 of 20 return 200 directly under `/cdn/value.<sha>.glb`; 82 non-CDN rows return 200 and 1 returns 401. The claim stays INFERRED and is weakened for the named-key family only.
+Observation (spawn-reported, bounded retry, scoped to the named keys): the 2 first-pass named-target timeouts now return 200 model/gltf-binary on HEAD and `glTF` body magic on a 4-byte range GET, and the 4 first-pass `/cdn/` timeouts retried 4 of 4, each returning 302 to a value-origin path that returns 200 model/gltf-binary on HEAD. Across all 308 named keys with `.yaml` stripped, every redirect target now returns 200 model/gltf-binary on HEAD, and a 4-byte range GET returns `glTF` magic with 206 for all 308 targets. The first pass had 2 range-GET TypeErrors that a sequential retry cleared, and that cause is not explained. Gone-410 probes: 41, none returned a body-level 410 (spawn-reported; probe 41 is a feed world absent from the root map, returning 200 found). This strengthens "named keys reach bytes at value-origin through a 302 from `/cdn/`" and does not confirm `/cdn/`-only, which stays INFERRED.
 Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output "217:Model URL naming: the only witnessed rule is world.assets/<xx>/~2fcdn~2fvalue.<sha256>.glb.yaml in a file-map value, which maps to /cdn/value.<sha256>.glb. Inferred (not witnessed): that every GLB is served only under play.spawn.co/cdn/"
 Tag: required-in-jayzee
@@ -72,6 +73,7 @@ Claim: the full spawnfile key path is ELIDED; FAULTS F3 shows world.assets/3d/ht
 Status: OPEN
 Source paths: `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output "24:- The same line for world.assets/3d/https~3a~2f~2fspawnfile.io~2fprod~2fcharacter-assets~2f...-savi-reduced-fitted.glb.yaml."
+Observation (spawn-reported, bounded probe of the FAULTS F3 path prefix only, no leaf): HEAD `https://spawnfile.io/` returns 200 text/html with length 0; HEAD `/prod/` returns 404 text/plain; HEAD `/prod/character-assets/` returns 404 text/plain; GET `/prod/character-assets/` returns 404 text/plain with body `Not Found`. No model bytes and no model content type were reached, the `<unix-ms>-savi-reduced-fitted.glb` leaf was not guessed, and no credential or auth header was used. The spawnfile.io bytes stay UNCONFIRMED and the key path stays ELIDED.
 Tag: required-in-jayzee
 
 ### OPEN-011

@@ -267,6 +267,63 @@ Negatives:
 
 These are static claims. The weather contract is pinned by reading the code, and the fire simulation is not run here.
 
+## Stream 24: client editor modules (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 11 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint.
+
+- `client/editor/EditorAutosave.js:34` (`[EditorAutosave] write failed:`): the recovery write logs and resolves false on a transaction error.
+- `client/editor/EditorAutosave.js:35` (`[EditorAutosave] write error:`): the recovery write resolves false on a thrown exception.
+- `client/editor/EditorAutosave.js:48` (`[EditorAutosave] read failed:`): the recovery read resolves null on a request error.
+- `client/editor/EditorAutosave.js:49` (`[EditorAutosave] read error:`): the recovery read resolves null on a thrown exception.
+- `client/editor/EditorAutosave.js:53` (`async function _deleteRecoverySnapshot() {`): the delete opens the database handle first.
+- `client/editor/EditorAutosave.js:61` (`tx.onerror = () => resolve(false)`): the delete resolves false on a transaction error.
+- `client/editor/EditorAutosave.js:62` (`} catch (e) { resolve(false) }`): the delete resolves false on a thrown exception.
+- `client/editor/EditorFsBrowse.js:23` (`export function fsSaveBase(pendingSave) {`): the save base is null without a pending save.
+- `client/editor/EditorFsBrowse.js:24` (`return pendingSave ? {`): the base carries `mtimeMs` only when it is finite.
+- `client/editor/EditorApps.js:14` (`export function getAppCategory(app) {`): the category is the declared string, or else a name-prefix rule.
+- `client/editor/EditorApps.js:27` (`if (name.startsWith('editor-')) {`): the `editor-` prefix maps to Editor Tools after the earlier rules.
+
+Cluster: 28 files and 5950 lines, counted with `wc -l` over `git show d5e3860:<path>` for the `.js` files under `client/editor/` excluding `EditorShell.js`, `editor.js` and `wm/`. Excluding only `EditorShell.js` gives 32 files and 7184 lines, so reaching 28 needs the other two exclusions. The earlier figure of 5284 lines does not reproduce under any scope tried, including non-blank lines (5399), so 5950 is the derived figure.
+
+Negatives:
+- `scripts/` in savi names none of the 28 basenames, so 0 of 28 have a witness script.
+- Outside this section, savi's docs name 26 of the 28 basenames 0 times. Two are named and disclosed: `EventChainPanel` as the editor consumer of EventChainManager at `docs/FEATURESET.md:178`, and `EditorEventLog` in the event-log line at `docs/FEATURESET.md:223`.
+- The editor is named at directory level, not by module, at `docs/PARITY-INPUTS.md:42`, `docs/FEATURESET.md:85`, and `docs/JAYZEE-GAPS.md:27`, `:73` and `:92`. Disclosed.
+
+These are static claims. The IndexedDB recovery and the file browser are not run here.
+
+## Stream 25: editor server-side modules in src/sdk (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 19 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. The five modules are spoint's editor server-side subset with zero witness scripts and zero savi mentions, and they total 510 lines.
+
+- `src/sdk/EditOpLog.js:1` (`const MAX_OPS = 10000`): the operation log has a 10000-entry ceiling.
+- `src/sdk/EditOpLog.js:4` (`export function createEditOpLog() {`): the log is a factory.
+- `src/sdk/EditOpLog.js:13` (`if (_ops.length > MAX_OPS) {`): the overflow check.
+- `src/sdk/EditOpLog.js:14` (`_ops = _ops.slice(-PRUNE_HEADROOM)`): on overflow only the last PRUNE_HEADROOM operations are kept, and the block that drops the older ones makes no log call.
+- `src/sdk/AgentEditServer.js:7` (`export function createAgentEditServer() {`): the agent edit server is a factory; the file is 120 lines.
+- `src/sdk/PlaceInstances.js:1` (`INSTANCE_SCOPES = Object.freeze(['party', 'solo'])`): the scopes are a frozen list. Spoint's wording omitted `Object.freeze`; the line has it.
+- `src/sdk/PlaceInstances.js:2` (`INSTANCE_LIFETIMES = Object.freeze(['ephemeral', 'session', 'persistent'])`): the lifetimes are a frozen list.
+- `src/sdk/PlaceInstances.js:4` (`export function instanceRoomId(scope, groupId) {`): the room id is derived from the scope and group.
+- `src/sdk/PlaceInstances.js:10` (`export class PlaceInstances {`): the class; the module has four exports in total.
+- `src/sdk/PrefabSpawner.js:1` (`export class PrefabSpawner {`): the spawner class.
+- `src/sdk/PrefabSpawner.js:10` (`const startMs = Date.now()`): the timing reads the wall clock.
+- `src/sdk/PrefabSpawner.js:67` (`const elapsedMs = Date.now() - startMs`): the elapsed time from the wall clock.
+- `src/sdk/PrefabSpawner.js:79` (`const startMs = Date.now()`): a second timing read.
+- `src/sdk/PrefabSpawner.js:108` (`const elapsedMs = Date.now() - startMs`): the second elapsed time.
+- `src/sdk/PrefabSpawner.js:232` (`Math.random().toString(36).slice(2, 8)`): an app-prefixed entity id from Math.random, so the ids are not reproducible.
+- `src/sdk/PrefabSpawner.js:235` (`return 'placed-' + Math.random()`): a placed id from Math.random.
+- `src/sdk/PrefabSpawner.js:237` (`return 'entity-' + Math.random()`): a fallback id from Math.random.
+- `src/sdk/PrefabSpawner.js:241` (`export function createPrefabSpawner(appRuntime, prefabLibrary) {`): the spawner factory.
+- `src/sdk/EditorHandlersSerialize.js:49` (`export { TEXT_EXTS, isTextFile, sanitizeFsError, WORLD_CONFIG_KEYS, serializeEntity, serializeWorld, serializeWorldSource }`): the module's re-export list.
+
+Cluster: `EditOpLog.js` 39 lines, `AgentEditServer.js` 120, `PlaceInstances.js` 60, `PrefabSpawner.js` 242 and `EditorHandlersSerialize.js` 49, which is 510 lines by `wc -l`. `src/sdk/EditorHandlers.js` (1006 lines) is excluded from the cluster. Spoint reports it has three witness scripts, which this section does not verify. The editor token check on the stream 18 surface is not claimed here.
+
+Negatives:
+- `scripts/` names none of the five modules by basename, so 0 of 5 have a witness script.
+- `docs/FEATURESET.md` outside this section, `docs/JAYZEE-GAPS.md`, `docs/OPEN-ITEMS.md` and `docs/PARITY-INPUTS.md` name none of the five modules.
+
+These are static claims. The log overflow and the id generator are not exercised here.
+
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the snippet at `d5e3860`. The citations were re-read from `git -C /workspace/spoint show d5e3860:<path>`, and the line counts were checked: `src/connection/SessionStore.js` has 121 lines and `src/stage/Stage.js` has 109. Nothing was written into spoint. Savi's documents name `SessionStore` 0 times and `StageLoader` 0 times.
@@ -442,7 +499,7 @@ These are facts about spoint. They do not change any jayzee row. Jayzee may idea
 The inputs are spawn's scan output, which exists only in spawn's ephemeral directory and has no durable copy here: `dt/results.jsonl` (2580 rows) and `dt/keys.txt`. The aggregates were re-derived from those two files. The decode itself was not re-run, so the result stays scoped to spawn's run.
 
 Four denominators, kept separate:
-- 307 text-visible keys, spawn-reported and partly re-derived: re-derived here from spawn's `witness/text-visible-307-keys.txt` (spawn-local, not durable in savi) as 307 unique keys, 298 value keys and 9 named keys, with `~2f` 614 occurrences and `~3a` 0 and `~7e` 0. The original 1173-file input (`/tmp/spawn-probe`, ephemeral) is not preserved, and the same script now returns 11987 from newer files, so the 307 stays spawn-reported. This is a different scope.
+- 307 text-visible keys, spawn-reported and historical, durable from 38 content-addressed contributor contents. Re-run 2026-11-07: `node text-visible-307-derive-durable.mjs` in spawn's `maps/witness` reads only the 38 files in `witness/text-visible-307-inputs/` (6.6 MB, `hashMismatches` 0) and returns 307 distinct keys, 298 value keys, 9 named keys, `~2f` 614 occurrences, `~3a` 0 and `~7e` 0; `sort -u witness/text-visible-307-keys.txt | wc -l` is 307. Whether those 38 contents are the complete contributor set rests on an ephemeral mtime-cutoff scan of 1154 files, which is not durable, and the original 1173-file input is not reproduced. The encoder-test script still returns 11987 from newer files, so it does not reproduce the 307. This is a different scope.
 - 11987 unique decoded-frame `world.assets` keys. `keys.txt` has 12186 lines, which is 11987 unique keys plus 199 duplicate lines. spawn-reported: its only input is the ephemeral `dt/keys.txt`.
 - 2580 manifests reached. All returned status 200, and 1240 have `world.assets` keys. 1584 have a `/cdn/` slash.
 - 399 worlds with `/cdn/` GLB references. This is the census denominator used elsewhere in this file and is not compared with the rows above. spawn-reported: its input is the spawn-local `glb-urls-all.tsv`, not a durable file in savi.

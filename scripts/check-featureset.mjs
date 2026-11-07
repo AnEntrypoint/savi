@@ -122,6 +122,7 @@ tableRows.forEach((cells, index) => {
   if (parity.status !== status) errors.push(`JAYZEE-GAPS.md: row ${number} status ${status} differs from ${pin} (${parity.status})`)
   const existing = parity.paths.filter((path) => jayzeeTree.has(path)).length
   if (jzCount !== `${existing}/${parity.paths.length}`) errors.push(`JAYZEE-GAPS.md: row ${number} path count ${jzCount} differs from ${pin} (${existing}/${parity.paths.length})`)
+  if ((status === "built") !== (tag === "none (built)")) errors.push(`JAYZEE-GAPS.md: row ${number} has status ${status} with tag ${tag}; a built row takes the none (built) tag and no other row does`)
   if (tag === "required-in-jayzee") {
     requiredRows++
     if (status === "open") {
@@ -136,8 +137,8 @@ tableRows.forEach((cells, index) => {
   }
 })
 if (tableRows.length !== parityRows.size) errors.push(`JAYZEE-GAPS.md: ${tableRows.length} rows against ${parityRows.size} ranked rows at ${pin}`)
-const expectedOpenWithoutTarget = [32]
-const expectedNamedNotCreated = [32]
+const expectedOpenWithoutTarget = []
+const expectedNamedNotCreated = []
 const sameList = (a, b) => a.length === b.length && a.every((n, i) => n === b[i])
 if (!sameList(openWithoutTarget, expectedOpenWithoutTarget)) errors.push(`JAYZEE-GAPS.md: feature-coverage rows citing no existing jayzee path are [${openWithoutTarget.join(", ")}], expected [${expectedOpenWithoutTarget.join(", ")}]`)
 if (!sameList(namedNotCreated, expectedNamedNotCreated)) errors.push(`JAYZEE-GAPS.md: open required rows citing a jayzee path not created at ${pin} are [${namedNotCreated.join(", ")}], expected [${expectedNamedNotCreated.join(", ")}]`)
@@ -222,7 +223,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -238,6 +239,32 @@ for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 2
   counts[`stream${number}`] = { citations: cites.length, verified }
   console.log(`STREAM ${number} CITATIONS VERIFIED AGAINST spoint ${spointPin}: ${verified} of ${cites.length}`)
 }
+const editorFiles = execFileSync("git", ["-C", spointRoot, "ls-tree", "-r", "--name-only", spointPin, "client/editor"], { encoding: "utf8" }).split("\n").filter((p) => p.endsWith(".js") && !/\/(EditorShell|editor)\.js$|\/wm\//.test(p))
+const editorLines = editorFiles.reduce((sum, p) => sum + execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:${p}`], { encoding: "utf8" }).split("\n").length - 1, 0)
+if (editorFiles.length !== 28 || editorLines !== 5950) errors.push(`spoint client/editor scope at ${spointPin} is ${editorFiles.length} files and ${editorLines} lines, expected 28 and 5950`)
+const streamTwentyFour = texts["FEATURESET.md"].split("\n## Stream 24")[1]?.split("\n## ")[0] ?? ""
+const savisDocsOutsideStreamTwentyFour = [texts["FEATURESET.md"].replace(streamTwentyFour, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"]]
+const editorBasenames = editorFiles.map((p) => p.split("/").pop().replace(/\.js$/, ""))
+const namedInDocs = editorBasenames.filter((b) => savisDocsOutsideStreamTwentyFour.some((t) => t.includes(b))).sort()
+if (namedInDocs.join() !== ["EditorEventLog", "EventChainPanel"].join()) errors.push(`savi docs outside stream 24 name editor modules [${namedInDocs.join(", ")}], expected [EditorEventLog, EventChainPanel]`)
+const scriptTexts = walk(join(savi, "scripts")).filter((f) => !f.endsWith("check-featureset.mjs")).map((f) => readFileSync(f, "utf8"))
+const namedInScripts = editorBasenames.filter((b) => scriptTexts.some((t) => t.includes(b)))
+if (namedInScripts.length !== 0) errors.push(`savi scripts name editor modules: ${namedInScripts.join(", ")}`)
+counts.stream24Cluster = { files: editorFiles.length, lines: editorLines, namedInDocs, namedInScripts: namedInScripts.length }
+console.log(`STREAM 24 CLUSTER AT spoint ${spointPin}: ${editorFiles.length} files, ${editorLines} lines; savi docs outside stream 24 name ${namedInDocs.length} (disclosed); scripts name ${namedInScripts.length}`)
+const serverModules = ["EditOpLog", "AgentEditServer", "PlaceInstances", "PrefabSpawner", "EditorHandlersSerialize"]
+const serverLines = serverModules.reduce((sum, m) => sum + execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/sdk/${m}.js`], { encoding: "utf8" }).split("\n").length - 1, 0)
+if (serverLines !== 510) errors.push(`spoint src/sdk editor server cluster at ${spointPin} is ${serverLines} lines, expected 510`)
+const placeInstancesExports = execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/sdk/PlaceInstances.js`], { encoding: "utf8" }).split("\n").filter((l) => l.startsWith("export")).length
+if (placeInstancesExports !== 4) errors.push(`PlaceInstances.js at ${spointPin} has ${placeInstancesExports} exports, expected 4`)
+const streamTwentyFive = texts["FEATURESET.md"].split("\n## Stream 25")[1]?.split("\n## ")[0] ?? ""
+const docsOutsideStreamTwentyFive = [texts["FEATURESET.md"].replace(streamTwentyFive, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
+const serverNamedInDocs = serverModules.filter((m) => docsOutsideStreamTwentyFive.some((t) => t.includes(m)))
+if (serverNamedInDocs.length !== 0) errors.push(`savi docs outside stream 25 name server modules: ${serverNamedInDocs.join(", ")}`)
+const serverNamedInScripts = serverModules.filter((m) => scriptTexts.some((t) => t.includes(m)))
+if (serverNamedInScripts.length !== 0) errors.push(`savi scripts name server modules: ${serverNamedInScripts.join(", ")}`)
+counts.stream25Cluster = { lines: serverLines, namedInDocs: serverNamedInDocs.length, namedInScripts: serverNamedInScripts.length }
+console.log(`STREAM 25 CLUSTER AT spoint ${spointPin}: ${serverLines} lines; savi docs outside stream 25 name ${serverNamedInDocs.length}; scripts name ${serverNamedInScripts.length}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
