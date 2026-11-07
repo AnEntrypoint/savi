@@ -1,6 +1,6 @@
 # Open items
 
-Status values: OPEN, INFERRED, UNVERIFIED, BEHAVIOUR, DIFFERENT-DATASET, HELD-OWNER. HELD-OWNER means awaiting an owner decision and is never a resolved status. Witness lines are command output or file paths. Tag `required-in-jayzee` marks the owner's parity directive; naming parity is not required, and feature support for everything spawn is learning is non-negotiable. Directive sources: `/workspace/jayzee/docs/PARITY.md`, and the spoint INVENTORY (external, not in this repo).
+Status values: OPEN, INFERRED, UNVERIFIED, BEHAVIOUR, DIFFERENT-DATASET, HELD-OWNER. HELD-OWNER means awaiting an owner decision and is never a resolved status. Witness lines are command output or file paths. Tag `required-in-jayzee` marks the owner's parity directive; naming parity is not required, and feature support for everything spawn is learning is non-negotiable. Directive sources: `/workspace/jayzee/docs/PARITY.md`. EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/INVENTORY.md`.
 
 ## Register
 
@@ -111,6 +111,7 @@ Tag: required-in-jayzee
 Claim: name encoder, resolve redirect/gone bodies, manifest frames after the sheet, and ledger bucket rule remain OPEN/UNVERIFIED; only token buckets exist at LagCompensator.js lines 6-7 with capacity 10 and refill 20 per second.
 Status: UNVERIFIED
 Source paths: `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/src/netcode/LagCompensator.js`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`
+EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/GAPS.md`
 Witness: command output `lag constants REWIND_BUCKET_CAPACITY=10 REWIND_REFILL_PER_SEC=20`
 Tag: required-in-jayzee
 
@@ -131,6 +132,7 @@ Witness: command output `site commit=501c76e HEAD=6c39a16 branch=main origin=AnE
 Claim: CHARTEST-est-s1-3 is a confirmed REAL gap at PlanetFrame.js installGroundSource line 348, where a placement-only prototype-linked install changes the shared base frame's groundSource.
 Status: BEHAVIOUR
 Source paths: `/workspace/spoint/src/terrain/PlanetFrame.js`, `/workspace/jayzee/docs/PARITY.md`
+EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/parity-crossmap.json`
 Witness: command output `real-gaps CHARTEST=REAL WADLER=REAL nonPrdREAL=5 bundleFreshnessRefs=2 deltaUpdateRefs=2 port3002Refs=3 trimeshLogged=true`
 Tag: required-in-jayzee
 
@@ -138,6 +140,7 @@ Tag: required-in-jayzee
 Claim: other confirmed real gaps are WADLER-relocation-probegroundy, GAP-bundle-freshness with 2 package.json refs to absent `scripts/bundle-freshness-witness.mjs`, GAP-fire-kernel-witness, MSG.DELTA_UPDATE declared but never sent or handled, AppRuntime trimesh failure logged with collider dropped, and port 3002 shared by three world defs.
 Status: OPEN
 Source paths: `/workspace/spoint/src/sdk/Relocation.js`, `/workspace/spoint/package.json`, `/workspace/spoint/src/shared/fire/fireKernel.js`, `/workspace/spoint/src/protocol/MessageTypes.js`, `/workspace/spoint/src/apps/AppRuntime.js`, `/workspace/spoint/apps/world/tps-game.js`, `/workspace/spoint/apps/world/tutorial.js`, `/workspace/spoint/apps/world/tutorial-rpg.js`, `/workspace/jayzee/docs/PARITY.md`
+EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/GAPS.md`, `/tmp/spoint-parity/FAMILIES.md`
 Witness: command output `real-gaps CHARTEST=REAL WADLER=REAL nonPrdREAL=5 bundleFreshnessRefs=2 deltaUpdateRefs=2 port3002Refs=3 trimeshLogged=true`
 Tag: required-in-jayzee
 
@@ -145,6 +148,7 @@ Tag: required-in-jayzee
 Claim: spoint PRD matrix has 15 open rows classified STALE 11, DOC-ONLY 2, REAL 2; .gm/prd.yml has 103 rows (fixed 34, refuted 28, retired 26, open 15), no row numbered 2-4, 76 tracked verdict paths, and no untracked verdict paths.
 Status: OPEN
 Source paths: `/workspace/spoint/.gm/prd.yml`, `/workspace/jayzee/docs/PARITY.md`
+EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/INVENTORY.md`, `/tmp/spoint-parity/parity-crossmap.json`
 Witness: command output `prd rows=103 fixed=34 refuted=28 retired=26 open=15 numbered2-4=0 trackedVerdictPaths=76 untrackedVerdictPaths=0 matrix STALE=11 DOC-ONLY=2 REAL=2 nonPrdREAL=5`
 Tag: required-in-jayzee
 
@@ -152,6 +156,7 @@ Tag: required-in-jayzee
 Claim: the 13 unchecked savi/spawn gap-report claims remain open and the 47 checked claims are explicitly NOT independently verified.
 Status: UNVERIFIED
 Source paths: `/workspace/spoint/.gm/witness-out/savi-spawn-feature-gap.md`, `/workspace/jayzee/docs/PARITY.md`
+EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/parity-crossmap.json`
 Witness: command output `gap unchecked=13 checked=47 total=60 implemented=47`
 Detail: Terrain mark vocabulary and world-def wiring; named terrain field paint with PLAYER and CREATOR layers; decoration item layers and graphics-tier reach; rigged-model ragdoll activation; vibe pattern core and transport; PostFX look DSL and render-graph operators; private preview room and separate publish; browser readiness, fault and chat contract; declarative world tree and state scopes; shared spec parse boundary for all ctx.define* factories; surface the tick drop counter; SES availability preflight with distinct reason codes; fail-loud asset loading gate for model errors.
 Tag: required-in-jayzee
@@ -166,12 +171,14 @@ Witness: command output `coverage gaps=26 open-items=5 owner-improvements=5`
 Claim: five netcode owner improvements await an owner decision: document 24 undocumented src/netcode modules, size the lag ring from window or clamp to 255 ticks, document WIRE_UNITS_PER_METER, put wire layouts in docs/code, and document gm maxInflight: 8.
 Status: HELD-OWNER
 Source paths: `/workspace/savi/gaps/netcode-optimization-gaps.md`, `/workspace/spoint/src/netcode/LagCompensator.js`
+EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/INVENTORY.md`
 Witness: command output `coverage gaps=26 open-items=5 owner-improvements=5`
 
 ### OPEN-025
 Claim: spoint-side HELD-OWNER decisions remain with the owner, never resolved: GAP-bundle-freshness fix choice, 11 STALE PRD rows, spoint PRD items 2-4, four lost verdict files, and Wave C model browser.
 Status: HELD-OWNER
 Source paths: `/workspace/spoint/.gm/prd.yml`, `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/package.json`
+EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/GAPS.md`, `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/INVENTORY.md`, `/tmp/spoint-parity/FAMILIES.md`, `/tmp/spoint-parity/parity-crossmap.json`
 Witness: command output `held-owner spoint=5 jayzee=2 external=3 total=10 source-paths present=19/19`
 
 ### OPEN-026
@@ -199,4 +206,4 @@ Tag: required-in-jayzee
 
 Jayzee must support the spawn boot chain head.json -> manifests/<hash> -> values/<sha>; file-map key escapes ~2f and ~3a; /cdn/value.<sha>.<ext> content-addressed GLBs with sha256, glTF magic, and HEAD 200 model/gltf-binary; 16-shard HEAD/Range probing with retry and idempotent aggregation; tolerance of 256 missing heads and transient ECONNRESET; bounded-offset feed enumeration with per-sort duplicates; address -> worldId/appId/creator resolution; creator profiles with no direct GLB URLs because models resolve from world state; world-store JSON values for scene, placement, terrain and UI versus binary assets on /cdn/; local store names and derivedGeometry shards:16; LOD format 1.3.0; and 93 savi endpoints, 23 served skills, 68 Tome headings and 23 builtin modules. Naming parity is not required. OPEN-028 records the builtin-module count delta.
 
-Source paths: `/workspace/savi/spawn-engine/FEED_SCOPE.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/spawn/maps/glb-urls-all.tsv`, `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/.spawn/reference/COVERAGE.md`, `/workspace/savi/.spawn/reference/engine-deep/api-b.md`, `/workspace/savi/.spawn/reference/engine/api-reference.md`.
+Source paths: `/workspace/savi/spawn-engine/FEED_SCOPE.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/spawn/maps/glb-urls-all.tsv`, `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/.spawn/reference/COVERAGE.md`, `/workspace/savi/.spawn/reference/engine-deep/api-b.md`, `/workspace/savi/.spawn/reference/engine/api-reference.md`
