@@ -600,6 +600,79 @@ Each line gives `path:line` and the first export at `d5e3860`. The four modules 
 
 Witness-less: `GrassClump`, `GrassMaterial` and `GrassTSL`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of the three.
 
+## Stream 36: client/core environment tint and weather modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The eight modules total 682 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for the eight basenames, and for the words `wetness`, `underwater` and `weather material`. The word `tint` appears only inside other words. `client/core` family rows in `docs/JAYZEE-GAPS.md` and `docs/PARITY-INPUTS.md` name the directory, not these files.
+
+- `client/core/WeatherGpu.js:3` (`export function makeSeedAttributes(capacity, fillSeed) {`): 44 lines, 5 exports. Imported by `client/core/Weather.js`. No witness.
+- `client/core/WeatherMaterials.js:3` (`export function makeStreakGeo() {`): 206 lines, 8 exports. Imported by `client/core/Weather.js`. No witness.
+- `client/core/WeatherMaterialsTSL.js:11` (`export function makeRainMaterialTSL() {`): 99 lines, 4 exports. Imported by `client/core/Weather.js`. No witness.
+- `client/core/WetnessTint.js:6` (`export function installWetnessTint() {`): 63 lines, 3 exports. Imported by `client/app.js`, `client/core/SSR.js` and `client/core/SSRWebGPU.js`. No witness.
+- `client/core/WetnessTintTSL.js:6` (`export const wetnessUniform = uniform(0)`): 39 lines, 4 exports. Imported by `client/ModelPoolAdapter.js`. No witness.
+- `client/core/UnderwaterTint.js:11` (`export const SEA_SURFACE_GLSL = [`): 99 lines, 4 exports. Imported by `client/core/SSR.js` and `client/core/SceneSetup.js`. No witness.
+- `client/core/UnderwaterTintTSL.js:10` (`export const seaUniform = uniform(new THREE.Vector4(-100000, 0, 0, 0))`): 62 lines, 5 exports. Imported by `client/ModelPoolAdapter.js`. No witness.
+- `client/core/PostFxLook.js:1` (`export class PostFxLookError extends Error {`): 70 lines, 5 exports. No importer in code. Witnessed by `scripts/postfx-graph-structure-witness.mjs`, `scripts/postfx-look-witness.mjs` and `scripts/postfx-render-graph-witness.mjs`, the only witnessed module in this stream.
+
+Witness-less: the seven other modules. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of them.
+
+## Stream 37: client/core culling, occlusion and terrain occlusion modules (spoint, read-only at `d5e3860`)
+
+This stream covers four modules and two held files. The two held files, `OcclusionPolicy` and `OcclusionQueryBudget`, are named per file here, so that their coverage does not rest on the family-level prose in `docs/JAYZEE-GAPS.md` row 39. Each citation is a `git show d5e3860` re-read.
+
+- `client/core/CullingHub.js:1` (`export function createCullingHub() {`): 25 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/TerrainOcclusion.js:6` (`export function createTerrainOcclusion(gl, opts = {}) {`): 228 lines, 1 export. Imported by `client/core/TerrainBackdrop.js`. No witness.
+- `client/core/WebGPUCullingHubIntegration.js:34` (`export async function runVegetationScalePerfAB({ counts = [12000, 30000],`): 193 lines, 2 exports. Imported by `client/app.js`. No witness.
+- `client/core/WebGPUCullingProbe.js:1` (`export async function probeWebGPU() {`): 176 lines, 3 exports. Imported by `client/core/SceneSetup.js` and `client/core/WebGPUCullingHubIntegration.js`. No witness.
+- `client/core/OcclusionPolicy.js:1` (`export function createOcclusionPolicy(config = {}) {`): 110 lines, 1 export. Imported by `client/core/SceneOcclusion.js` and `client/core/TerrainOcclusion.js`. No witness. Held before this stream, now accepted as coverage by this per-file entry.
+- `client/core/OcclusionQueryBudget.js:1` (`export function createOcclusionQueryBudget(opts = {}) {`): 79 lines, 1 export. Imported by `client/app.js`. No witness. Held before this stream, now accepted as coverage by this per-file entry.
+
+The four modules total 622 lines and the two held files total 189, for 811 lines in the stream. `SceneOcclusion.js` is covered by its own citation at `docs/FEATURESET.md` (see the occlusion lines above) and is not part of this stream. None of the six has a witness script.
+
+## Stream 38: client/core bloom and FSR1 modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The four modules total 790 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for `Bloom`, `BloomWebGPU`, `FSR1` and `FSR1WebGPU`, and the words `bloom`, `FSR` and `fsr1` have zero hits. The `upscal` substring appears only in `scripts/openapi.json`, which is unrelated.
+
+- `client/core/Bloom.js:55` (`export class Bloom {`): 247 lines, 4 exports. Imported by `client/app.js`. No witness.
+- `client/core/BloomWebGPU.js:38` (`export class BloomWebGPU {`): 155 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/FSR1.js:65` (`export class FSR1 {`): 241 lines, 4 exports. Imported by `client/app.js`. No witness.
+- `client/core/FSR1WebGPU.js:52` (`export class FSR1WebGPU {`): 147 lines, 1 export. Imported by `client/app.js`. No witness.
+
+Witness-less: all four.
+
+## Stream 39: client/core screen-space ambient occlusion and reflection modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The four modules total 1175 lines by `wc -l`. Savi's docs and scripts have zero word hits for `SSAO`, `SSAOWebGPU`, `SSR` and `SSRWebGPU`, checked word-bounded and case-insensitively. Substring hits of `ssr` inside other words are not module mentions. The words `ssao`, `ambient occlusion`, `screen-space` and `reflection` have zero hits.
+
+- `client/core/SSAO.js:113` (`export class SSAO {`): 289 lines, 4 exports. Imported by `client/app.js`. No witness.
+- `client/core/SSAOWebGPU.js:81` (`export class SSAOWebGPU {`): 194 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/SSR.js:114` (`export class SSR {`): 361 lines, 4 exports. Imported by `client/app.js`. No witness.
+- `client/core/SSRWebGPU.js:127` (`export class SSRWebGPU {`): 331 lines, 1 export. Imported by `client/app.js`. No witness.
+
+Witness-less: all four.
+
+## Stream 40: client/core player LOD and vertex-animation-texture modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The five modules total 807 lines by `wc -l`. Savi's docs and scripts have zero word hits for the five basenames and for `PlayerLOD`, `VAT`, `vertex animation` and `animation texture`. Substring hits of `vat` inside other words are not module mentions.
+
+- `client/core/PlayerLOD.js:6` (`export const PLAYER_LOD_FULL_COUNT = 30`): 248 lines, 10 exports. Imported by `client/app.js`. No witness.
+- `client/core/PlayerLODTSL.js:5` (`export function createDotMaterialTSL(matrixNode) {`): 21 lines, 1 export. Imported by `client/core/PlayerLOD.js`. No witness.
+- `client/core/PlayerVAT.js:7` (`export { bakeVAT, bakeVATMultiClip }`): 301 lines, 5 exports. Imported by `client/app.js`. No witness.
+- `client/core/PlayerVATBake.js:62` (`export function bakeVAT(skinnedMesh, mixerRoot, clip, opts = {}) {`): 155 lines, 2 exports. Imported by `client/core/PlayerVAT.js` and `client/core/PlayerVATTSL.js`. No witness.
+- `client/core/PlayerVATTSL.js:6` (`export { bakeVAT, bakeVATMultiClip }`): 82 lines, 2 exports. Imported by `client/core/PlayerVAT.js`. No witness.
+
+Witness-less: all five.
+
+## Stream 41: client/core rock and vegetation shading modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The four modules total 496 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for `Rocks`, `RocksTSL`, `VegetationTSL` and `VegetationAmbientTSL`. The substring `rock` appears in `docs/JAYZEE-GAPS.md` only as `RockPhysics`, a different module. `Vegetation.js`, `VegetationBuild.js` and `VegImpostorTier.js` are separate streams and are not in this one.
+
+- `client/core/Rocks.js:83` (`export async function createRocks(opts = {}) {`): 342 lines, 1 export. Imported by `client/app.js`. Its only script mention is `scripts/rock-model-exclusion-witness.mjs`, which reads `client/core/Rocks.js` as source text and does not import it. That is a source-text witness, not an import witness, and it is disclosed as such.
+- `client/core/RocksTSL.js:22` (`export function applyRockTextureTSL(material) {`): 39 lines, 2 exports. Imported by `client/core/Rocks.js`. No witness.
+- `client/core/VegetationTSL.js:3` (`export function makeWindUniformsTSL() {`): 35 lines, 5 exports. Imported by `client/core/Vegetation.js`. No witness.
+- `client/core/VegetationAmbientTSL.js:10` (`export const vegAmbientUniforms = {`): 80 lines, 3 exports. Imported by `client/core/Vegetation.js`. No witness.
+
+Witness-less: `RocksTSL`, `VegetationTSL` and `VegetationAmbientTSL`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of them.
+
 ## Improvement opportunities (not behaviour to match)
 
 The owner's rule is that the documented featureset is a floor. Where spoint's design is weaker, jayzee should build the better version, and matching spoint's behaviour is not the requirement. Each item below is spoint's weaker design, recorded here as an improvement opportunity for jayzee.
@@ -623,6 +696,40 @@ The items below come from streams 33, 34 and 35. They are GREP-BASED CANDIDATES,
 - `client/core/GrassWindField.js:137` (`const r = Number.isFinite(reach) && reach > 0 ? reach : GRASS_WIND_FIELD_REACH_M`): an invalid reach silently takes the default.
 - `client/core/GrassMaterial.js:117` (`return Number.isFinite(v) ? v : fallback`): a silent fallback.
 - The grass law is held in one place, `GRASS_DENSITY` from `src/terrain/GrassPlacement.js`, but the shader-side fade is still written in both `GrassTSL` and `GrassMaterial`. A change to one side alone can desynchronise them. This is a design candidate, not a defect.
+
+The items below come from streams 36 to 40. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/WetnessTint.js:54` (`const v = THREE.MathUtils.clamp(Number.isFinite(w) ? w : 0, 0, 1)`) and `client/core/WetnessTintTSL.js:36` (`const v = Number.isFinite(w) ? Math.min(1, Math.max(0, w)) : 0`): an absent or invalid wetness silently becomes 0, a sentinel for absence.
+- `client/core/UnderwaterTint.js:89` (`if (Number.isFinite(planetRadius) && planetRadius > 0) _seaUniform.value[SEA_RADIUS] = planetRadius`): an invalid planetRadius is skipped silently, which leaves the previous uniform in place.
+- `client/core/UnderwaterTintTSL.js:51` (`if (!Number.isFinite(seaY)) return`): a non-finite seaY is a silent no-op.
+- `client/core/PostFxLook.js:38` (`const exposure = look.exposure ?? 1`): a silent default for an optional field.
+- `client/core/CullingHub.js:15` (`per[name] = s || null`): a null sentinel. Lines 17 and 18 skip non-finite values silently.
+- `client/core/TerrainOcclusion.js:8` (`const minCandidates = opts.minCandidates ?? 32`), `:9` (`const maxElev = opts.maxElev ?? 200`) and `:24` (`let maxQueriesPerFrame = opts.maxQueriesPerFrame ?? 32`): silent defaults for absent options. Line 25 drops an invalid `setMaxQueriesPerFrame` value without a refusal.
+- `client/core/TerrainOcclusion.js:135` (`|| 1` on a length), `:178` (`const s = halfSize || 1`) and `:207` (`size: rec.size || 1`): silent literal defaults.
+- `client/core/WebGPUCullingHubIntegration.js:35` (`const viewProjection = vp || DEFAULT_PERSPECTIVE_VIEW_PROJECTION`): an invalid view-projection is silently replaced. Line 93 (`return mesh.count || 0`) turns an absent count into 0.
+- `client/core/WebGPUCullingHubIntegration.js:141` (`failOpens: 1`): a failed GPU compute cull is reported on a fail-open path. Per AGENTS.md a GPU and CPU divergence culls the wrong cells, so this is worth a look. This is a candidate, not a verified defect.
+- `client/core/Bloom.js:100` and `client/core/BloomWebGPU.js:62` (`const scale = RenderControls.get('bloomResolutionScale') || 0.5`): a stored 0 silently becomes 0.5.
+- `client/core/Bloom.js:157` and `client/core/BloomWebGPU.js:122` (`Math.max(1, RenderControls.get('bloomBlurPasses') || 1)`): a stored 0 silently becomes 1, and a non-finite value is not refused.
+- `client/core/FSR1.js:216` (`if (dpr == null) return false`) and `:217` (`window.devicePixelRatio || 1`): a literal default for an absent device pixel ratio.
+- `client/core/Bloom.js:87` and `client/core/FSR1.js:83` read `RenderControls.get('bloomIntensity')` and `RenderControls.get('fsr1Sharpness')` straight into uniform values at construction, with no validation at that boundary.
+- `client/core/SSR.js:212` and `client/core/SSRWebGPU.js:218` (`this.userData.wetness || 0`): an absent wetness and a zero wetness are not distinguished.
+- `client/core/SSR.js:272` and `client/core/SSRWebGPU.js:277` (`THREE.MathUtils.clamp(_getWeatherWetness() || 0, 0, 1)`): a missing weather reading becomes 0 silently, the same class as `WetnessTint.js:54`.
+- `client/core/SSR.js:243` and `client/core/SSRWebGPU.js:250` (`this._sharedGBuffer = gbufferTexture || null`): a null sentinel for an absent G-buffer.
+- `client/core/SSRWebGPU.js:292` (`const underwaterTint = typeof window !== 'undefined' ? window.__underwaterTint : null`): a global read with a null fallback, not an injected dependency.
+- `client/core/PlayerLOD.js:81`, `:82` and `:83` (`opts.dotCellM || 25`, `opts.dotSize || 1.4`, `opts.capacity || 512`), repeated at `:135` to `:137`: literal defaults in two places, so a zero is replaced silently and the two copies can drift apart.
+- `client/core/PlayerVAT.js:137` and `:141` (`const nominal = opts.nominalSpeed || 4.0`): a zero becomes 4.0. Line 120 derives `blendHighSpeed` from the same literal.
+- `client/core/PlayerVAT.js:202` (`try { im.setUniformAt(id, name, value) } catch (_) {}`): a failed uniform write is dropped without a report.
+- `client/core/PlayerVAT.js:293` and `:295`: `null` is the sentinel for an absent renderer or mesh.
+- `client/core/PlayerVATBake.js:77` (`const maxTexSize = opts.maxTexSize || 4096`) and `:148` (`baked[0] || null`).
+
+The items below come from stream 41. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/Rocks.js:89` (`const worldSeed = (opts.worldSeed ?? cfg.seed ?? 0) | 0`): a non-finite seed is coerced to 0 silently.
+- `client/core/Rocks.js:92` and `:97`: a non-finite config value falls back to a literal (`cfg.renderDistance || 320`, `MAX_INSTANCES` 12000), and a zero value is silently replaced.
+- `client/core/Rocks.js:102` and `:118`: a failed geometry build becomes `null` or `-1` with a `console.error`, and the build continues. That is a sentinel for absence rather than a refusal with a code.
+- `client/core/Rocks.js:276` (`if (!Number.isFinite(px) || !Number.isFinite(pz)) return 0`): a non-finite position returns a count of 0.
+- `client/core/VegetationAmbientTSL.js:50` (`return Number.isFinite(v) ? v : fallback`): a silent fallback. Line 54 sets `muS` to 1 when the elevation is non-finite. Line 61 skips the ambient update silently when a value is non-finite.
+- `client/core/VegetationTSL.js:9` (`if (typeof window !== 'undefined' && window.__vegWind != null) wind.uVegWind.value = +window.__vegWind`): the global is written to a uniform with no finite check first.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 

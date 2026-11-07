@@ -27,7 +27,7 @@ Written by spawn, 2026-11-07, for savi. Spawn has no git repo; nothing here is c
 - Bucket <xx> rule: UNDETERMINED (negative as above).
 - Name encoder for ':' and '~': not witnessed in the probes.
 - Non-CDN refs: 83 rows, 81 HEAD 200 on retry, 1 ttf 401, 1 mp4 connect timeout (open).
-- Head drift: one case observed. World 41cd46499614484ca9261ce32e257e22 head.json now names manifest 3fa9a434..., which returns 404 unknown_world_store_key; the scanned manifest 5a526ee6... still returns 200. A single observed case, not a rule.
+- Head drift: one case observed. World 41cd46499614484ca9261ce32e257e22 head.json names manifest 3fa9a434...; re-checked 2026-11-07 with repeat GETs, manifests/3fa9a434... returns 200 application/octet-stream, 513116 bytes, so the earlier 404 unknown_world_store_key is NOT reproduced. The condition that selected that error is OPEN, because the saved bodies hold only error text with no URL. The scanned manifest 5a526ee6... still returns 200. The key reproduces only for a misspelled resource name under the same world: GET .../git/41cd46499614484ca9261ce32e257e22/head.jsn returns 404 application/json 35 bytes {"error":"unknown_world_store_key"}, and the control head.json returns 200 1673 bytes. A single observed case, not a rule.
 
 ## Manifest verification over all 2580 distinct manifests (COMPLETE)
 Run: probe-scripts/verify-all-manifests.mjs, 12-way concurrency, 30 s timeout, up to 3 attempts. The job was killed once by the gm job monitor at 1343 rows (no stdout progress) and resumed from results.jsonl, which the script reads for done keys. Raw: data/manifests-all-results.jsonl (2580 lines).

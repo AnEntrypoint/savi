@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -478,6 +478,91 @@ if (candidateMismatch.length !== 0) errors.push(`improvement candidates not at t
 const candidateShiftRefused = improvementCandidates.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
 if (!candidateShiftRefused) errors.push("improvement candidate line-shift negative was not refused")
 console.log(`IMPROVEMENT CANDIDATES AT spoint ${spointPin}: ${improvementCandidates.length} located, line-shift negative refused: ${candidateShiftRefused}`)
+const coreLines = (names) => names.reduce((sum, m) => sum + spointLineCount(`client/core/${m}.js`), 0)
+const coreWitnessed = (names) => names.filter((m) => spointWitnessFiles(m).length > 0)
+const s36 = ["WeatherGpu", "WeatherMaterials", "WeatherMaterialsTSL", "WetnessTint", "WetnessTintTSL", "UnderwaterTint", "UnderwaterTintTSL", "PostFxLook"]
+if (coreLines(s36) !== 682) errors.push(`stream 36 at ${spointPin}: ${coreLines(s36)} lines, expected 682`)
+if (coreWitnessed(s36).join() !== "PostFxLook") errors.push(`stream 36 witnessed set is [${coreWitnessed(s36).join(", ")}], expected [PostFxLook]`)
+if (s36.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 36 modules: ${s36.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 36 AT spoint ${spointPin}: ${coreLines(s36)} lines, 8 modules, witnessed ${coreWitnessed(s36).join("+")}, savi names ${s36.filter(saviNamesModule).length}`)
+const s37 = ["CullingHub", "TerrainOcclusion", "WebGPUCullingHubIntegration", "WebGPUCullingProbe", "OcclusionPolicy", "OcclusionQueryBudget"]
+if (coreLines(s37) !== 811) errors.push(`stream 37 at ${spointPin}: ${coreLines(s37)} lines, expected 811`)
+if (coreWitnessed(s37).length !== 0) errors.push(`stream 37 has witnesses: ${coreWitnessed(s37).join(", ")}`)
+if (s37.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 37 modules: ${s37.filter(saviNamesModule).join(", ")}`)
+const occlusionPerFileCited = ["client/core/OcclusionPolicy.js:1", "client/core/OcclusionQueryBudget.js:1"].every((c) => texts["FEATURESET.md"].includes(`\`${c}\``))
+if (!occlusionPerFileCited) errors.push("stream 37 does not cite OcclusionPolicy and OcclusionQueryBudget per file")
+console.log(`STREAM 37 AT spoint ${spointPin}: ${coreLines(s37)} lines (6 modules incl. the 2 held), witnesses ${coreWitnessed(s37).length}, held files cited per file: ${occlusionPerFileCited}`)
+const s38 = ["Bloom", "BloomWebGPU", "FSR1", "FSR1WebGPU"]
+if (coreLines(s38) !== 790) errors.push(`stream 38 at ${spointPin}: ${coreLines(s38)} lines, expected 790`)
+if (coreWitnessed(s38).length !== 0) errors.push(`stream 38 has witnesses: ${coreWitnessed(s38).join(", ")}`)
+if (s38.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 38 modules: ${s38.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 38 AT spoint ${spointPin}: ${coreLines(s38)} lines, witnesses ${coreWitnessed(s38).length}, savi names ${s38.filter(saviNamesModule).length}`)
+const s39 = ["SSAO", "SSAOWebGPU", "SSR", "SSRWebGPU"]
+if (coreLines(s39) !== 1175) errors.push(`stream 39 at ${spointPin}: ${coreLines(s39)} lines, expected 1175`)
+if (coreWitnessed(s39).length !== 0) errors.push(`stream 39 has witnesses: ${coreWitnessed(s39).join(", ")}`)
+if (s39.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 39 modules: ${s39.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 39 AT spoint ${spointPin}: ${coreLines(s39)} lines, witnesses ${coreWitnessed(s39).length}, savi names ${s39.filter(saviNamesModule).length}`)
+const s40 = ["PlayerLOD", "PlayerLODTSL", "PlayerVAT", "PlayerVATBake", "PlayerVATTSL"]
+if (coreLines(s40) !== 807) errors.push(`stream 40 at ${spointPin}: ${coreLines(s40)} lines, expected 807`)
+if (coreWitnessed(s40).length !== 0) errors.push(`stream 40 has witnesses: ${coreWitnessed(s40).join(", ")}`)
+if (s40.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 40 modules: ${s40.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 40 AT spoint ${spointPin}: ${coreLines(s40)} lines, witnesses ${coreWitnessed(s40).length}, savi names ${s40.filter(saviNamesModule).length}`)
+const candidates36to40 = [
+  ["client/core/WetnessTint.js", 54, "const v = THREE.MathUtils.clamp(Number.isFinite(w) ? w : 0, 0, 1)"],
+  ["client/core/WetnessTintTSL.js", 36, "const v = Number.isFinite(w) ? Math.min(1, Math.max(0, w)) : 0"],
+  ["client/core/UnderwaterTint.js", 89, "if (Number.isFinite(planetRadius) && planetRadius > 0) _seaUniform.value[SEA_RADIUS] = planetRadius"],
+  ["client/core/UnderwaterTintTSL.js", 51, "if (!Number.isFinite(seaY)) return"],
+  ["client/core/PostFxLook.js", 38, "const exposure = look.exposure ?? 1"],
+  ["client/core/CullingHub.js", 15, "per[name] = s || null"],
+  ["client/core/TerrainOcclusion.js", 8, "const minCandidates = opts.minCandidates ?? 32"],
+  ["client/core/TerrainOcclusion.js", 9, "const maxElev = opts.maxElev ?? 200"],
+  ["client/core/TerrainOcclusion.js", 24, "let maxQueriesPerFrame = opts.maxQueriesPerFrame ?? 32"],
+  ["client/core/TerrainOcclusion.js", 178, "const s = halfSize || 1"],
+  ["client/core/TerrainOcclusion.js", 207, "out.push({ key, center: rec.center, size: rec.size || 1, state })"],
+  ["client/core/WebGPUCullingHubIntegration.js", 35, "const viewProjection = vp || DEFAULT_PERSPECTIVE_VIEW_PROJECTION"],
+  ["client/core/WebGPUCullingHubIntegration.js", 141, "failOpens: 1"],
+  ["client/core/Bloom.js", 100, "const scale = RenderControls.get('bloomResolutionScale') || 0.5"],
+  ["client/core/BloomWebGPU.js", 62, "const scale = RenderControls.get('bloomResolutionScale') || 0.5"],
+  ["client/core/Bloom.js", 157, "const passes = Math.max(1, RenderControls.get('bloomBlurPasses') || 1)"],
+  ["client/core/BloomWebGPU.js", 122, "const passes = Math.max(1, RenderControls.get('bloomBlurPasses') || 1)"],
+  ["client/core/FSR1.js", 216, "if (dpr == null) return false"],
+  ["client/core/SSR.js", 212, "mat.uniforms.uWetness.value = this.userData.wetness || 0"],
+  ["client/core/SSR.js", 272, "u.uWeatherWetness.value = THREE.MathUtils.clamp(_getWeatherWetness() || 0, 0, 1)"],
+  ["client/core/SSRWebGPU.js", 277, "this._weatherWetnessUniform.value = THREE.MathUtils.clamp(_getWeatherWetness() || 0, 0, 1)"],
+  ["client/core/SSRWebGPU.js", 292, "const underwaterTint = typeof window !== 'undefined' ? window.__underwaterTint : null"],
+  ["client/core/PlayerLOD.js", 81, "const dotCellM = opts.dotCellM || 25"],
+  ["client/core/PlayerLOD.js", 135, "const dotCellM = opts.dotCellM || 25"],
+  ["client/core/PlayerVAT.js", 137, "const nominal = opts.nominalSpeed || 4.0"],
+  ["client/core/PlayerVAT.js", 202, "try { im.setUniformAt(id, name, value) } catch (_) {}"],
+  ["client/core/PlayerVATBake.js", 77, "const maxTexSize = opts.maxTexSize || 4096"],
+  ["client/core/PlayerVATBake.js", 148, "return { idle: baked[0] || null,"],
+]
+const candidate36Mismatch = candidates36to40.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate36Mismatch.length !== 0) errors.push(`stream 36 to 40 candidates not at cited lines: ${candidate36Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const candidate36ShiftRefused = candidates36to40.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
+if (!candidate36ShiftRefused) errors.push("stream 36 to 40 candidate line-shift negative was not refused")
+console.log(`CANDIDATES 36 TO 40 AT spoint ${spointPin}: ${candidates36to40.length} located, line-shift negative refused: ${candidate36ShiftRefused}`)
+const s41 = ["Rocks", "RocksTSL", "VegetationTSL", "VegetationAmbientTSL"]
+if (coreLines(s41) !== 496) errors.push(`stream 41 at ${spointPin}: ${coreLines(s41)} lines, expected 496`)
+const rockWitnessText = spointShow("scripts/rock-model-exclusion-witness.mjs")
+if (!rockWitnessText.includes("client/core/Rocks.js") || !rockWitnessText.includes("readFileSync")) errors.push("stream 41 Rocks witness no longer reads client/core/Rocks.js as source text")
+if (coreWitnessed(s41).join() !== "Rocks") errors.push(`stream 41 witnessed set is [${coreWitnessed(s41).join(", ")}], expected [Rocks]`)
+if (s41.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 41 modules: ${s41.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 41 AT spoint ${spointPin}: ${coreLines(s41)} lines, witnessed ${coreWitnessed(s41).join("+")} (source-text witness: ${rockWitnessText.includes("readFileSync")}), savi names ${s41.filter(saviNamesModule).length}`)
+const candidates41 = [
+  ["client/core/Rocks.js", 89, "const worldSeed = (opts.worldSeed ?? cfg.seed ?? 0) | 0"],
+  ["client/core/Rocks.js", 92, "const renderDistance = Number.isFinite(cfg.rockRenderDistance) ? cfg.rockRenderDistance : (cfg.renderDistance || 320)"],
+  ["client/core/Rocks.js", 97, "const MAX_INSTANCES = Number.isFinite(cfg.rockMaxInstances) ? cfg.rockMaxInstances : 12000"],
+  ["client/core/Rocks.js", 102, "try { geos.push(buildRockGeo(t, ROCK_MESH_RES)) } catch (e) { buildErr++; geos.push(null);"],
+  ["client/core/Rocks.js", 118, "try { geomIds.push(bm.addGeometry(geos[t])) } catch (e) { buildErr++; geomIds.push(-1);"],
+  ["client/core/Rocks.js", 276, "if (!Number.isFinite(px) || !Number.isFinite(pz)) return 0"],
+  ["client/core/VegetationAmbientTSL.js", 50, "return Number.isFinite(v) ? v : fallback"],
+  ["client/core/VegetationAmbientTSL.js", 54, "const muS = Number.isFinite(tod && tod.elevationDeg) ? Math.sin(tod.elevationDeg * Math.PI / 180) : 1"],
+  ["client/core/VegetationAmbientTSL.js", 61, "if (tod && Number.isFinite(tod.ambientIntensity) && Number.isFinite(tod.ambientColor)) {"],
+  ["client/core/VegetationTSL.js", 9, "if (typeof window !== 'undefined' && window.__vegWind != null) wind.uVegWind.value = +window.__vegWind"],
+]
+const candidate41Mismatch = candidates41.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate41Mismatch.length !== 0) errors.push(`stream 41 candidates not at cited lines: ${candidate41Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
