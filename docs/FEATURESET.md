@@ -761,6 +761,46 @@ The three relocation and lerp modules total 301 lines by `wc -l`: 100, 85 and 11
 
 No tracked witness script at `d5e3860`: `RelocationSearch`, `RelocationSettle`, `TransformLerp` and `FloatingOrigin`.
 
+## Stream 50: client/core decal, cache sweep, exact patch frame and multi viewport modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The four modules total 400 lines by `wc -l`: 104, 131, 93 and 72. Savi's docs, gaps and scripts have zero word-bounded hits for `DecalSystem`, `ExactPatchFrame` and `MultiViewport`. `CacheRevalidationSweep` appears only in the stream 46 section, as an importer of `client/core/StreamingScheduler.js`.
+
+- `client/core/DecalSystem.js:10` (`export function createDecalSystem(scene, THREE) {`): 104 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/CacheRevalidationSweep.js:12` (`export function createCacheRevalidationSweep(opts = {}) {`): 131 lines, 2 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/ExactPatchFrame.js:47` (`export function createExactPatchFrame(frame) {`): 93 lines, 1 export. Imported by `client/core/Grass.js`, `client/core/Rocks.js` and `client/core/Vegetation.js`. Behavioural witnesses: `scripts/grass-seam-card-witness.mjs` and `scripts/shared-lattice-surface-witness.mjs`. Each loads the module with `await import(href('client/core/ExactPatchFrame.js'))` and prints `RESULT:` twice. Both were checked at `d5e3860`.
+- `client/core/MultiViewport.js:9` (`export function createMultiViewport(renderer, scene) {`): 72 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+
+## Stream 51: client/core expression, tree texture, replay, grid, shadow and editor kit modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The seven modules total 347 lines by `wc -l`: 67, 112, 75, 35, 51, 1 and 6. These are the modules whose names appear in the concept-level prose of `docs/JAYZEE-GAPS.md` rows 39 and 59. That prose is NOT per-file coverage. Each module has its own entry below. Savi's docs, gaps and scripts have zero word-bounded hits for all seven basenames outside those prose lines.
+
+- `client/core/ExpressionCodes.js:1` (`export const EXPR_NEUTRAL = 0`): 67 lines, 15 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/TreeTextureBudget.js:2` (`export let TREE_TEXTURE_SOURCE_PX = 1024`): 112 lines, 14 exports. Imported by `client/core/Vegetation.js` and `client/core/VegetationBuild.js`. No tracked witness script at `d5e3860`.
+- `client/core/ReplayBuffer.js:1` (`export function createReplayBuffer({`): 75 lines, 2 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/GroundNodeGrid.js:9` (`export function createGroundNodeGrid(sampleExact) {`): 35 lines, 1 export. Imported by `client/core/Weather.js`. No tracked witness script at `d5e3860`.
+- `client/core/CascadeShadowSelectTSL.js:4` (`export function installCascadeShadowSelectTSL(cascadeLights, splitExtents) {`): 51 lines, 3 exports. Imported by `client/core/ShadowPipeline.js`. No tracked witness script at `d5e3860`.
+- `client/core/ShadowLayers.js:1` (`export const SHADOW_CASTER_ONLY_LAYER = 30`): 1 line, 1 export. Imported by `client/core/ShadowPipeline.js` and `client/core/WebGPULodInstancer.js`. `scripts/.veg-lod-stream-control.mjs` imports it through an absolute `file:///C:/dev/spoint/...` path and prints no `RESULT:` line, so it is NOT a witness. No tracked witness script at `d5e3860`.
+- `client/core/EditorKit.js:1` (`export const editorKit = import('game-editor-kit').catch((e) => {`): 6 lines, 1 export. Imported by `client/app.js` and `client/editor/EditorShell.js`. No tracked witness script at `d5e3860`.
+
+## Stream 52: client/core dev tools, scene graph, spectator, debug log, frame capture and sculpt overlay modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The six modules total 454 lines by `wc -l`: 50, 158, 90, 37, 13 and 106. Savi's docs and scripts name `DevToolsIntegration`, `SceneGraph` and `SculptOverlay` only in lines that are not coverage. Those lines are listed below.
+
+- `client/core/DevToolsIntegration.js:7` (`export function installDevTools(renderer, scene, networkClient) {`): 50 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`. The importer-only citation of `DevToolsIntegration.js` in the stream 45 section names it as an importer of `PerformanceProfiler.js`. That citation is NOT coverage.
+- `client/core/SceneGraph.js:5` (`export function createSceneGraph(scene, floatingOrigin) {`): 158 lines, 1 export. Imported by `client/app.js`. `scripts/netcode-conditioner-harness.mjs` loads it dynamically, but that script prints no `RESULT:` line, so it is NOT a witness. No tracked witness script at `d5e3860`. The importer-only citation in the stream 49 section names it as the importer of `TransformLerp.js`. That citation is NOT coverage.
+- `client/core/SpectatorMode.js:1` (`export function createSpectatorMode({`): 90 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/debug-log.js:26` (`export function dbg(namespace) {`): 37 lines, 1 export. Imported by `client/app.js`, `client/core/Grass.js`, `client/core/Rocks.js`, `client/core/SceneOcclusion.js`, `client/core/TerrainBackdrop.js`, `client/core/VegImpostorTier.js`, `client/core/Vegetation.js` and `client/core/VegetationBuild.js`. `client/core/RenderControls.js` names the path as a `readAt` string at line 346. That string is NOT an import and NOT coverage. No tracked witness script at `d5e3860`.
+- `client/core/frameCapture.js:1` (`export async function captureHudFreeFrame({`): 13 lines, 1 export. No importer. `git grep -lw captureHudFreeFrame` at `d5e3860` finds only the module, so the export is unreferenced. No tracked witness script at `d5e3860`.
+- `client/core/SculptOverlay.js:7` (`export function createSculptOverlay(terrainBackdrop) {`): 106 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+
+## Stream 53: client/core worker render protocol, time of day and world panels modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The three modules total 348 lines by `wc -l`: 78, 140 and 130. Savi's docs, gaps and scripts have zero word-bounded hits for all three basenames.
+
+- `client/core/WorkerRenderProtocol.js:1` (`export const WORKER_MESSAGE = Object.freeze({`): 78 lines, 14 exports. Imported by `client/workers/OffscreenRenderWorker.js` as a namespace import (`import * as PROTOCOL`). No tracked witness script at `d5e3860`.
+- `client/core/TimeOfDay.js:52` (`export function createTimeOfDay(sun, ambient, opts = {}) {`): 140 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`. Its state is read through the globals `window.__timeOfDay` and `window.__timeOfDayApi`. `scripts/tsl-parity/bodies.mjs` drives `window.__timeOfDayApi`, which makes it a consumer of the global. That is NOT a per-file mention of the module.
+- `client/core/WorldPanels.js:83` (`export function createWorldPanels(THREE, scene) {`): 130 lines, 2 exports (`WorldPanelError` and `createWorldPanels`). Imported by `client/AppModuleSystem.js`. No tracked witness script at `d5e3860`.
+
 ## Improvement opportunities (not behaviour to match)
 
 The owner's rule is that the documented featureset is a floor. Where spoint's design is weaker, jayzee should build the better version, and matching spoint's behaviour is not the requirement. Each item below is spoint's weaker design, recorded here as an improvement opportunity for jayzee.
@@ -884,6 +924,36 @@ The items below come from streams 48 and 49. They are GREP-BASED CANDIDATES, not
 - `client/core/TransformLerp.js:19` (`if (!(Number.isFinite(target.rx) && Number.isFinite(target.ry) && Number.isFinite(target.rz) && Number.isFinite(target.rw))) return`): a non-finite target rotation drops the update with no report.
 
 Observation, not a finding, scoped to the tracked tree at `d5e3860`: `.gm/pool/pool.log` line 1625 records an honest PASS 38/38 for ClientCorePlayerVATBake, and no tracked script names PlayerVATBake at `d5e3860`. The same log names `scripts/decal-system-witness.mjs`, `scripts/SculptOverlay-witness.mjs` and `scripts/DebugLog-witness.mjs`, and none of the three is tracked at `d5e3860`. The log records provenance and is not a witness, so this discrepancy stays OPEN and is not resolved here.
+
+The items below come from streams 50 to 53. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/DecalSystem.js:64` (`if (!origin || !target) return`): a missing origin or target is a silent no-op with no report.
+- `client/core/CacheRevalidationSweep.js:14` (`const staleMs = Number.isFinite(opts.staleMs) && opts.staleMs >= 0 ? opts.staleMs : STALE_MS`) and `client/core/CacheRevalidationSweep.js:15` (`const maxPerSweep = Number.isFinite(opts.maxPerSweep) && opts.maxPerSweep > 0 ? opts.maxPerSweep : MAX_ENQUEUED_PER_SWEEP`): an invalid option falls back to a literal default with no refusal.
+- `client/core/ExactPatchFrame.js:11` (`const seed = Number.isFinite(frame.anchorHeight) ? frame.anchorHeight : 0`): 0 is a sentinel for an absent anchor height.
+- `client/core/MultiViewport.js:17` (`camera = new THREE.PerspectiveCamera(opts.fov ?? 60`): silent literal defaults for the camera options.
+- `client/core/MultiViewport.js:34` (`function getPane(id) { return panes.get(id) || null }`): null for an unknown pane.
+- `client/core/ExactPatchFrame.js:75` (`if (y === null) { missing = true; throw new NoGroundHeightError(x, z) }`) is a conforming example, not a defect. It throws a named error for missing ground, as AGENTS.md asks.
+- `client/core/GroundNodeGrid.js:7` (`const _nodeY = (h) => Number.isFinite(h) ? h : NO_GROUND_Y`): a sentinel height for a non-finite sample. NEEDING A CHECK against AGENTS.md's sentinel rule, not a defect.
+- `client/core/ExpressionCodes.js:47` (`if (!expressionManager || typeof expressionManager.getValue !== 'function') return EXPR_NEUTRAL`): a missing manager returns neutral with no signal.
+- `client/core/ExpressionCodes.js:51` (`try { v = expressionManager.getValue(name) || 0 } catch (_e) { continue }`): getValue failures are dropped, and a zero reading is replaced by 0 silently.
+- `client/core/ReplayBuffer.js:3` (`throw new Error('createReplayBuffer requires maxFrames >= 1')`): a prose Error, not a refusal code.
+- `client/core/CascadeShadowSelectTSL.js:9` (`uniform((splitExtents && splitExtents[idx]) || 0)`) and `client/core/CascadeShadowSelectTSL.js:45` (`farEdge.value = extents[idx] || 0`): silent zero defaults for missing split extents.
+- `client/core/EditorKit.js:4` (`console.error('[kit]', reason)`): the import failure is logged, with no refusal code.
+- `client/core/TreeTextureBudget.js:33` (`throw new TreeTextureBudgetError('not-a-number'`) is a conforming example, not a defect. It throws a coded refusal, as AGENTS.md asks.
+- `client/core/SceneGraph.js:22` (`feetOffset: opts.feetOffset ?? 0.91`): a silent literal default for the feet offset.
+- `client/core/SceneGraph.js:155` (`function setLocalPlayer(id) {}`): an empty function. NEEDING A CHECK, not a verified defect. Spoint reports a call at `client/app.js:1236`, and that call has not been run to confirm it is a no-op.
+- `client/core/SculptOverlay.js:44` (`const res = render.SCULPT_RES || 256`): a silent literal default.
+- `client/core/SculptOverlay.js:63` (`radius <= 0) return false`): a bare refusal with no reason code.
+- `client/core/SculptOverlay.js:98` (`const cx = Number.isFinite(centerX) ? centerX : 0`): a non-finite centre becomes the origin silently.
+- `client/core/debug-log.js:11` (`} catch {`): a catch on the query decode. NEEDING A CHECK.
+- `client/core/DevToolsIntegration.js:23` (`(renderer.info.render.calls * GPU_MS_PER_DRAW_CALL_ESTIMATE) : 0`): an unknown draw-call count becomes a GPU estimate of 0 with no signal.
+- `client/core/frameCapture.js:8` (`throw new Error('capture_unavailable')`): a code string as the Error message, not a coded error class.
+- `client/core/TimeOfDay.js:53` (`let dayLengthSec = Number.isFinite(opts.dayLengthSec) && opts.dayLengthSec > 0 ? opts.dayLengthSec : 600`): an invalid option takes a literal default with no refusal.
+- `client/core/TimeOfDay.js:54` (`let t = Number.isFinite(opts.startFraction) ? ((opts.startFraction % 1) + 1) % 1 : 0.3`) and `client/core/TimeOfDay.js:58` (`const tiltDeg = Number.isFinite(opts.azimuthTiltDeg) ? opts.azimuthTiltDeg : 23`): literal defaults for invalid options.
+- `client/core/TimeOfDay.js:92` (`try { onDirectionChange(dir) } catch (_) {}`): a consumer callback's error is swallowed with no log.
+- `client/core/TimeOfDay.js:121` (`function setFraction(frac) { if (Number.isFinite(frac)) {`): a non-finite input is ignored silently.
+- `client/core/WorkerRenderProtocol.js:67` (`if (!isWorkerRefusalCode(code)) {`): the one place the module refuses in prose, for an undeclared refusal code. Minor.
+- `client/core/WorldPanels.js:73` (`canvas.getContext('2d')`): the context is not checked for null, and line 59 uses it directly.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 

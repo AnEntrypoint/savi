@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4], [50, 4], [51, 7], [52, 6], [53, 3]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -677,7 +677,7 @@ const s46Importers = {
 const spointImporters = (name) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lE", `(from|import\\()\\s*['"][^'"]*/${name}\\.js['"]`, spointPin, "--", "src", "client", "apps", "packages", "scripts", "bin", "edge"], { encoding: "utf8" }).split("\n").filter(Boolean).map((l) => l.replace(`${spointPin}:`, "")).filter((f) => f !== `client/core/${name}.js`).sort() } catch { return [] } }
 const s46ImporterMismatch = s46.filter((m) => spointImporters(m).join() !== [...s46Importers[m]].sort().join())
 if (s46ImporterMismatch.length !== 0) errors.push(`stream 46 importers differ from the cited set: ${s46ImporterMismatch.join(", ")}`)
-const importsModule = (name, text) => new RegExp(`(from|import\\()\\s*['"][^'"]*/${name}\\.js['"]`).test(text)
+const importsModule = (name, text) => new RegExp(`(from|import\\(|href\\()\\s*['"][^'"]*/${name}\\.js['"]`).test(text)
 const behaviouralWitnesses = (name) => spointWitnessFiles(name).filter((f) => spointShow(f).includes("RESULT") && importsModule(name, spointShow(f)))
 const s46Behavioural = s46.filter((m) => behaviouralWitnesses(m).length > 0)
 if (s46Behavioural.join() !== "modelLoadGate") errors.push(`stream 46 behavioural witnesses are [${s46Behavioural.join(", ")}], expected [modelLoadGate]`)
@@ -755,6 +755,86 @@ const s49Named = s49.filter(saviNamesModule)
 if (s49Named.length !== 0) errors.push(`savi docs or scripts outside streams name stream 49 modules: ${s49Named.join(", ")}`)
 console.log(`STREAM 49 AT spoint ${spointPin}: ${coreLines(["RelocationSearch", "RelocationSettle", "TransformLerp"])} lines (3 modules) plus FloatingOrigin ${coreLines(["FloatingOrigin"])} per file, importers as cited ${s49ImporterMismatch.length === 0}, behavioural witnesses 0, savi names ${s49Named.length}`)
 console.log(`STREAM 48 AND 49 CANDIDATES AT spoint ${spointPin}: ${candidates48and49.length} located, line-shift negative refused: ${candidate48and49ShiftRefused}`)
+const sameSet = (a, b) => [...a].sort().join() === [...b].sort().join()
+const spointGrep = (args) => { try { return execFileSync("git", ["-C", spointRoot, "grep", ...args], { encoding: "utf8" }).split("\n").filter(Boolean) } catch { return [] } }
+const streamImporterMismatch = (names, expected) => names.filter((m) => !sameSet(spointImporters(m), expected[m]))
+const noTrackedBehaviouralWitness = (names) => names.filter((m) => behaviouralWitnesses(m).length > 0)
+const s50 = ["DecalSystem", "CacheRevalidationSweep", "ExactPatchFrame", "MultiViewport"]
+if (coreLines(s50) !== 400) errors.push(`stream 50 at ${spointPin}: ${coreLines(s50)} lines, expected 400`)
+const s50Expected = { DecalSystem: ["client/app.js"], CacheRevalidationSweep: ["client/app.js"], ExactPatchFrame: ["client/core/Grass.js", "client/core/Rocks.js", "client/core/Vegetation.js"], MultiViewport: ["client/app.js"] }
+if (streamImporterMismatch(s50, s50Expected).length !== 0) errors.push(`stream 50 importers differ: ${streamImporterMismatch(s50, s50Expected).join(", ")}`)
+const s50Behavioural = noTrackedBehaviouralWitness(s50)
+if (s50Behavioural.join() !== "ExactPatchFrame") errors.push(`stream 50 behavioural witnesses are [${s50Behavioural.join(", ")}], expected [ExactPatchFrame]`)
+const exactWitnesses = behaviouralWitnesses("ExactPatchFrame").sort()
+if (exactWitnesses.join() !== ["scripts/grass-seam-card-witness.mjs", "scripts/shared-lattice-surface-witness.mjs"].join()) errors.push(`stream 50 ExactPatchFrame witnesses are [${exactWitnesses.join(", ")}]`)
+if (s50.filter(saviNamesModule).length !== 0) errors.push(`savi names outside streams name stream 50 modules: ${s50.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 50 AT spoint ${spointPin}: ${coreLines(s50)} lines (4 modules), importers as cited ${streamImporterMismatch(s50, s50Expected).length === 0}, behavioural [${s50Behavioural.join(", ")}] with ${exactWitnesses.length} scripts`)
+const s51 = ["ExpressionCodes", "TreeTextureBudget", "ReplayBuffer", "GroundNodeGrid", "CascadeShadowSelectTSL", "ShadowLayers", "EditorKit"]
+if (coreLines(s51) !== 347) errors.push(`stream 51 at ${spointPin}: ${coreLines(s51)} lines, expected 347`)
+const s51Expected = { ExpressionCodes: ["client/app.js"], TreeTextureBudget: ["client/core/Vegetation.js", "client/core/VegetationBuild.js"], ReplayBuffer: ["client/app.js"], GroundNodeGrid: ["client/core/Weather.js"], CascadeShadowSelectTSL: ["client/core/ShadowPipeline.js"], ShadowLayers: ["client/core/ShadowPipeline.js", "client/core/WebGPULodInstancer.js", "scripts/.veg-lod-stream-control.mjs"], EditorKit: ["client/app.js", "client/editor/EditorShell.js"] }
+if (streamImporterMismatch(s51, s51Expected).length !== 0) errors.push(`stream 51 importers differ: ${streamImporterMismatch(s51, s51Expected).join(", ")}`)
+if (noTrackedBehaviouralWitness(s51).length !== 0) errors.push("stream 51 has a behavioural witness")
+const vegLodStream = spointShow("scripts/.veg-lod-stream-control.mjs")
+if (vegLodStream.includes("RESULT")) errors.push("stream 51 ShadowLayers script prints RESULT and would be a witness")
+if (s51.filter(saviNamesModule).length !== 0) errors.push(`savi names outside streams name stream 51 modules: ${s51.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 51 AT spoint ${spointPin}: ${coreLines(s51)} lines (7 modules), importers as cited ${streamImporterMismatch(s51, s51Expected).length === 0}, behavioural witnesses 0`)
+const s52 = ["DevToolsIntegration", "SceneGraph", "SpectatorMode", "debug-log", "frameCapture", "SculptOverlay"]
+if (coreLines(s52) !== 454) errors.push(`stream 52 at ${spointPin}: ${coreLines(s52)} lines, expected 454`)
+const debugLogImporters = ["client/app.js", "client/core/Grass.js", "client/core/Rocks.js", "client/core/SceneOcclusion.js", "client/core/TerrainBackdrop.js", "client/core/VegImpostorTier.js", "client/core/Vegetation.js", "client/core/VegetationBuild.js"]
+const s52Expected = { DevToolsIntegration: ["client/app.js"], SceneGraph: ["client/app.js", "scripts/netcode-conditioner-harness.mjs"], SpectatorMode: ["client/app.js"], "debug-log": debugLogImporters, frameCapture: [], SculptOverlay: ["client/app.js"] }
+if (streamImporterMismatch(s52, s52Expected).length !== 0) errors.push(`stream 52 importers differ: ${streamImporterMismatch(s52, s52Expected).join(", ")}`)
+if (noTrackedBehaviouralWitness(s52).length !== 0) errors.push("stream 52 has a behavioural witness")
+if (!sameSet(spointGrep(["-lw", "captureHudFreeFrame", spointPin, "--", "client", "src", "apps", "packages", "scripts", "bin", "edge"]).map((l) => l.replace(`${spointPin}:`, "")), ["client/core/frameCapture.js"])) errors.push("frameCapture export is referenced beyond its own module at spoint")
+if (!spointShow("client/core/RenderControls.js").split("\n")[345]?.includes("client/core/debug-log.js")) errors.push("RenderControls.js:346 readAt string for debug-log is missing")
+if (s52.filter(saviNamesModule).length !== 0) errors.push(`savi names outside streams name stream 52 modules: ${s52.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 52 AT spoint ${spointPin}: ${coreLines(s52)} lines (6 modules), importers as cited ${streamImporterMismatch(s52, s52Expected).length === 0}, behavioural witnesses 0`)
+const s53 = ["WorkerRenderProtocol", "TimeOfDay", "WorldPanels"]
+if (coreLines(s53) !== 348) errors.push(`stream 53 at ${spointPin}: ${coreLines(s53)} lines, expected 348`)
+const s53Expected = { WorkerRenderProtocol: ["client/workers/OffscreenRenderWorker.js"], TimeOfDay: ["client/app.js"], WorldPanels: ["client/AppModuleSystem.js"] }
+if (streamImporterMismatch(s53, s53Expected).length !== 0) errors.push(`stream 53 importers differ: ${streamImporterMismatch(s53, s53Expected).join(", ")}`)
+if (noTrackedBehaviouralWitness(s53).length !== 0) errors.push("stream 53 has a behavioural witness")
+const timeOfDayDriver = spointGrep(["-l", "__timeOfDayApi", spointPin, "--", "scripts"]).map((l) => l.replace(`${spointPin}:`, ""))
+if (!timeOfDayDriver.includes("scripts/tsl-parity/bodies.mjs")) errors.push("stream 53 TimeOfDay global driver scripts/tsl-parity/bodies.mjs is missing")
+if (spointShow("scripts/tsl-parity/bodies.mjs").includes("RESULT")) errors.push("stream 53 bodies.mjs prints RESULT and would be a witness")
+if (s53.filter(saviNamesModule).length !== 0) errors.push(`savi names outside streams name stream 53 modules: ${s53.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 53 AT spoint ${spointPin}: ${coreLines(s53)} lines (3 modules), importers as cited ${streamImporterMismatch(s53, s53Expected).length === 0}, behavioural witnesses 0, TimeOfDay driver ${timeOfDayDriver.join("+")}`)
+const candidates50to53 = [
+  ["client/core/DecalSystem.js", 64, "if (!origin || !target) return"],
+  ["client/core/CacheRevalidationSweep.js", 14, "const staleMs = Number.isFinite(opts.staleMs)"],
+  ["client/core/CacheRevalidationSweep.js", 15, "const maxPerSweep = Number.isFinite(opts.maxPerSweep)"],
+  ["client/core/ExactPatchFrame.js", 11, "const seed = Number.isFinite(frame.anchorHeight) ? frame.anchorHeight : 0"],
+  ["client/core/ExactPatchFrame.js", 75, "throw new NoGroundHeightError(x, z)"],
+  ["client/core/MultiViewport.js", 17, "opts.fov ?? 60"],
+  ["client/core/MultiViewport.js", 34, "function getPane(id) { return panes.get(id) || null }"],
+  ["client/core/GroundNodeGrid.js", 7, "const _nodeY = (h) => Number.isFinite(h) ? h : NO_GROUND_Y"],
+  ["client/core/ExpressionCodes.js", 47, "return EXPR_NEUTRAL"],
+  ["client/core/ExpressionCodes.js", 51, "try { v = expressionManager.getValue(name) || 0 } catch (_e) { continue }"],
+  ["client/core/ReplayBuffer.js", 3, "throw new Error('createReplayBuffer requires maxFrames >= 1')"],
+  ["client/core/CascadeShadowSelectTSL.js", 9, "uniform((splitExtents && splitExtents[idx]) || 0)"],
+  ["client/core/CascadeShadowSelectTSL.js", 45, "farEdge.value = extents[idx] || 0"],
+  ["client/core/EditorKit.js", 4, "console.error('[kit]', reason)"],
+  ["client/core/TreeTextureBudget.js", 33, "throw new TreeTextureBudgetError('not-a-number'"],
+  ["client/core/SceneGraph.js", 22, "feetOffset: opts.feetOffset ?? 0.91"],
+  ["client/core/SceneGraph.js", 155, "function setLocalPlayer(id) {}"],
+  ["client/core/SculptOverlay.js", 44, "const res = render.SCULPT_RES || 256"],
+  ["client/core/SculptOverlay.js", 63, "radius <= 0) return false"],
+  ["client/core/SculptOverlay.js", 98, "const cx = Number.isFinite(centerX) ? centerX : 0"],
+  ["client/core/debug-log.js", 11, "} catch {"],
+  ["client/core/DevToolsIntegration.js", 23, "(renderer.info.render.calls * GPU_MS_PER_DRAW_CALL_ESTIMATE) : 0"],
+  ["client/core/frameCapture.js", 8, "throw new Error('capture_unavailable')"],
+  ["client/core/TimeOfDay.js", 53, "let dayLengthSec = Number.isFinite(opts.dayLengthSec) && opts.dayLengthSec > 0 ? opts.dayLengthSec : 600"],
+  ["client/core/TimeOfDay.js", 54, "let t = Number.isFinite(opts.startFraction)"],
+  ["client/core/TimeOfDay.js", 58, "const tiltDeg = Number.isFinite(opts.azimuthTiltDeg) ? opts.azimuthTiltDeg : 23"],
+  ["client/core/TimeOfDay.js", 92, "try { onDirectionChange(dir) } catch (_) {}"],
+  ["client/core/TimeOfDay.js", 121, "function setFraction(frac) { if (Number.isFinite(frac)) {"],
+  ["client/core/WorkerRenderProtocol.js", 67, "if (!isWorkerRefusalCode(code)) {"],
+  ["client/core/WorldPanels.js", 73, "canvas.getContext('2d')"],
+]
+const candidate50to53Mismatch = candidates50to53.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate50to53Mismatch.length !== 0) errors.push(`stream 50 to 53 candidates not at cited lines: ${candidate50to53Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const candidate50to53ShiftRefused = candidates50to53.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
+if (!candidate50to53ShiftRefused) errors.push("stream 50 to 53 candidate line-shift negative was not refused")
+console.log(`STREAM 50 TO 53 CANDIDATES AT spoint ${spointPin}: ${candidates50to53.length} located, line-shift negative refused: ${candidate50to53ShiftRefused}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
