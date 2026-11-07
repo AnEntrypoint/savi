@@ -217,6 +217,23 @@ claim("FEATURESET.md", `difference 0 for all ${skillRows.length}`, "json content
 counts.skills = { served: skillRows.length, entries: skillEntries.length, json: skillJson, md: skillMd, plusOneRows: plusOne, cameras: cameras.column - cameras.md, heightmap: heightmap.column - heightmap.md, contentEqualsMd: contentMatches }
 if (contentMatches !== skillRows.length) errors.push(`skills: json content differs from md for ${skillRows.length - contentMatches} rows`)
 
+const spointRoot = "/workspace/spoint"
+const spointPin = "d5e3860"
+const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
+if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
+const stream17 = texts["FEATURESET.md"].split("\n## Stream 17")[1]?.split("\n## ")[0] ?? ""
+const stream17Cites = [...stream17.matchAll(/`((?:src|client|apps|scripts)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g)]
+let stream17Verified = 0
+for (const [, path, lineNumber, snippet] of stream17Cites) {
+  claimsChecked++
+  let source = null
+  try { source = execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:${path}`], { encoding: "utf8" }).split("\n") } catch { source = null }
+  if (source === null) { errors.push(`FEATURESET.md stream 17: ${path} is not in spoint at ${spointPin}`); continue }
+  if ((source[Number(lineNumber) - 1] ?? "").includes(snippet)) stream17Verified++
+  else errors.push(`FEATURESET.md stream 17: ${path}:${lineNumber} does not contain the cited text: ${snippet}`)
+}
+counts.stream17 = { citations: stream17Cites.length, verified: stream17Verified }
+console.log(`STREAM 17 CITATIONS VERIFIED AGAINST spoint ${spointPin}: ${stream17Verified} of ${stream17Cites.length}`)
 console.log(`FEATURESET CHECK FILES: ${files.length}`)
 console.log(`CITED WORKSPACE PATHS: ${counts.workspacePaths}`)
 console.log(`TMP REFERENCES LABELLED: ${counts.tmpReferences}`)
