@@ -222,7 +222,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -271,6 +271,22 @@ for (const phrase of ["withinManifestRepeatSum 73", "manifestsWithRepeats 61", "
   if (!denominatorSection.includes(phrase)) errors.push(`FEATURESET.md: the 73-gap resolution is missing "${phrase}"`)
 }
 console.log("THREE ~2f SCOPES AND 73-GAP RESOLUTION CHECKED")
+const spawnRecord = texts["FEATURESET.md"].split("\n## Spawn consolidated learning record")[1]?.split("\n## ")[0] ?? ""
+const v3Rows = readFileSync(join(savi, "spawn-evidence", "data", "manifests-all-v3-results.jsonl"), "utf8").trim().split("\n").map((line) => JSON.parse(line))
+const v3 = {
+  rows: v3Rows.length,
+  status200: v3Rows.filter((r) => r.status === 200).length,
+  eof: v3Rows.filter((r) => r.eof === true).length,
+  framesEqualHashes: v3Rows.filter((r) => r.framesEqualHashes === true).length,
+  frames: v3Rows.reduce((a, r) => a + (r.frames || 0), 0),
+  gzipFrames: v3Rows.reduce((a, r) => a + (r.gzipFrames || 0), 0),
+  gzipDecodedMatch: v3Rows.reduce((a, r) => a + (r.gzipDecodedMatch || 0), 0),
+  gzipFail: v3Rows.reduce((a, r) => a + (r.gzipFail || 0), 0),
+}
+const v3Phrase = `${v3.rows} rows, ${v3.status200} status 200, ${v3.eof} eof true, ${v3.framesEqualHashes} framesEqualHashes true, ${v3.frames} frames, ${v3.gzipFrames} gzip frame, ${v3.gzipDecodedMatch} gzip decode match, ${v3.gzipFail} gzip failures`
+if (!spawnRecord.includes(v3Phrase)) errors.push(`FEATURESET.md spawn record: durable v3 figures are not stated as "${v3Phrase}"`)
+counts.spawnV3 = v3
+console.log(`SPAWN V3 RE-DERIVED FROM spawn-evidence/data: ${v3Phrase}`)
 const stream17 = texts["FEATURESET.md"].split("\n## Stream 17")[1]?.split("\n## ")[0] ?? ""
 const stream17Cites = [...stream17.matchAll(/`((?:src|client|apps|scripts)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g)]
 let stream17Verified = 0

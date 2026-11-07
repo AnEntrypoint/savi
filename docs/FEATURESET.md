@@ -240,6 +240,65 @@ Self-produced from `/workspace/spoint` at `d5e3860` (clean tree), not from a pee
 - Registry: `src/protocol/MessageTypes.js:146` (`export function isRegisteredMessage(id)`), `src/protocol/MessageTypes.js:154` (`export let UNRELIABLE_MSGS = new Set([`). Consumers outside the module: `scripts/src-batch1-rules-witness.mjs:15` (`assert.equal(isRegisteredMessage(unreliableId), true)`) and `scripts/chart-reanchor-wire-harness.mjs:120`.
 - Input codec: `src/protocol/InputCodec.js:5` (`export const MAX_INPUT_BUTTONS = 32`), `src/protocol/InputCodec.js:6` (`export const MAX_INPUTS_PER_PACKET = 8`), `src/protocol/InputCodec.js:18` (`const FLAG_EPOCH_TAGGED = 0x80`), `src/protocol/InputCodec.js:242` (`export function tryEncodeInputPacket(schema, entries, chartEpoch = 0)`). Consumer: `src/client/BaseClient.js:191` (`const packet = tryEncodeInputPacket(schema, entries, this._chart.epoch ?? 0)`).
 
+## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The citations were re-read from `git -C /workspace/spoint show d5e3860:<path>`, and the line counts were checked: `src/connection/SessionStore.js` has 121 lines and `src/stage/Stage.js` has 109. Nothing was written into spoint. Savi's documents name `SessionStore` 0 times and `StageLoader` 0 times.
+
+Session store:
+- The class and its TTL default: `src/connection/SessionStore.js:9` (`export class SessionStore {`) and `src/connection/SessionStore.js:11` (`this.ttl = options.ttl || 30000`).
+- The expiry test skips pinned sessions: `src/connection/SessionStore.js:79` (`if (!session.pinned && Date.now() - session.lastTouched > this.ttl) {`). The timer uses the same TTL: `src/connection/SessionStore.js:92` (`}, this.ttl)`).
+- Two consumers pass their own TTL: `src/sdk/WorkerEntry.js:71` (`const sessions = new SessionStore({ ttl: 60000 })`, imported at `src/sdk/WorkerEntry.js:5` (`import { SessionStore } from '../connection/SessionStore.js'`)) and `src/sdk/server.js:48` (`const sessions = new SessionStore({ ttl: config.sessionTTL || 60000 })`, imported at `src/sdk/server.js:7` (`import { SessionStore } from '../connection/SessionStore.js'`)).
+
+Stage loader and stage:
+- The config error class: `src/stage/StageLoader.js:7` (`export class StageConfigError extends TypeError {`), with its reason code at `src/stage/StageLoader.js:13` (`this.reasonCode = typeof reason?.code === 'string' ? reason.code : null`).
+- The loader resolves the cluster config from the shared module: `src/stage/StageLoader.js:4` (`import { resolveClusterConfig, declaredWeaponRangeM } from '../shared/clusterConfig.js'`), calls it at `src/stage/StageLoader.js:32` (`clusterConfig = resolveClusterConfig(tcfg.clusters`), and throws when a radius is declared without enabled clusters: `src/stage/StageLoader.js:46` (`throw new StageConfigError('stage-radius-not-cluster-resolved'`). The loader class itself is at `src/stage/StageLoader.js:49` (`export class StageLoader {`).
+- The stage module re-exports the flat ring height from its shapes module: `src/stage/Stage.js:6` (`export { FLAT_RING_HALF_HEIGHT_M } from './stageShapes.js'`), and the class is at `src/stage/Stage.js:8` (`export class Stage {`).
+
+Negatives:
+- A silent default on a caller's zero: `src/connection/SessionStore.js:11` uses `options.ttl || 30000`, so an explicit `ttl: 0` becomes 30000. `src/sdk/server.js:48` has the same shape with `config.sessionTTL || 60000`. Neither cited consumer passes 0. This is the silent-default shape, not a verified runtime bug.
+- `git grep -l -F SessionStore d5e3860 -- scripts` lists 0 files, so no witness script names the session store.
+- `git grep -l -E 'StageLoader|stage/Stage\.js' d5e3860 -- scripts` lists one file, `scripts/lib/verify-doc-claims.mjs`. No script exercises the loader's throw paths.
+- Savi's `docs/FEATURESET.md`, `docs/PARITY-INPUTS.md` and `docs/JAYZEE-GAPS.md` each contain 0 matches for `SessionStore` and 0 for `StageLoader`.
+
+These are static claims. Runtime behaviour of the session timer and the stage loader is not exercised here.
+
+## Stream 22: static asset pipeline and bake code-version pins (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The citations were re-read from `git -C /workspace/spoint show d5e3860:<path>`. The `BAKE_INPUTS_GLB_TRANSFORM` list is at lines 25 to 29 and the `BAKE_TRANSFORMS` array has 8 records. Nothing was written into spoint, and no pin was recomputed.
+
+Bake code-version pins:
+- The pin hashes each listed file's path and its CRLF-normalised text: `src/static/BakeCodeVersion.js:9` (`export function bakeCodeVersion(relFiles) {`), `src/static/BakeCodeVersion.js:10` (`const cacheKey = relFiles.join('|')`), `src/static/BakeCodeVersion.js:13` (`const h = createHash('sha1')`), `src/static/BakeCodeVersion.js:16` (`h.update(rel)`) and `src/static/BakeCodeVersion.js:17` (`h.update(readFileSync(p, 'utf8').replace(/\r\n/g, '\n'))`).
+- The GLB transform inputs are five files: `src/static/BakeCodeVersion.js:24` (`export const BAKE_INPUTS_GLB_TRANSFORM = [`), with `./GLBTransformer.js`, `./GLBDraco.js`, `./GLBKtx2.js`, `./GLBVrmPassthrough.js` and `../shared/fnv1a.js` at lines 25 to 29. The version is `src/static/BakeCodeVersion.js:136` (`export const GLB_TRANSFORM_CODE_VERSION = bakeCodeVersion(BAKE_INPUTS_GLB_TRANSFORM)`).
+- The transform records start at `src/static/BakeCodeVersion.js:146` (`export const BAKE_TRANSFORMS = [`). The first record at `src/static/BakeCodeVersion.js:147` (`{ name: 'GLB_TRANSFORM', entries: ['./GLBTransformer.js'], inputs: BAKE_INPUTS_GLB_TRANSFORM, version: GLB_TRANSFORM_CODE_VERSION }`) takes its version from `inputs`, and `entries` is a separate listing. The pin therefore covers the listed input files, not their import closure.
+
+Modules and exports:
+- Draco and Meshopt helpers: `src/static/GLBDraco.js:1` (`export function hasDraco(jsonChunk) {`), `src/static/GLBDraco.js:5` (`export function hasMeshopt(jsonChunk) {`), `src/static/GLBDraco.js:60` (`export async function stripDraco(inputBuffer) {`) and `src/static/GLBDraco.js:96` (`export async function compressMeshopt(inputBuffer) {`).
+- KTX2 binary and availability: `src/static/GLBKtx2.js:18` (`export const KTX_BIN = _ktxCandidates.find(p => existsSync(p)) || _ktxCandidates[0]`), `src/static/GLBKtx2.js:20` (`export function ktxAvailable() {`) and `src/static/GLBKtx2.js:40` (`export async function imageToKtx2(imageBuffer, mode = 'basis-lz', tmpBase = 'tex') {`).
+- KTX2 extraction: `src/static/KTX2Extract.js:28` (`export function extractKtx2Images(transformedGlbBuf) {`), `src/static/KTX2Extract.js:53` (`export function getKtx2Extracted(srcPath) {`) and `src/static/KTX2Extract.js:92` (`export function resolveKtx2File(srcPath, imageIndex) {`).
+- Progressive bake containment: `src/static/ProgressiveBake.js:199` (`export function isContainedPath(outDir, relative) {`) and `src/static/ProgressiveBake.js:205` (`export function resolveBakedFile(srcPath, relative) {`).
+- The GLB transformer: `src/static/GLBTransformer.js:47` (`export function getCachePath(glbPath) {`), `src/static/GLBTransformer.js:144` (`export function getTransformed(filepath) {`), `src/static/GLBTransformer.js:150` (`export async function getTransformedHashAsync(filepath) {`), `src/static/GLBTransformer.js:157` (`export async function getTransformedAsync(filepath) {`) and `src/static/GLBTransformer.js:168` (`export async function prewarmFiles(files, label = 'referenced') {`).
+- The fetch manifest: `src/static/FetchManifest.js:46` (`export async function buildManifestEntries(worldDef, project, sdkRoot) {`) and `src/static/FetchManifest.js:93` (`export async function buildFetchManifest(worldName, worldDef, project, sdkRoot) {`).
+- The VRM passthrough extensions: `src/static/GLBVrmPassthrough.js:25` (`export const VRM0Passthrough = makeVrmPassthroughExtension('VRM')`) and `src/static/GLBVrmPassthrough.js:26` (`export const VRMCVrmPassthrough = makeVrmPassthroughExtension('VRMC_vrm')`).
+
+Negatives:
+- `git grep -l -F` over `scripts` at `d5e3860` finds `FetchManifest` in 0 files, `GLBDraco` 0, `GLBTransformer` 0, `GLBVrmPassthrough` 0, `KTX2Extract` 0 and `ProgressiveBake` 0. `BakeCodeVersion` is named in 4 files and `GLBKtx2` in 1.
+- Savi's three documents name each of the eight modules 0 times.
+- `src/static/GLBKtx2.js:18` falls back to `_ktxCandidates[0]` when no candidate exists, and that path may not exist. The guard is `ktxAvailable` at `src/static/GLBKtx2.js:20`, which checks `existsSync` first. Nothing is wrong here; this is the fallback shape.
+
+These are static claims. The pins are not recomputed, and the KTX2 and Draco tools are not run.
+
+## Spawn consolidated learning record (spawn-local, status per figure)
+
+The record is `/workspace/spawn/maps/spawn-learning-record.md`, which is spawn-local and not in savi. Each figure below carries its status. "Re-derived" means this document's author re-computed it from a file named in the line; "spawn-reported" means spawn's probe or test was not re-run here.
+
+- Manifests and frames, re-derived from the durable copy `spawn-evidence/data/manifests-all-v3-results.jsonl` (`node` over its 2580 lines): 2580 rows, 2580 status 200, 2580 eof true, 2580 framesEqualHashes true, 229921 frames, 1 gzip frame, 1 gzip decode match, 0 gzip failures, 0 raw failures, 0 hitRaw and 1 hitDec.
+- Worlds with `/cdn/` GLB refs, 399, re-derived from `/workspace/spawn/maps/glb-urls-all.tsv` (2416 rows, 399 distinct worlds). The file is spawn-local.
+- Unique decoded-frame keys, 11987, re-derived from spawn's `dt/keys.txt` in `/tmp/spawn-probe` (ephemeral, no durable copy here).
+- Text-visible keys, 307, spawn-reported. The witness `spawn-evidence/maps/witness/encoder-bucket/encoder-test.mjs` scans `/tmp/spawn-probe` (ephemeral) and `/workspace/spawn/maps/witness`. Its re-run today gives `distinctKeys` 11987, because `/tmp/spawn-probe` now holds `dt/keys-unique.txt`. The 307 is therefore not reproduced by that script at its current inputs.
+- Non-CDN data rows, 83, re-derived as the data-row count of `/workspace/spawn/maps/unverified-noncdn-refs.tsv`. Its first-pass 200 count (81) is spawn-reported.
+- `/cdn/`-only probe, re-derived from `/tmp/spawn-probe/cdn-named/results.jsonl` (421 rows, ephemeral): named-cdn stripped of `.yaml` 302 for 304 rows and error for 4 (the 4 timeouts retried to 302), named-cdn with `.yaml` 401 for 10, value-sha controls 200 for 20, non-CDN rows 200 for 82 and 401 for 1. The 304 redirect targets are 304 distinct `value-origin` locations. The claim that the bytes come only from `/cdn/` is weakened for the named family and stays INFERRED.
+- Gone 410 (39 probes, no body-level 410), the bucket rule (UNDETERMINED), the error keys, the mp4 retry (200 for a bounded read) and the spawnfile.io bytes (UNCONFIRMED) are spawn-reported. Network probes and bucket tests were not re-run here.
+
 ## Stream 19: terrain and chart reanchor (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the snippet at `d5e3860`. The 24 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. Two of spoint's own locations were corrected here: `CaveMeshes` is `client/core/CaveMeshes.js`, not under `src/terrain`, and the `ChartReanchor*` modules are in `src/terrain/`, not `src/sdk/chartState/`.
