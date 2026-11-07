@@ -1,5 +1,7 @@
 # Jayzee implementation gaps for the documented featureset
 
+Feature completeness is the requirement, not architectural or operational parity: any jayzee part may be idealized, so a missing jayzee path is not by itself a missing feature. The two tracked sets the gate prints (open rows citing no existing jayzee path, and open rows citing a path not created) are architectural questions. A feature gap closes when a working jayzee module with a node-check witness covers it, whatever the path. The gate still fails on any new missing row and requires a witness for every removal from the open set.
+
 Source of status: jayzee `docs/PARITY.md` at `2c6aaee` (jayzee's latest committed PARITY, equal to origin/main). The 66 ranked rows and their status words are taken from that file, not from the working tree. Each jayzee path cited in a row is checked by `scripts/check-featureset.mjs` to exist at that pin. Existence is not behaviour. A row marked built means jayzee's own gate, as written in its PARITY.md, passes. This register does not re-run jayzee's gates.
 
 Tags:

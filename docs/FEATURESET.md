@@ -240,6 +240,65 @@ Self-produced from `/workspace/spoint` at `d5e3860` (clean tree), not from a pee
 - Registry: `src/protocol/MessageTypes.js:146` (`export function isRegisteredMessage(id)`), `src/protocol/MessageTypes.js:154` (`export let UNRELIABLE_MSGS = new Set([`). Consumers outside the module: `scripts/src-batch1-rules-witness.mjs:15` (`assert.equal(isRegisteredMessage(unreliableId), true)`) and `scripts/chart-reanchor-wire-harness.mjs:120`.
 - Input codec: `src/protocol/InputCodec.js:5` (`export const MAX_INPUT_BUTTONS = 32`), `src/protocol/InputCodec.js:6` (`export const MAX_INPUTS_PER_PACKET = 8`), `src/protocol/InputCodec.js:18` (`const FLAG_EPOCH_TAGGED = 0x80`), `src/protocol/InputCodec.js:242` (`export function tryEncodeInputPacket(schema, entries, chartEpoch = 0)`). Consumer: `src/client/BaseClient.js:191` (`const packet = tryEncodeInputPacket(schema, entries, this._chart.epoch ?? 0)`).
 
+## Stream 18: SDK server HTTP, static serving and server surface (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the exact source line at `d5e3860`. A self-check re-read all 25 snippets from `git -C /workspace/spoint show d5e3860:<path>` and matched 25 of 25 before this section was written. Nothing was written into spoint.
+
+Static serving, COEP and path containment:
+- The COEP value is `require-corp`: `src/sdk/StaticHandler.js:101` (`const COEP_VALUE = 'require-corp'`).
+- The COEP header is sent with the COOP header: `src/sdk/StaticHandler.js:108` (`res.setHeader('Cross-Origin-Embedder-Policy', COEP_VALUE)`).
+- A baked path containing `..` is refused: `src/sdk/StaticHandler.js:146` (`if (!bakedRel.includes('..'))`).
+- Static files are contained to the served root after resolution and symlink realpath: `src/sdk/StaticHandler.js:227` (`if (fpResolved !== baseResolved && !fpResolved.startsWith(baseResolved + sep)) continue`).
+
+Token comparison:
+- The compare is `timingSafeTokenEqual`: `src/sdk/authCompare.js:10` (`export function timingSafeTokenEqual(a, b) {`).
+- The Node path uses `crypto.timingSafeEqual`: `src/sdk/authCompare.js:2` (`const _nodeTimingSafeEqual = _isNode ? (await import('node:crypto')).timingSafeEqual : null`).
+- A length mismatch still runs a dummy compare before returning false: `src/sdk/authCompare.js:15` (`if (bufA.length !== bufB.length) { _nodeTimingSafeEqual(bufA, bufA); return false }`).
+- The editor token is checked on the upload route: `src/sdk/ServerAPIRoutes.js:48` (`if (_tok && !timingSafeTokenEqual(req.headers['x-editor-token'], _tok)) { res.writeHead(403); res.end('forbidden'); return }`). There are three call sites in that file, at lines 48, 57 and 148.
+- The socket message token is checked the same way: `src/sdk/ServerHandlers.js:454` (`const ok = !!_tok && timingSafeTokenEqual(msg.payload?.token, _tok)`).
+- Some routes require a loopback remote address: `src/sdk/ServerAPIRoutes.js:97` (`if (!isLoopbackAddress(remote)) { res.writeHead(403); res.end('forbidden'); return }`).
+- The API sends a wildcard CORS origin: `src/sdk/ServerAPIRoutes.js:137` (`'Access-Control-Allow-Origin': '*',`).
+- The server API entry is `src/sdk/ServerAPI.js:26` (`export function createServerAPI(ctx) {`).
+
+Sandbox, upload, minimap, persistence, room orchestration, cron and LLM jobs:
+- The SES preflight entry: `src/sdk/SESCompartmentEvaluator.js:34` (`export async function preflightSes({ importSes: doImport = importSes, lockdown: doLockdown = null, getCompartment = null, isFrozen = null } = {}) {`).
+- A failed lockdown returns a reason code rather than throwing: `src/sdk/SESCompartmentEvaluator.js:44` (`if (!isAlreadyLockedDown(cause)) return { ok: false, Compartment: null, reasonCode: 'SES_LOCKDOWN_FAILED', cause }`).
+- The upload size cap is 50 MiB: `src/sdk/UploadHandler.js:6` (`const MAX_SIZE = 50 * 1024 * 1024`), enforced at `src/sdk/UploadHandler.js:55` (`if (size > MAX_SIZE) { fail(413, 'too large'); return }`).
+- On-demand minimap bakes are capped at 64 concurrent: `src/sdk/MinimapBake.js:10` (`const MAX_CONCURRENT_ON_DEMAND_MINIMAP_BAKES = 64`), with the bake entry at `src/sdk/MinimapBake.js:59` (`export function bakeMinimapIfMissing(worldName, tcfg, opts = {}) {`).
+- The world snapshot format is version 1: `src/sdk/WorldPersistence.js:8` (`export let WORLD_SNAPSHOT_FORMAT_VERSION = 1`). The world name resolves from the definition, then the context, then the environment: `src/sdk/WorldPersistence.js:37` (`return ctx.currentWorldDef?.name || ctx.worldName || envWorldName() || null`).
+- The room orchestrator router is `src/sdk/RoomOrchestratorHttp.js:55` (`export function startRoomOrchestratorRouter(orch, port) {`), and worker registration is `src/sdk/RoomOrchestratorHttp.js:60` (`if (req.method === 'POST' && url.pathname === '/workers/register') {`).
+- Cron rejects a non-positive step: `src/sdk/cronSchedule.js:25` (`if (!(step >= 1)) throw new CronSyntaxError('bad-step'`).
+- LLM jobs cap messages at 32 and prompts at 8000 characters: `src/sdk/llmJobs.js:12` (`const DEFAULT_MAX_PROMPT_CHARS = 8000;`) and `src/sdk/llmJobs.js:28` (`export function createLlmJobs({ provider = null, maxMessages = DEFAULT_MAX_MESSAGES, maxPromptChars = DEFAULT_MAX_PROMPT_CHARS } = {}) {`).
+
+Negatives (`git grep` at `d5e3860`, scoped to `src`):
+- `git grep -n -i -E 'Content-Security-Policy|Strict-Transport-Security' d5e3860 -- src` prints 0 lines, so no CSP or HSTS header is set.
+- `git grep -n 'Cross-Origin-Resource-Policy' d5e3860 -- src` prints 0 lines.
+- `git grep -n 'Access-Control-Allow-Origin' d5e3860 -- src` prints one line, `src/sdk/ServerAPIRoutes.js:137`.
+- `git grep -n -i 'rate.\?limit' d5e3860 -- src/sdk/UploadHandler.js src/sdk/StaticHandler.js src/sdk/llmJobs.js` prints 0 lines, so none of those three paths has a rate limit.
+- `git grep -c 'timingSafeTokenEqual(' d5e3860 -- src` reports `ServerAPIRoutes.js` 3, `ServerHandlers.js` 1 and `authCompare.js` 1.
+
+These are facts about spoint. They do not change any jayzee row. Jayzee may idealize any of these parts, as the owner's clarification allows.
+
+## Scoped spawn decoded-frame token scan (spawn-reported, aggregates re-derived here)
+
+The inputs are spawn's scan output, which exists only in spawn's ephemeral directory and has no durable copy here: `dt/results.jsonl` (2580 rows) and `dt/keys.txt`. The aggregates were re-derived from those two files. The decode itself was not re-run, so the result stays scoped to spawn's run.
+
+Four denominators, kept separate:
+- 307 text-visible keys (the earlier census in the escape-token bullet above). This is a different scope.
+- 11987 unique decoded-frame `world.assets` keys. `keys.txt` has 12186 lines, which is 11987 unique keys plus 199 duplicate lines.
+- 2580 manifests reached. All returned status 200, and 1240 have `world.assets` keys. 1584 have a `/cdn/` slash.
+- 399 worlds with `/cdn/` GLB references. This is the census denominator used elsewhere in this file and is not compared with the rows above.
+
+Scoped results, decoded-frame scope only, re-derived:
+- Frames 229921, gzip frames 1, decode failures 0.
+- Key occurrences 12259 (the sum of `keyCount` over the 2580 rows). Those occurrences and the 12186 `keys.txt` lines differ by 73. The gap is not reconciled.
+- Unique keys 11987: 11679 are `~2fcdn~2fvalue.<sha>` and 308 are `~2fcdn~2f<name>` with no sha.
+- `~2f` occurs 23974 times across the unique keys and 24518 times in frame-level tilde tokens.
+- `~3a` 0 and `~7e` 0 across the unique keys, with no key containing `spawnfile`, `https~3a` or a bare tilde. Bucket `3d` holds 22 keys, all `/cdn/` keys.
+- `spawnfile` occurs 0 times across the decoded frames.
+
+These negatives hold only in the decoded-frame scope of the 2580 manifests reached. They are not a universal absence. The spawnfile key path stays ELIDED, the bucket rule stays UNDETERMINED, and the 2 non-CDN refs and the 2 404 keys stay scoped observations. The 73-line gap between the occurrence total and the `keys.txt` lines is open until spawn explains it.
+
 ## Scoped spawn body witnesses
 
 These are body-level witnesses from spawn. They are scoped as stated, do not change any OPEN status, and do not close the rows they touch. Witness copies are durable at `/workspace/spawn/maps/witness/`, with the checkers `manifest-chain.mjs` and `manifest-hashmatch.mjs` alongside.

@@ -139,8 +139,8 @@ if (tableRows.length !== parityRows.size) errors.push(`JAYZEE-GAPS.md: ${tableRo
 const expectedOpenWithoutTarget = [9, 32]
 const expectedNamedNotCreated = [9, 23, 32]
 const sameList = (a, b) => a.length === b.length && a.every((n, i) => n === b[i])
-if (!sameList(openWithoutTarget, expectedOpenWithoutTarget)) errors.push(`JAYZEE-GAPS.md: open required rows with no existing jayzee target are [${openWithoutTarget.join(", ")}], expected [${expectedOpenWithoutTarget.join(", ")}]`)
-if (!sameList(namedNotCreated, expectedNamedNotCreated)) errors.push(`JAYZEE-GAPS.md: open required rows naming a jayzee path not created at ${pin} are [${namedNotCreated.join(", ")}], expected [${expectedNamedNotCreated.join(", ")}]`)
+if (!sameList(openWithoutTarget, expectedOpenWithoutTarget)) errors.push(`JAYZEE-GAPS.md: feature-coverage rows citing no existing jayzee path are [${openWithoutTarget.join(", ")}], expected [${expectedOpenWithoutTarget.join(", ")}]`)
+if (!sameList(namedNotCreated, expectedNamedNotCreated)) errors.push(`JAYZEE-GAPS.md: open required rows citing a jayzee path not created at ${pin} are [${namedNotCreated.join(", ")}], expected [${expectedNamedNotCreated.join(", ")}]`)
 counts.requiredInJayzee = requiredRows
 counts.builtRows = builtRows
 
@@ -248,8 +248,8 @@ console.log(`JAYZEE PINNED COMMIT: ${pin}`)
 console.log(`JAYZEE RANKED ROWS AT PIN: ${counts.parityRows}`)
 console.log(`GAP TABLE ROWS: ${counts.gapRows} (required-in-jayzee ${requiredRows}, built ${builtRows})`)
 console.log(`SAVI-OWNED ITEMS WITH PATH CHECK: ${counts.savedItemsNeedingPath}`)
-console.log(`OPEN REQUIRED ROWS WITH NO EXISTING JAYZEE TARGET (tracked, not resolved): ${openWithoutTarget.join(", ")}`)
-console.log(`NAMED JAYZEE PATHS NOT CREATED (tracked, not resolved): ${namedNotCreated.join(", ")}`)
+console.log(`OPEN ROWS CITING NO EXISTING JAYZEE PATH (architectural, not a feature obligation; tracked): ${openWithoutTarget.join(", ")}`)
+console.log(`OPEN ROWS CITING A JAYZEE PATH NOT CREATED (architectural, not a feature obligation; tracked): ${namedNotCreated.join(", ")}`)
 for (const error of errors) console.log(`ERROR: ${error}`)
 console.log(`RESULT: ${errors.length === 0 ? "PASS" : "FAIL"}`)
 
