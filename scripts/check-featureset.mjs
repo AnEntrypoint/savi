@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -638,6 +638,32 @@ const candidates43to44 = [
 ]
 const candidate43Mismatch = candidates43to44.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
 if (candidate43Mismatch.length !== 0) errors.push(`stream 43 and 44 candidates not at cited lines: ${candidate43Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const s45 = ["PerformanceProfiler", "RuntimeStats", "OverdrawProbe", "MeshDebug", "ColliderDebug"]
+if (coreLines(s45) !== 1135) errors.push(`stream 45 at ${spointPin}: ${coreLines(s45)} lines, expected 1135`)
+if (coreWitnessed(s45).length !== 0) errors.push(`stream 45 has witnesses: ${coreWitnessed(s45).join(", ")}`)
+if (s45.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 44 name stream 45 modules: ${s45.filter(saviNamesModule).join(", ")}`)
+const frameMetricsCited = texts["FEATURESET.md"].includes("`client/core/FrameMetrics.js:4`")
+if (!frameMetricsCited) errors.push("stream 45 does not cite FrameMetrics.js per file")
+if (coreLines(["FrameMetrics"]) !== 233) errors.push(`FrameMetrics.js at ${spointPin} is not 233 lines`)
+if (coreWitnessed(["FrameMetrics"]).length !== 0) errors.push("FrameMetrics.js has a witness")
+console.log(`STREAM 45 AT spoint ${spointPin}: ${coreLines(s45)} lines (5 modules), witnesses ${coreWitnessed(s45).length}, FrameMetrics.js cited per file ${frameMetricsCited} (233 lines, witness-less)`)
+const candidates45 = [
+  ["client/core/PerformanceProfiler.js", 57, "const dpr = window.devicePixelRatio || 1"],
+  ["client/core/PerformanceProfiler.js", 167, "texMem += (t.width || 0) * (t.height || 0) * BYTES_PER_RGBA8_TEXEL"],
+  ["client/core/PerformanceProfiler.js", 170, "geoMem += (g.vertices || 0) * BYTES_PER_VEC3_F32"],
+  ["client/core/PerformanceProfiler.js", 179, "profileState.drawCalls = info.render?.calls || 0"],
+  ["client/core/PerformanceProfiler.js", 181, "profileState.entityCount = scene?.children?.length || 0"],
+  ["client/core/RuntimeStats.js", 76, "rttHistory.push(Math.max(0, rtt || 0))"],
+  ["client/core/RuntimeStats.js", 82, "drawCalls: info.calls || 0"],
+  ["client/core/OverdrawProbe.js", 219, "try { RenderControls.set(STATS_KEY, next) } catch (_) {}"],
+  ["client/core/OverdrawProbe.js", 283, "setViewCeiling: (n) => { if (Number.isFinite(n) && n > 0) ceilingUniform.value = n }"],
+  ["client/core/ColliderDebug.js", 49, "const extent = Number.isFinite(phys.extent) && phys.extent > 0 ? phys.extent : 256"],
+  ["client/core/ColliderDebug.js", 75, "if (!Number.isFinite(h)) h = -1000"],
+  ["client/core/MeshDebug.js", 51, "?? '-'"],
+  ["client/core/MeshDebug.js", 94, "hostPhase: s.hostMigration?.phase ?? null"],
+]
+const candidate45Mismatch = candidates45.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate45Mismatch.length !== 0) errors.push(`stream 45 candidates not at cited lines: ${candidate45Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()

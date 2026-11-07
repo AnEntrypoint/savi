@@ -702,6 +702,19 @@ Each line gives `path:line` and the first export at `d5e3860`. The three modules
 
 Witness-less: `RenderGraph.nodes`.
 
+## Stream 45: client/core diagnostics and profiling probes with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The five modules total 1135 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for the five basenames, `profiler`, `overdraw`, `runtime stats`, `collider debug` and `debug overlay`, outside this stream.
+
+- `client/core/PerformanceProfiler.js:8` (`export function createPerformanceProfiler(renderer, scene) {`): 395 lines, 1 export. Imported by `client/core/DevToolsIntegration.js`, an unsent `client/core` module. `client/app.js` does not import it. No witness.
+- `client/core/RuntimeStats.js:52` (`export function createRuntimeStats() {`): 185 lines, 2 exports. Imported by `client/app.js`. No witness.
+- `client/core/OverdrawProbe.js:49` (`export function createOverdrawProbe({ renderer, scene, camera, readIntervalMs`): 292 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/MeshDebug.js:58` (`export function installMeshDebug({ maxTicks = POLL_MAX_TICKS } = {}) {`): 155 lines, 1 export. Imported by `client/app.js` and by one `client/hud` module. No witness.
+- `client/core/ColliderDebug.js:44` (`export function createColliderDebug({ scene, frame, cfg }) {`): 108 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/FrameMetrics.js:4` (`export function createPerfTracker() {`): 233 lines, 5 exports. Imported by `client/app.js`. No witness. This is the explicit per-file mention for the held module. The concept-level phrase "the frame metrics" in `docs/JAYZEE-GAPS.md` row 59 is prose and is NOT the coverage; this entry is.
+
+Witness-less: all six. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for any of them.
+
 ## Improvement opportunities (not behaviour to match)
 
 The owner's rule is that the documented featureset is a floor. Where spoint's design is weaker, jayzee should build the better version, and matching spoint's behaviour is not the requirement. Each item below is spoint's weaker design, recorded here as an improvement opportunity for jayzee.
@@ -789,6 +802,18 @@ The items below come from streams 43 and 44. They are GREP-BASED CANDIDATES, not
 - `client/core/ProgramReadiness.js:5` (`renderer.deferredProgramDraws = renderer.deferredProgramDraws || 0`): writes a property onto the renderer when it is absent.
 - `client/core/ProgramReadiness.js:93` and `:206` (`window.__spointAsyncPipelineEscort !== false` and `window.__spointDeferFirstUse !== false`): default-on flags, so an absent global enables the path.
 - `client/core/ProgramReadiness.js:18`, `:114` and `:242` (`} catch (e) {`): NEEDING A CHECK. What these blocks do with the error has not been verified here.
+
+The items below come from stream 45. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/PerformanceProfiler.js:167` and `:170` (`(t.width || 0) * (t.height || 0)` and `(g.vertices || 0)`): a missing size counts as 0 bytes, so memory is undercounted without a flag.
+- `client/core/PerformanceProfiler.js:179` to `:181` (`info.render?.calls || 0` and `scene?.children?.length || 0`): an absent counter becomes 0, so a zero reading cannot be told apart from no data.
+- `client/core/PerformanceProfiler.js:57` (`const dpr = window.devicePixelRatio || 1`): a silent literal default.
+- `client/core/RuntimeStats.js:76` (`rttHistory.push(Math.max(0, rtt || 0))`): a missing RTT becomes 0 ms, which is also a valid reading. The two cases cannot be told apart. This is a candidate for a distinct missing marker, not a defect. Lines 82 to 87 use the same `|| 0` for render and player counters.
+- `client/core/OverdrawProbe.js:219` (`try { RenderControls.set(STATS_KEY, next) } catch (_) {}`): a swallowed write.
+- `client/core/OverdrawProbe.js:283` (`setViewCeiling: (n) => { if (Number.isFinite(n) && n > 0) ceilingUniform.value = n }`): an invalid ceiling is ignored with no refusal.
+- `client/core/ColliderDebug.js:49` (`const extent = Number.isFinite(phys.extent) && phys.extent > 0 ? phys.extent : 256`): a literal default for an invalid extent, the same shape as the `colliderLattice.js` candidate in stream 33. The `resolution` line uses the same literal form.
+- `client/core/ColliderDebug.js:75` (`if (!Number.isFinite(h)) h = -1000`): a magic `-1000` stands in for an absent height.
+- `client/core/MeshDebug.js:51` and `:94` (`?? '-'` and `?? null`): display-only absence sentinels, listed for completeness.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
