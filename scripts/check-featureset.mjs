@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -253,7 +253,7 @@ const streamTwentyFour = texts["FEATURESET.md"].split("\n## Stream 24")[1]?.spli
 const savisDocsOutsideStreamTwentyFour = [texts["FEATURESET.md"].replace(streamTwentyFour, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"]]
 const editorBasenames = editorFiles.map((p) => p.split("/").pop().replace(/\.js$/, ""))
 const namedInDocs = editorBasenames.filter((b) => savisDocsOutsideStreamTwentyFour.some((t) => t.includes(b))).sort()
-if (namedInDocs.join() !== ["EditorEventLog", "EventChainPanel", "FreddieChatPanel"].join()) errors.push(`savi docs outside stream 24 name editor modules [${namedInDocs.join(", ")}], expected [EditorEventLog, EventChainPanel, FreddieChatPanel]`)
+if (namedInDocs.join() !== ["EditorEventLog", "EventChainPanel", "FreddieChatPanel", "ProcgenPanel"].join()) errors.push(`savi docs outside stream 24 name editor modules [${namedInDocs.join(", ")}], expected [EditorEventLog, EventChainPanel, FreddieChatPanel, ProcgenPanel]`)
 const scriptTexts = walk(join(savi, "scripts")).filter((f) => !f.endsWith("check-featureset.mjs")).map((f) => readFileSync(f, "utf8"))
 const namedInScripts = editorBasenames.filter((b) => scriptTexts.some((t) => t.includes(b)))
 if (namedInScripts.length !== 0) errors.push(`savi scripts name editor modules: ${namedInScripts.join(", ")}`)
@@ -376,6 +376,22 @@ for (const [, path, lineNumber, snippet] of chartCites) {
 }
 if (chartCites.length !== 4) errors.push(`FEATURESET.md chartState addendum: expected 4 citations, found ${chartCites.length}`)
 console.log(`CHARTSTATE ADDENDUM CITATIONS VERIFIED AGAINST spoint ${spointPin}: ${chartVerified} of ${chartCites.length}`)
+const procgenModules = ["LSystem", "NoiseTerrain", "TextureScript", "WFC"]
+const procgenText = (m) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/procgen/${m}.js`], { encoding: "utf8" })
+const procgenLines = procgenModules.reduce((sum, m) => sum + procgenText(m).split("\n").length - 1, 0)
+if (procgenLines !== 563) errors.push(`spoint src/procgen stream 30 at ${spointPin} is ${procgenLines} lines, expected 563`)
+const procgenExports = procgenModules.reduce((sum, m) => sum + procgenText(m).split("\n").filter((l) => l.startsWith("export")).length, 0)
+if (procgenExports !== 13) errors.push(`spoint src/procgen stream 30 at ${spointPin} has ${procgenExports} exports, expected 13`)
+const procgenWitnesses = ["LSystem", "NoiseTerrain", "TextureScript", "WFC", "procgen"].filter((m) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-liwF", m, spointPin, "--", "scripts"], { encoding: "utf8" }).trim().length > 0 } catch { return false } })
+if (procgenWitnesses.length !== 0) errors.push(`procgen names have witness scripts at ${spointPin}: ${procgenWitnesses.join(", ")}`)
+const procgenSection = texts["FEATURESET.md"].split("\n## Stream 30")[1]?.split("\n## ")[0] ?? ""
+const procgenDocsOutside = [texts["FEATURESET.md"].replace(procgenSection, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
+const procgenNamedInDocs = procgenModules.filter((m) => procgenDocsOutside.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (procgenNamedInDocs.length !== 0) errors.push(`savi docs outside stream 30 name procgen modules: ${procgenNamedInDocs.join(", ")}`)
+const procgenNamedInScripts = procgenModules.filter((m) => scriptJsTexts.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (procgenNamedInScripts.length !== 0) errors.push(`savi scripts name procgen modules: ${procgenNamedInScripts.join(", ")}`)
+counts.stream30 = { lines: procgenLines, exports: procgenExports, namedInDocs: procgenNamedInDocs.length, namedInScripts: procgenNamedInScripts.length }
+console.log(`STREAM 30 AT spoint ${spointPin}: ${procgenLines} lines, ${procgenExports} exports, witnesses ${procgenWitnesses.length}; savi docs name ${procgenNamedInDocs.length}; scripts name ${procgenNamedInScripts.length}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()

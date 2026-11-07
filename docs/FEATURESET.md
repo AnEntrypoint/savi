@@ -287,7 +287,7 @@ Cluster: 28 files and 5950 lines, counted with `wc -l` over `git show d5e3860:<p
 
 Negatives:
 - `scripts/` in savi names none of the 28 basenames, so 0 of 28 have a witness script.
-- Outside this section, savi's docs name 26 of the 28 basenames 0 times. Three are named and disclosed: `EventChainPanel` as the editor consumer of EventChainManager at `docs/FEATURESET.md:178`, `EditorEventLog` in the event-log line at `docs/FEATURESET.md:223`, and `FreddieChatPanel` as a code importer listed in the stream 25, part 2 section, which is recorded there and not claimed for stream 24.
+- Outside this section, savi's docs name 26 of the 28 basenames 0 times. Four are named and disclosed: `EventChainPanel` as the editor consumer of EventChainManager at `docs/FEATURESET.md:178`, `EditorEventLog` in the event-log line at `docs/FEATURESET.md:223`, `FreddieChatPanel` as a code importer listed in the stream 25, part 2 section, and the editor panel that imports the procgen modules, listed as an importer in the stream 30 section. Each is recorded there and not claimed for stream 24.
 - The editor is named at directory level, not by module, at `docs/PARITY-INPUTS.md:42`, `docs/FEATURESET.md:85`, and `docs/JAYZEE-GAPS.md:27`, `:73` and `:92`. Disclosed.
 
 These are static claims. The IndexedDB recovery and the file browser are not run here.
@@ -487,6 +487,31 @@ Witnesses: `git grep -lwF` over `scripts/` at `d5e3860` finds no file for any of
 Savi: the case-sensitive word `Chat` has no hit in `docs/` or `gaps` (the `docs/OPEN-ITEMS.md` line 167 phrase "chat contract" is lowercase and generic). `docs/PARITY-INPUTS.md:42`, `docs/FEATURESET.md:85`, `docs/JAYZEE-GAPS.md:73` and `docs/JAYZEE-GAPS.md:92` are directory-level client lists and name none of the 17 modules.
 
 These are static claims. No HUD is rendered here.
+
+## Stream 30: src/procgen modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 14 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. The four modules are the whole `src/procgen` directory, and they total 563 lines by `wc -l` and 13 `export` lines.
+
+- `src/procgen/LSystem.js:13` (`export function expandLSystem({ axiom, rules = {}, iterations = 1, seed = 1337 }) {`): L-system expansion, with four exports in the module; imported by `client/editor/ProcgenPanel.js`.
+- `src/procgen/LSystem.js:80` (`export function interpretTurtle(symbolString, {`): the turtle interpreter.
+- `src/procgen/LSystem.js:143` (`export function generateLSystemTree({ axiom, rules = {}, iterations = 1, seed = 1337, ...turtleOpts }) {`): the tree generator.
+- `src/procgen/LSystem.js:149` (`export let PRESETS = {`): the preset table.
+- `src/procgen/NoiseTerrain.js:35` (`export function createNoise2D(seed = 1337) {`): the 2D noise factory, with four exports in the module; imported by `client/editor/ProcgenPanel.js` and `src/procgen/TextureScript.js`.
+- `src/procgen/NoiseTerrain.js:59` (`export function createFbm2D(seed = 1337, opts = {}) {`): the fractal noise factory.
+- `src/procgen/NoiseTerrain.js:76` (`export function generateHeightfield(opts = {}) {`): the heightfield generator.
+- `src/procgen/NoiseTerrain.js:143` (`export function createHeightSampler(opts = {}) {`): the heightfield sampler.
+- `src/procgen/TextureScript.js:1` (`import { createFbm2D } from './NoiseTerrain.js'`): the texture module's only internal import; no importer outside the directory.
+- `src/procgen/TextureScript.js:16` (`export function paintTexture({ width, height, seed = 1337, paint } = {}) {`): the texture painter, with one export.
+- `src/procgen/WFC.js:13` (`export const DIRS = Object.freeze({`): the wave-function-collapse directions, with four exports in the module.
+- `src/procgen/WFC.js:40` (`export function rulesFromSockets(tiles) {`): the socket rules.
+- `src/procgen/WFC.js:64` (`export function runWFC({ width, height, tiles, rules, sockets, seed = 1337, maxSteps }) {`): the collapse run.
+- `src/procgen/WFC.js:166` (`export function runWFCWithRetries(options, attempts = 20) {`): the retrying collapse; imported by `client/editor/ProcgenPanel.js`, which is the only consumer outside the directory for LSystem, NoiseTerrain and WFC.
+
+Witnesses: `git grep -lwF` over `scripts/` at `d5e3860` finds no file for `LSystem`, `NoiseTerrain`, `TextureScript`, `WFC` or `procgen`, and a case-insensitive whole-word search for `procgen` finds none either.
+
+Savi: none of `LSystem`, `NoiseTerrain`, `TextureScript`, `WFC` or `procgen` appears in `docs/` or `scripts/`, and the directory string `src/procgen` has zero hits. `ProcgenPanel` appears in savi's docs only in this section and in the stream 24 disclosure, and has no hit in scripts. Its importer role here is disclosed. This section does not claim that stream 24 covers `client/editor/ProcgenPanel.js`.
+
+These are static claims. No procedural generation is run here.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
