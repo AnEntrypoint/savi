@@ -137,6 +137,13 @@ tableRows.forEach((cells, index) => {
   }
 })
 if (tableRows.length !== parityRows.size) errors.push(`JAYZEE-GAPS.md: ${tableRows.length} rows against ${parityRows.size} ranked rows at ${pin}`)
+const rankedNumbers = [...parityRows.keys()].sort((a, b) => a - b)
+const numberedFromOne = (numbers) => numbers.every((n, i) => n === i + 1)
+if (!numberedFromOne(rankedNumbers)) errors.push(`ranked rows at ${pin} are not numbered 1 to ${rankedNumbers.length}`)
+if (numberedFromOne(rankedNumbers.filter((n) => n !== rankedNumbers[Math.floor(rankedNumbers.length / 2)]))) errors.push("negative witness failed: a register with a removed row was accepted as contiguous")
+if (!numberedFromOne([...rankedNumbers, rankedNumbers.length + 1])) errors.push("negative witness failed: a register with one more row was refused")
+counts.rankedNumbering = { first: rankedNumbers[0], last: rankedNumbers[rankedNumbers.length - 1], rows: rankedNumbers.length }
+console.log(`RANKED NUMBERING AT jayzee ${pin}: ${rankedNumbers.length} rows numbered 1 to ${rankedNumbers.length}; removed-row negative refused: ${!numberedFromOne(rankedNumbers.filter((n) => n !== rankedNumbers[Math.floor(rankedNumbers.length / 2)]))}; N+1 row accepted: ${numberedFromOne([...rankedNumbers, rankedNumbers.length + 1])}`)
 const expectedOpenWithoutTarget = []
 const expectedNamedNotCreated = []
 const sameList = (a, b) => a.length === b.length && a.every((n, i) => n === b[i])
@@ -223,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -246,7 +253,7 @@ const streamTwentyFour = texts["FEATURESET.md"].split("\n## Stream 24")[1]?.spli
 const savisDocsOutsideStreamTwentyFour = [texts["FEATURESET.md"].replace(streamTwentyFour, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"]]
 const editorBasenames = editorFiles.map((p) => p.split("/").pop().replace(/\.js$/, ""))
 const namedInDocs = editorBasenames.filter((b) => savisDocsOutsideStreamTwentyFour.some((t) => t.includes(b))).sort()
-if (namedInDocs.join() !== ["EditorEventLog", "EventChainPanel"].join()) errors.push(`savi docs outside stream 24 name editor modules [${namedInDocs.join(", ")}], expected [EditorEventLog, EventChainPanel]`)
+if (namedInDocs.join() !== ["EditorEventLog", "EventChainPanel", "FreddieChatPanel"].join()) errors.push(`savi docs outside stream 24 name editor modules [${namedInDocs.join(", ")}], expected [EditorEventLog, EventChainPanel, FreddieChatPanel]`)
 const scriptTexts = walk(join(savi, "scripts")).filter((f) => !f.endsWith("check-featureset.mjs")).map((f) => readFileSync(f, "utf8"))
 const namedInScripts = editorBasenames.filter((b) => scriptTexts.some((t) => t.includes(b)))
 if (namedInScripts.length !== 0) errors.push(`savi scripts name editor modules: ${namedInScripts.join(", ")}`)
@@ -265,6 +272,39 @@ const serverNamedInScripts = serverModules.filter((m) => scriptTexts.some((t) =>
 if (serverNamedInScripts.length !== 0) errors.push(`savi scripts name server modules: ${serverNamedInScripts.join(", ")}`)
 counts.stream25Cluster = { lines: serverLines, namedInDocs: serverNamedInDocs.length, namedInScripts: serverNamedInScripts.length }
 console.log(`STREAM 25 CLUSTER AT spoint ${spointPin}: ${serverLines} lines; savi docs outside stream 25 name ${serverNamedInDocs.length}; scripts name ${serverNamedInScripts.length}`)
+const serverPartTwo = ["AppManifest", "ChaseCamera", "DevAppModuleVersions", "DevHmrGraph", "FreddieBridge", "PublicBenchmark", "ReloadHandlers", "ReloadManager", "RoomLog", "RoomProcessWorker", "ServerIdentity", "ServerTimeOfDay", "SharedEventEnvelope", "TextureAtlas", "WorkerBoot", "appEventSender", "scatterSpec"]
+const partTwoText = (m) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/sdk/${m}.js`], { encoding: "utf8" })
+const partTwoLines = serverPartTwo.reduce((sum, m) => sum + partTwoText(m).split("\n").length - 1, 0)
+if (partTwoLines !== 1171) errors.push(`spoint src/sdk stream 25 part 2 at ${spointPin} is ${partTwoLines} lines, expected 1171`)
+const partTwoExports = serverPartTwo.reduce((sum, m) => sum + partTwoText(m).split("\n").filter((l) => l.startsWith("export")).length, 0)
+if (partTwoExports !== 41) errors.push(`spoint src/sdk stream 25 part 2 at ${spointPin} has ${partTwoExports} exports, expected 41`)
+const importersOf = (m) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lF", m, spointPin, "--", "src", "client", "apps", "packages", "scripts", "bin", "edge", `:!src/sdk/${m}.js`], { encoding: "utf8" }).split("\n").filter(Boolean) } catch { return [] } }
+for (const m of ["ChaseCamera", "RoomLog", "SharedEventEnvelope", "scatterSpec"]) if (importersOf(m).length !== 0) errors.push(`${m} has code importers at ${spointPin}, expected none`)
+const partTwoSection = texts["FEATURESET.md"].split("\n## Stream 25, part 2")[1]?.split("\n## ")[0] ?? ""
+const partTwoDocsOutside = [texts["FEATURESET.md"].replace(partTwoSection, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
+const partTwoNamedInDocs = serverPartTwo.filter((m) => partTwoDocsOutside.some((t) => t.includes(m)))
+if (partTwoNamedInDocs.length !== 0) errors.push(`savi docs outside stream 25 part 2 name part-2 modules: ${partTwoNamedInDocs.join(", ")}`)
+const partTwoNamedInScripts = serverPartTwo.filter((m) => scriptTexts.some((t) => t.includes(m)))
+if (partTwoNamedInScripts.length !== 0) errors.push(`savi scripts name part-2 modules: ${partTwoNamedInScripts.join(", ")}`)
+counts.stream25PartTwo = { lines: partTwoLines, exports: partTwoExports, namedInDocs: partTwoNamedInDocs.length, namedInScripts: partTwoNamedInScripts.length }
+console.log(`STREAM 25 PART 2 AT spoint ${spointPin}: ${partTwoLines} lines, ${partTwoExports} exports; savi docs name ${partTwoNamedInDocs.length}; scripts name ${partTwoNamedInScripts.length}`)
+const behaviourModules = ["buoyancy", "cameraRig", "checkpoint", "decisionPipe", "decisionRuntime", "destructibleSpec", "fluid3d", "game-fsm", "gamemode", "pickup", "projectile", "projectileGravity", "shrinking-zone", "specBoundary", "steering", "teams", "trade", "voxels", "weapon"]
+const behaviourText = (m) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/behaviours/${m}.js`], { encoding: "utf8" })
+const behaviourLines = behaviourModules.reduce((sum, m) => sum + behaviourText(m).split("\n").length - 1, 0)
+if (behaviourLines !== 2210) errors.push(`spoint src/behaviours stream 26 at ${spointPin} is ${behaviourLines} lines, expected 2210`)
+const behaviourExports = behaviourModules.reduce((sum, m) => sum + behaviourText(m).split("\n").filter((l) => l.startsWith("export")).length, 0)
+if (behaviourExports !== 46) errors.push(`spoint src/behaviours stream 26 at ${spointPin} has ${behaviourExports} exports, expected 46`)
+const projectileImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lE", "behaviours/projectile\\.js['\"]|'\\./projectile\\.js'", spointPin, "--", "src", "client", "apps", "packages", "scripts", "bin", "edge"], { encoding: "utf8" }).split("\n").filter(Boolean) } catch { return [] } })()
+if (projectileImporters.length !== 0) errors.push(`projectile.js has exact-path importers at ${spointPin}: ${projectileImporters.join(", ")}`)
+const behaviourSection = texts["FEATURESET.md"].split("\n## Stream 26")[1]?.split("\n## ")[0] ?? ""
+const docsOutsideStreamTwentySix = [texts["FEATURESET.md"].replace(behaviourSection, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
+const behaviourNamedInDocs = behaviourModules.filter((m) => docsOutsideStreamTwentySix.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (behaviourNamedInDocs.length !== 0) errors.push(`savi docs outside stream 26 name behaviour modules: ${behaviourNamedInDocs.join(", ")}`)
+const scriptJsTexts = walk(join(savi, "scripts")).filter((f) => /\.(mjs|js)$/.test(f) && !f.endsWith("check-featureset.mjs")).map((f) => readFileSync(f, "utf8"))
+const behaviourNamedInScripts = behaviourModules.filter((m) => scriptJsTexts.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (behaviourNamedInScripts.length !== 0) errors.push(`savi scripts name behaviour modules: ${behaviourNamedInScripts.join(", ")}`)
+counts.stream26 = { lines: behaviourLines, exports: behaviourExports, namedInDocs: behaviourNamedInDocs.length, namedInScripts: behaviourNamedInScripts.length }
+console.log(`STREAM 26 AT spoint ${spointPin}: ${behaviourLines} lines, ${behaviourExports} exports, projectile importers ${projectileImporters.length}; savi docs name ${behaviourNamedInDocs.length}; scripts name ${behaviourNamedInScripts.length}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()

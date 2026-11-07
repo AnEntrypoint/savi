@@ -287,7 +287,7 @@ Cluster: 28 files and 5950 lines, counted with `wc -l` over `git show d5e3860:<p
 
 Negatives:
 - `scripts/` in savi names none of the 28 basenames, so 0 of 28 have a witness script.
-- Outside this section, savi's docs name 26 of the 28 basenames 0 times. Two are named and disclosed: `EventChainPanel` as the editor consumer of EventChainManager at `docs/FEATURESET.md:178`, and `EditorEventLog` in the event-log line at `docs/FEATURESET.md:223`.
+- Outside this section, savi's docs name 26 of the 28 basenames 0 times. Three are named and disclosed: `EventChainPanel` as the editor consumer of EventChainManager at `docs/FEATURESET.md:178`, `EditorEventLog` in the event-log line at `docs/FEATURESET.md:223`, and `FreddieChatPanel` as a code importer listed in the stream 25, part 2 section, which is recorded there and not claimed for stream 24.
 - The editor is named at directory level, not by module, at `docs/PARITY-INPUTS.md:42`, `docs/FEATURESET.md:85`, and `docs/JAYZEE-GAPS.md:27`, `:73` and `:92`. Disclosed.
 
 These are static claims. The IndexedDB recovery and the file browser are not run here.
@@ -323,6 +323,70 @@ Negatives:
 - `docs/FEATURESET.md` outside this section, `docs/JAYZEE-GAPS.md`, `docs/OPEN-ITEMS.md` and `docs/PARITY-INPUTS.md` name none of the five modules.
 
 These are static claims. The log overflow and the id generator are not exercised here.
+
+## Stream 25, part 2: src/sdk modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 17 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. The 17 modules total 1171 lines by `wc -l`, and their code importers were re-derived with `git grep -lF` at `d5e3860` (excluding each module's own file) and match spoint's list. Savi's `docs/` and `scripts/` name none of the 17 modules.
+
+- `src/sdk/AppManifest.js:17` (`export function validateManifest(manifest) {`): manifest validation, imported by `bin/marketplace-install.js` and `bin/marketplace-registry.js`.
+- `src/sdk/ChaseCamera.js:1` (`export const CHASE_CAMERA_DEFAULTS = Object.freeze({`): the chase-camera defaults; no code importer.
+- `src/sdk/DevAppModuleVersions.js:31` (`export function registerAppModuleVersioning(appsDirs) {`): the module also exports `initialize` and `resolve`; imported by `src/sdk/server.js`.
+- `src/sdk/DevHmrGraph.js:8` (`export function readImportMap(htmlPath) {`): the module graph; imported by `src/sdk/DevHmr.js`.
+- `src/sdk/FreddieBridge.js:16` (`export function validateMessage(msg) {`): eleven exports, including the KIND constants, PRIMITIVES, LAYOUTS and `computeLayout`; imported by `apps/_lib/dataset-viz.js`, `client/editor/FreddieChatPanel.js` and `src/sdk/ServerAPIRoutes.js`.
+- `src/sdk/PublicBenchmark.js:19` (`export function collectBenchmark(ctx) {`): imported by `src/sdk/ServerAPIRoutes.js`.
+- `src/sdk/ReloadHandlers.js:32` (`export function createReloadHandlers(deps) {`): imported by `src/sdk/server.js`.
+- `src/sdk/ReloadManager.js:26` (`export class ReloadManager {`): imported by `src/sdk/server.js`.
+- `src/sdk/RoomLog.js:11` (`export class RoomLog {`): the module also exports `RoomLogError`; no code importer.
+- `src/sdk/RoomProcessWorker.js:1` (`import { RoomDirectory } from './RoomDirectory.js'`): no exports; imported by `src/sdk/RoomOrchestrator.js`.
+- `src/sdk/ServerIdentity.js:16` (`export function getServerIdentity() {`): also exports `logServerIdentity`; imported by `src/sdk/ServerBoot.js` and `src/sdk/StaticHandler.js`.
+- `src/sdk/ServerTimeOfDay.js:5` (`export function createServerTimeOfDay(getConfig) {`): imported by `src/sdk/TickHandler.js`.
+- `src/sdk/SharedEventEnvelope.js:1` (`export function generateEventId() {`): also exports `emitEnvelope` and `validateEnvelope`; no code importer.
+- `src/sdk/TextureAtlas.js:11` (`export function atlasLayout(spec) {`): also exports `AtlasSpecError`; imported by `client/core/Vegetation.js` and `packages/streaming-gltf/src/octahedral-impostor-ez.js`.
+- `src/sdk/WorkerBoot.js:2` (`await import('./WorkerEntry.js')`): no exports; imported by `client/BrowserServer.js` and `scripts/browser-server-worker-error-witness.mjs`.
+- `src/sdk/appEventSender.js:11` (`export function stampSender(message, { id, fromClient }) {`): also exports `senderOf`; imported by `src/apps/AppContext.js`, `src/behaviours/combat.js`, `src/sdk/Relocation.js` and `src/sdk/ServerHandlers.js`.
+- `src/sdk/scatterSpec.js:1` (`export class ScatterSpecError extends Error {`): also exports `parseScatterSpec`, `hashUnit` and `sampleScatter`; no code importer.
+
+Negatives: `git grep -lF` at `d5e3860` finds no importer for `ChaseCamera`, `RoomLog`, `SharedEventEnvelope` and `scatterSpec` outside their own files.
+
+Not folded here, with the reason for each:
+- `ServerBoot.js` and `StaticCache.js`: savi's docs name neither, and stream 18 does not name them either, so they are not covered by #18. They belong in stream #26 when spoint sends them with their own citations.
+- `bundleFreshness.js`: held owner decision.
+- `EditorHandlers.js`: already excluded, because it has witness scripts.
+- `chartWire.js`: chart re-anchor wire, #19 territory, not verified here.
+- `ServerWeather.js`: fire wind, #23 adjacency, not verified here.
+- `chartState/migratePlayers.js` and `chartState/migrateWorldAnchors.js`: stream 19 walks the `chartState` directory (`src/sdk/chartState/index.js:21` attaches the migrators, and its re-anchor service names have zero matches in that directory). The two files are not named in savi's docs, so their coverage is at directory level under #19, not per file.
+
+These are static claims. No server is started and no migration is run.
+
+## Stream 26: src/behaviours modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 19 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. Spoint's narrowing took the 35 tracked `src/behaviours/*.js` files, removed 5 fire-named files (covered by stream 23), removed 11 with a case-sensitive basename hit in savi's docs or gaps, and kept these 19, which total 2210 lines by `wc -l` and 46 `export` lines.
+
+- `src/behaviours/buoyancy.js:3` (`export function defineBuoyancy(spec = {}, appCtx = null) {`): imported by `src/apps/AppContext.js`; witnessed by `scripts/define-spec-coverage-witness.mjs`.
+- `src/behaviours/cameraRig.js:129` (`export function defineCameraRig(spec = {}, appCtx = null) {`): imported by `src/apps/AppContext.js`; no witness script.
+- `src/behaviours/checkpoint.js:3` (`export function defineCheckpoint(spec = {}, appCtx) {`): imported by `src/apps/AppBehaviours.js` and `src/apps/AppContext.js`; witnessed by `scripts/checkpoint-nested-radius-witness.mjs` and `scripts/define-spec-coverage-witness.mjs`.
+- `src/behaviours/decisionPipe.js:1` (`export class DecisionPipeError extends Error {`): imported only by `src/behaviours/decisionRuntime.js`, so it has no witness of its own.
+- `src/behaviours/decisionRuntime.js:9` (`export function createDecisionRuntime({ ask, random, now,`): no code importer; witnessed by `scripts/decision-runtime-witness.mjs`.
+- `src/behaviours/destructibleSpec.js:3` (`export function validateDestructibleSpec(spec) {`): imported by `src/behaviours/destructible.js`; no witness script.
+- `src/behaviours/fluid3d.js:25` (`export function createFluid3DBody(spec = {}, appCtx = null) {`): imported by `src/apps/AppContext.js`; no witness script.
+- `src/behaviours/game-fsm.js:12` (`export class GameFSMError extends Error {`): imported by `apps/_lib/game-fsm.js`, `src/animation/AnimationController.js`, `src/apps/AppContext.js` and `src/behaviours/README.md`; no witness script.
+- `src/behaviours/gamemode.js:1` (`export function defineGameMode(spec = {}, appCtx = null) {`): imported by `apps/_lib/gamemode.js` and `src/apps/AppContext.js`; no witness script.
+- `src/behaviours/pickup.js:3` (`export function definePickup(spec = {}, appCtx) {`): imported by `src/apps/AppBehaviours.js` and `src/apps/AppContext.js`; witnessed by `scripts/define-spec-boundary-witness.mjs`.
+- `src/behaviours/projectile.js:3` (`export function sweepProjectile(raycast, from, velocity, dt) {`): 18 lines; no code importer, and `git grep` finds no file importing it by exact path; no witness script.
+- `src/behaviours/projectileGravity.js:9` (`export function stepProjectile({ position, velocity, gravity = -9.81, dt } = {}) {`): no code importer; witnessed by `scripts/projectile-gravity-witness.mjs`.
+- `src/behaviours/shrinking-zone.js:51` (`export function defineShrinkingZone(spec = {}, appCtx = null) {`): imported by `apps/_lib/shrinking-zone.js` and `src/apps/AppContext.js`; no witness script.
+- `src/behaviours/specBoundary.js:39` (`export function parseDefineSpec(name, spec, schema) {`): imported by `src/apps/AppContext.js`, by three `scripts/define-spec-*` witnesses and by eight behaviour files (buoyancy, checkpoint, combat, health, path, pickup, teams, weapon).
+- `src/behaviours/steering.js:52` (`export function defineSteering(spec = {}, appCtx) {`): imported by `apps/_lib/steering.js`, `src/apps/AppBehaviours.js` and `src/apps/AppContext.js`; no witness script.
+- `src/behaviours/teams.js:4` (`export const COLORBLIND_SAFE_PALETTE = [`): imported by `apps/_lib/teams.js`, `scripts/define-spec-boundary-witness.mjs`, `src/apps/AppBehaviours.js` and `src/apps/AppContext.js`.
+- `src/behaviours/trade.js:49` (`export function settleTrade({ proposer, responder, offer, request, withdrawn = false } = {}) {`): imported only by `scripts/two-sided-trade-witness.mjs`.
+- `src/behaviours/voxels.js:208` (`export function createVoxelPart(spec) {`): imported only by `scripts/voxels-witness.mjs`.
+- `src/behaviours/weapon.js:6` (`export function defineWeapon(spec = {}, appCtx) {`): imported by `apps/_lib/weapon.js`, `scripts/define-spec-boundary-witness.mjs` and `src/apps/AppContext.js`.
+
+Negatives: `git grep` for the exact `behaviours/projectile.js` path at `d5e3860` finds no importer, and the file is 18 lines. Savi's `docs/` and the `.js`/`.mjs` files in `scripts/` name none of the 19 modules by basename. The only word hits are incidental: `trade` and `voxels` in the description fields of `scripts/openapi.json`, which is not a module reference.
+
+Directory-level disclosure: `JAYZEE-GAPS.md` row 53 names buoyancy, fluid, destructible core and health as family-level jayzee status. It does not name these files.
+
+These are static claims. No behaviour is run here.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
