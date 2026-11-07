@@ -7,6 +7,7 @@
     "check": "node scripts/check-manual.mjs .",
     "endpoints": "node scripts/endpoints.mjs .",
     "sync-spec": "node scripts/endpoints.mjs --sync",
-    "verify": "node scripts/verify-publish.mjs ."
+    "verify": "node scripts/verify-publish.mjs .",
+    "check:featureset": "node scripts/check-featureset.mjs"
   }
 }

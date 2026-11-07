@@ -8,7 +8,7 @@ const TAB = String.fromCharCode(9)
 const root = path.resolve(process.argv[2] || '.')
 const site = path.join(root, 'site')
 const excludedDirs = new Set(['.git', '.playwriter', 'runs', 'site', 'node_modules', 'sources'])
-const withheldPrefixes = ['.spawn/reference/http/raw/']
+const withheldPrefixes = ['.spawn/reference/http/raw/', 'spawn-evidence/data/', 'spawn-evidence/maps/witness/']
 
 function escapeHtml(value) {
   return String(value)
