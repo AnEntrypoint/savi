@@ -513,6 +513,24 @@ Savi: none of `LSystem`, `NoiseTerrain`, `TextureScript`, `WFC` or `procgen` app
 
 These are static claims. No procedural generation is run here.
 
+## Stream 31: src/effects modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 7 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. The directory has two modules, which total 275 lines by `wc -l` and carry four `export` lines.
+
+- `src/effects/DamageEffects.js:1` (`export function createDamageEffects(scene, camera, audioListener, config = {}) {`): the damage-effects factory, the module's only export. It is consumed at runtime, not by an import in the apps tree.
+- `client/app.js:17` (`import * as DamageEffects from '/src/effects/DamageEffects.js'`): the client's import of the module.
+- `client/app.js:1942` (`window.__damageEffects = DamageEffects`): the client publishes the module as a window global.
+- `apps/hit-feedback/index.js:72` (`window.__damageEffects?.createDamageEffects?.(engine.scene, engine.camera, null)`): the hit-feedback app reads the global at runtime through an optional chain.
+- `src/effects/fxProgram.js:13` (`export class FxProgramError extends Error {`): the program error class, one of three exports.
+- `src/effects/fxProgram.js:79` (`export function parseFxProgram(source) {`): the program parser.
+- `src/effects/fxProgram.js:107` (`export function createFxSimulation(program) {`): the simulation factory. The module has no importer: `git grep` for `fxProgram` at `d5e3860`, excluding its own file, finds no file.
+
+Witnesses: `git grep -lwF` over `scripts/` at `d5e3860` finds no file for `DamageEffects` or `fxProgram`.
+
+Savi: `DamageEffects`, `fxProgram`, the directory string `src/effects`, the phrases `damage effect` and `fx program`, and the case-insensitive basename matches all have zero hits in `docs/`, `gaps` and `scripts/`.
+
+These are static claims. No effect is played and no program is parsed here.
+
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the snippet at `d5e3860`. The citations were re-read from `git -C /workspace/spoint show d5e3860:<path>`, and the line counts were checked: `src/connection/SessionStore.js` has 121 lines and `src/stage/Stage.js` has 109. Nothing was written into spoint. Savi's documents name `SessionStore` 0 times and `StageLoader` 0 times.

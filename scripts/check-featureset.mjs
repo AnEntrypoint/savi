@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -392,6 +392,24 @@ const procgenNamedInScripts = procgenModules.filter((m) => scriptJsTexts.some((t
 if (procgenNamedInScripts.length !== 0) errors.push(`savi scripts name procgen modules: ${procgenNamedInScripts.join(", ")}`)
 counts.stream30 = { lines: procgenLines, exports: procgenExports, namedInDocs: procgenNamedInDocs.length, namedInScripts: procgenNamedInScripts.length }
 console.log(`STREAM 30 AT spoint ${spointPin}: ${procgenLines} lines, ${procgenExports} exports, witnesses ${procgenWitnesses.length}; savi docs name ${procgenNamedInDocs.length}; scripts name ${procgenNamedInScripts.length}`)
+const effectsModules = ["DamageEffects", "fxProgram"]
+const effectsText = (m) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/effects/${m}.js`], { encoding: "utf8" })
+const effectsLines = effectsModules.reduce((sum, m) => sum + effectsText(m).split("\n").length - 1, 0)
+if (effectsLines !== 275) errors.push(`spoint src/effects stream 31 at ${spointPin} is ${effectsLines} lines, expected 275`)
+const effectsExports = effectsModules.reduce((sum, m) => sum + effectsText(m).split("\n").filter((l) => l.startsWith("export")).length, 0)
+if (effectsExports !== 4) errors.push(`spoint src/effects stream 31 at ${spointPin} has ${effectsExports} exports, expected 4`)
+const fxProgramImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lE", "fxProgram", spointPin, "--", ":!src/effects/fxProgram.js"], { encoding: "utf8" }).split("\n").filter(Boolean) } catch { return [] } })()
+if (fxProgramImporters.length !== 0) errors.push(`fxProgram has references at ${spointPin} outside its own file: ${fxProgramImporters.join(", ")}`)
+const effectsWitnesses = effectsModules.filter((m) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lwF", m, spointPin, "--", "scripts"], { encoding: "utf8" }).trim().length > 0 } catch { return false } })
+if (effectsWitnesses.length !== 0) errors.push(`effects modules have witness scripts at ${spointPin}: ${effectsWitnesses.join(", ")}`)
+const effectsSection = texts["FEATURESET.md"].split("\n## Stream 31")[1]?.split("\n## ")[0] ?? ""
+const effectsDocsOutside = [texts["FEATURESET.md"].replace(effectsSection, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
+const effectsNamedInDocs = effectsModules.filter((m) => effectsDocsOutside.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (effectsNamedInDocs.length !== 0) errors.push(`savi docs outside stream 31 name effects modules: ${effectsNamedInDocs.join(", ")}`)
+const effectsNamedInScripts = effectsModules.filter((m) => scriptJsTexts.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (effectsNamedInScripts.length !== 0) errors.push(`savi scripts name effects modules: ${effectsNamedInScripts.join(", ")}`)
+counts.stream31 = { lines: effectsLines, exports: effectsExports, namedInDocs: effectsNamedInDocs.length, namedInScripts: effectsNamedInScripts.length }
+console.log(`STREAM 31 AT spoint ${spointPin}: ${effectsLines} lines, ${effectsExports} exports, fxProgram references ${fxProgramImporters.length}, witnesses ${effectsWitnesses.length}; savi docs name ${effectsNamedInDocs.length}; scripts name ${effectsNamedInScripts.length}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
