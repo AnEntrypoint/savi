@@ -2,7 +2,7 @@
 
 Engine notes for Spawn engine 6.0.0, written from the docs clone at `/workspace/savi/.spawn/engine`. Start with ENGINE.md. For physics and optimization internals, see physics-and-optimization.md. For netcode, lag compensation and compression, see netcode-and-optimization.md.
 
-These notes live at `/workspace/savi/.spawn/reference/`. `/workspace/savi` is not a git repository, so none of them can be committed to the game-6 world tree.
+These notes live at `/workspace/savi/.spawn/reference/`. `/workspace/savi` is a git repository (branch `main`, origin `AnEntrypoint/savi`), and these notes are tracked there.
 
 | File | Size (bytes) | What it is |
 |---|---|---|
