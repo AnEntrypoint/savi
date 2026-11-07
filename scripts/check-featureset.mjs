@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -563,6 +563,41 @@ const candidates41 = [
 ]
 const candidate41Mismatch = candidates41.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
 if (candidate41Mismatch.length !== 0) errors.push(`stream 41 candidates not at cited lines: ${candidate41Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const s42 = ["Vegetation", "VegetationBuild", "VegImpostorTier"]
+if (coreLines(s42) !== 1731) errors.push(`stream 42 at ${spointPin}: ${coreLines(s42)} lines, expected 1731`)
+const s42Witnessed = spointWitnessFiles("Vegetation").sort().join(",")
+if (s42Witnessed !== ["scripts/lib/verify-doc-claims.mjs", "scripts/lint/comment-lint.mjs", "scripts/rock-model-exclusion-witness.mjs"].sort().join(",")) errors.push(`stream 42 Vegetation script names are [${s42Witnessed}]`)
+if (coreWitnessed(["VegetationBuild", "VegImpostorTier"]).length !== 0) errors.push("stream 42 VegetationBuild or VegImpostorTier has a witness")
+const s42Named = s42.filter(saviNamesModule)
+if (s42Named.join() !== "Vegetation") errors.push(`savi docs or scripts outside streams 32 to 41 name stream 42 modules: ${s42Named.join(", ")}`)
+const vegetationImporterLine = texts["FEATURESET.md"].split("\n").find((l) => l.includes("TextureAtlas.js:11") && l.includes("client/core/Vegetation.js"))
+if (!vegetationImporterLine) errors.push("stream 42 importer-only savi line for Vegetation.js (TextureAtlas) is missing")
+console.log(`STREAM 42 AT spoint ${spointPin}: ${coreLines(s42)} lines, Vegetation script names ${spointWitnessFiles("Vegetation").length} (not behavioural), witness-less VegetationBuild and VegImpostorTier, savi outside-span names ${s42Named.join("+")} (importer-only)`)
+const candidates42 = [
+  ["client/core/Vegetation.js", 75, "vegetation skipped this session"],
+  ["client/core/Vegetation.js", 79, "const renderDistance = Number.isFinite(cfg.renderDistance) ? cfg.renderDistance : 640"],
+  ["client/core/Vegetation.js", 115, "const _shapeVariantsParam = (typeof location"],
+  ["client/core/Vegetation.js", 116, "const SHAPE_VARIANTS = Number.isFinite(_shapeVariantsParam)"],
+  ["client/core/Vegetation.js", 199, "console.warn('[veg] impostor bake failed (mesh-LOD-only):'"],
+  ["client/core/Vegetation.js", 254, "console.warn('[veg] impostor bake failed (mesh-LOD-only):'"],
+  ["client/core/Vegetation.js", 378, "catch (_) { list = null }"],
+  ["client/core/VegetationBuild.js", 90, "try { if (await decodeImage(img)) { t.needsUpdate = true; return } } catch (_) {}"],
+  ["client/core/VegetationBuild.js", 493, "const presetName = PRESET[name] || name"],
+  ["client/core/VegetationBuild.js", 516, "const target = TARGET_H[name] || 9"],
+  ["client/core/VegImpostorTier.js", 91, "const capacity = Math.min(opts.maxInstances || 20000, opts.initCapacity || 4096)"],
+  ["client/core/VegImpostorTier.js", 147, "try { im.addLOD("],
+  ["client/core/VegImpostorTier.js", 158, "try { im.setUniformAt(id, 'atlasTile', species) } catch (_) {}"],
+  ["client/core/VegImpostorTier.js", 185, "function removeImpostor(id) { try { im.removeInstances(id) } catch (_) {} }"],
+  ["client/core/VegImpostorTier.js", 222, "try { rec.setAttributeAt(id, 'atlasTile', species); rec.setAttributeAt(id, 'tint', tint) } catch (_) {}"],
+  ["client/core/VegImpostorTier.js", 231, "function removeImpostor(id) { try { rec.releaseId(id) } catch (_) {} }"],
+]
+const candidate42Mismatch = candidates42.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate42Mismatch.length !== 0) errors.push(`stream 42 candidates not at cited lines: ${candidate42Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const docNoteSavi = [[".spawn/reference/engine/api-reference.md", 2198, "new LineBasicNodeMaterial({ color, linewidth: 3 })"], [".spawn/reference/engine-deep/api-b.md", 309, "linewidth` is in CSS pixels at every distance"]].every(([p, n, s]) => readFileSync(join(savi, p), "utf8").split("\n")[n - 1]?.includes(s))
+const docNoteJayzee = (() => { try { return execFileSync("git", ["-C", "/workspace/jayzee", "show", `${pin}:scripts/check-savi-builtin-three.mjs`], { encoding: "utf8" }).split("\n")[93]?.includes("linewidth: 3") } catch { return false } })()
+if (!docNoteSavi) errors.push("documentation note: the savi LineBasicNodeMaterial or linewidth reference line is not where it is cited")
+if (!docNoteJayzee) errors.push(`documentation note: jayzee check-savi-builtin-three.mjs:94 does not name linewidth 3 at ${pin}`)
+console.log(`IMPROVEMENT CANDIDATES 42 AT spoint ${spointPin}: ${candidates42.length} located, documentation note savi ${docNoteSavi}, jayzee ${docNoteJayzee}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()

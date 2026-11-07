@@ -673,6 +673,16 @@ Each line gives `path:line` and the first export at `d5e3860`. The four modules 
 
 Witness-less: `RocksTSL`, `VegetationTSL` and `VegetationAmbientTSL`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of them.
 
+## Stream 42: vegetation core, build and impostor-tier modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The three modules total 1731 lines by `wc -l`: `client/core/Vegetation.js` 917, `client/core/VegetationBuild.js` 581 and `client/core/VegImpostorTier.js` 233.
+
+- `client/core/Vegetation.js:55` (`export async function createVegetation(opts = {}) {`): 917 lines, 1 export. Imported by `client/app.js` and `apps/world/_shared/worldDefParse.js` (the second through a string `readBy` reference). Savi names it in `docs/FEATURESET.md:344`, where it is an importer of one atlas module only. That is importer-only, so it is NOT coverage of this module. Three scripts name it: `scripts/lib/verify-doc-claims.mjs`, `scripts/lint/comment-lint.mjs` (a lint scope) and `scripts/rock-model-exclusion-witness.mjs` (a source-text read). None is recorded here as a behavioural witness.
+- `client/core/VegetationBuild.js:110` (`export function treeTextureHalveRefusals() { return _halveRefusals.slice() }`): 581 lines, 5 exports. Imported by `client/core/Vegetation.js`. No witness.
+- `client/core/VegImpostorTier.js:10` (`export const IMPOSTOR_DISSOLVE_FADE_BAND_M = 3.0`): 233 lines, 5 exports. Imported by `client/core/Vegetation.js` and `client/core/VegetationBuild.js`. No witness.
+
+Witness-less: `VegetationBuild` and `VegImpostorTier`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for either.
+
 ## Improvement opportunities (not behaviour to match)
 
 The owner's rule is that the documented featureset is a floor. Where spoint's design is weaker, jayzee should build the better version, and matching spoint's behaviour is not the requirement. Each item below is spoint's weaker design, recorded here as an improvement opportunity for jayzee.
@@ -730,6 +740,21 @@ The items below come from stream 41. They are GREP-BASED CANDIDATES, not verifie
 - `client/core/Rocks.js:276` (`if (!Number.isFinite(px) || !Number.isFinite(pz)) return 0`): a non-finite position returns a count of 0.
 - `client/core/VegetationAmbientTSL.js:50` (`return Number.isFinite(v) ? v : fallback`): a silent fallback. Line 54 sets `muS` to 1 when the elevation is non-finite. Line 61 skips the ambient update silently when a value is non-finite.
 - `client/core/VegetationTSL.js:9` (`if (typeof window !== 'undefined' && window.__vegWind != null) wind.uVegWind.value = +window.__vegWind`): the global is written to a uniform with no finite check first.
+
+The items below come from stream 42. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/Vegetation.js:75` (`console.error('[veg] @dgreenheck/ez-tree failed to load -- vegetation skipped this session (rest of the client is unaffected):', e?.message || e)`): a failed load skips all vegetation for the session and logs an error. The rest of the client continues. This is a fail-soft choice to weigh, not a verified defect.
+- `client/core/Vegetation.js:79` (`const renderDistance = Number.isFinite(cfg.renderDistance) ? cfg.renderDistance : 640`) and the other `Number.isFinite(cfg.x) ? cfg.x : literal` lines in the 79 to 116 block: invalid config becomes a literal default at one boundary, with no refusal.
+- `client/core/Vegetation.js:115` and `:116` read `?vegVariants=` from the URL. The `SHAPE_VARIANTS` line clamps the value, and a non-numeric value falls back silently.
+- `client/core/Vegetation.js:199` and `:254` (`console.warn('[veg] impostor bake failed (mesh-LOD-only):'`): an impostor bake failure falls back to mesh LOD only with a warning.
+- `client/core/Vegetation.js:378` (`catch (_) { list = null }`): a placement failure is swallowed and the list becomes null.
+- `client/core/VegetationBuild.js:90` (`try { if (await decodeImage(img)) { t.needsUpdate = true; return } } catch (_) {}`): a decode failure is swallowed, and a size check takes over.
+- `client/core/VegetationBuild.js:493` (`const presetName = PRESET[name] || name`) and `:516` (`const target = TARGET_H[name] || 9`): silent literal defaults for an absent name or height.
+- `client/core/VegImpostorTier.js:91` (`const capacity = Math.min(opts.maxInstances || 20000, opts.initCapacity || 4096)`): silent literal defaults for absent options.
+- `client/core/VegImpostorTier.js:147`, `:158`, `:185`, `:222` and `:231` wrap `addLOD`, `setUniformAt`, `removeInstances`, `setAttributeAt` and `releaseId` in `try { } catch (_) {}`, so a failed write is dropped with no report.
+- `client/core/Vegetation.js:262` logs and rethrows a species failure, which is consistent with the AGENTS.md rule, so it is not a candidate.
+
+The note below is a DOCUMENTATION IMPROVEMENT OPPORTUNITY, scoped to one example in savi's reference. Savi's reference gives `new LineBasicNodeMaterial({ color, linewidth: 3 })` at `.spawn/reference/engine/api-reference.md:2198`, and `.spawn/reference/engine-deep/api-b.md:309` says `linewidth` is in CSS pixels at every distance. Jayzee's gate at `37bd320` accepts the example as written (`scripts/check-savi-builtin-three.mjs:94`), and jayzee keeps this note OPEN in its AGENTS.md. The claim that three's public docs give a line width of 1 on most WebGL platforms, so that `Line2NodeMaterial` may be needed for every-distance width, is NOT verified here: three is not installed in this repository, and the claim is recorded as the reviewer's statement, not a checked fact.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
