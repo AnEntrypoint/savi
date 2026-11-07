@@ -1,0 +1,202 @@
+# Open items
+
+Status values: OPEN, INFERRED, UNVERIFIED, BEHAVIOUR, DIFFERENT-DATASET, HELD-OWNER. HELD-OWNER means awaiting an owner decision and is never a resolved status. Witness lines are command output or file paths. Tag `required-in-jayzee` marks the owner's parity directive; naming parity is not required, and feature support for everything spawn is learning is non-negotiable. Directive sources: `/tmp/spoint-parity/INVENTORY.md`, `/workspace/jayzee/docs/PARITY.md`.
+
+## Register
+
+### OPEN-001
+Claim: ENDPOINTS.md says 62 openapi paths while its three listed sections sum to 63; 93 total and four headings reconcile, so this is a doc contradiction, not a feature.
+Status: OPEN
+Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/scripts/openapi.json`
+Witness: command output `openapi=62 listed=63 total=93 headings=4 39/21/3/30`
+
+### OPEN-002
+Claim: 305 API type names in api-types.md and 308 in ASSET_SHAPES.md come from different fetches and scopes, not an error.
+Status: DIFFERENT-DATASET
+Source paths: `/workspace/savi/.spawn/reference/http/api-types.md`, `/workspace/savi/spawn-engine/ASSET_SHAPES.md`, `/workspace/savi/.spawn/reference/COVERAGE.md`
+Witness: command output `api-types=305 asset-shapes=308`
+
+### OPEN-003
+Claim: 93 endpoints break down as 39 published spec, 21 per-game-or-id, 3 disabled, and 30 not-in-spec; jayzee must support the endpoint surface, not its naming.
+Status: OPEN
+Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/scripts/openapi.json`
+Witness: command output `openapi=62 listed=63 total=93 headings=4 39/21/3/30`
+Tag: required-in-jayzee
+
+### OPEN-004
+Claim: FAULTS F1 GET /api/games/{appId} answers 200 with game:null, which is documented BEHAVIOUR and not a contradiction with ENDPOINTS.md listing that path; do not resolve by deleting either.
+Status: BEHAVIOUR
+Source paths: `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/scripts/openapi.json`
+Witness: command output `5:## F1. GET /api/games/{appId} answers 200 with game: null for every app id [verified]`
+Tag: required-in-jayzee
+
+### OPEN-005
+Claim: savi FEED_SCOPE.md has 3421 projects and 66 engine versions by offset step 22, while spawn's three-sort limit=48 union has 2848 worlds and 1002 creators; DIFFERENT-DATASET, not a conflict.
+Status: DIFFERENT-DATASET
+Source paths: `/workspace/savi/spawn-engine/FEED_SCOPE.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
+Witness: command output `feed savi=3421/66 spawn=2848/1002`
+Tag: required-in-jayzee
+
+### OPEN-006
+Claim: 2416 verified /cdn/ GLB refs across 399 worlds and 2355 unique sha256 values are a LOWER BOUND for the /cdn/ family only.
+Status: OPEN
+Source paths: `/workspace/spawn/maps/glb-urls-all.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `glb rows=2416 worlds=399 shas=2355 cdn=2416 ok=2416`
+Tag: required-in-jayzee
+
+### OPEN-007
+Claim: spawnfile-family scan covered 16/16 shards and 2848 worlds with 0 refs, 0 worlds and 0 unique URLs, scoped to the scanned set and NOT a proof of universal absence.
+Status: INFERRED
+Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `spawnfile shards=16 worlds=2848 refs=0 worldsWithRefs=0 urls=0`
+Tag: required-in-jayzee
+
+### OPEN-008
+Claim: "all GLBs served only from play.spawn.co/cdn/" is INFERRED, not witnessed.
+Status: INFERRED
+Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output "217:Model URL naming: the only witnessed rule is world.assets/<xx>/~2fcdn~2fvalue.<sha256>.glb.yaml in a file-map value, which maps to /cdn/value.<sha256>.glb. Inferred (not witnessed): that every GLB is served only under play.spawn.co/cdn/"
+Tag: required-in-jayzee
+
+### OPEN-009
+Claim: spawnfile.io model bytes are UNCONFIRMED until a HEAD proof exists.
+Status: UNVERIFIED
+Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`, `/workspace/savi/spawn-engine/ASSETS.md`
+Witness: command output "222:Totals over the 2848 feed worlds: scanned 2848. Spawnfile-family refs: 0 (0 worlds, 0 unique URLs). The spawnfile.io family is not present in any feed world the scanner reached, and the complete key path is still ELIDED (no full example exists). So spawnfile.io bytes stays UNCONFIRMED."
+Observation (scoped, reported by spawn in msg abbc6d6e, not re-run or verified by this session; witness gm run 2026-11-07-10-49-42-a2cf05 seq 53): one page, filtered on /spawnfile|bigspawn/, gave total 30, unique 29, glbLike [], hosts play.bigspawn.net, www.spawn.co, rqr3rdr46-playco.spawnfile.io, and blob: under that host. This is one page only and does not contradict the 0 spawnfile refs over 2848 worlds.
+Tag: required-in-jayzee
+
+### OPEN-010
+Claim: the full spawnfile key path is ELIDED; FAULTS F3 shows world.assets/3d/https~3a~2f~2fspawnfile.io~2f…glb.yaml with no complete example.
+Status: OPEN
+Source paths: `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output "24:- The same line for world.assets/3d/https~3a~2f~2fspawnfile.io~2fprod~2fcharacter-assets~2f...-savi-reduced-fitted.glb.yaml."
+Tag: required-in-jayzee
+
+### OPEN-011
+Claim: MISSING-HEAD CORRECTION is 256; the older 259 list over-counts by 3 head-present missing-manifest worlds, and the 259 list is kept as recorded, not overwritten.
+Status: BEHAVIOUR
+Source paths: `/workspace/spawn/maps/head404-confirmed-worlds.txt`, `/workspace/spawn/maps/head-present-manifest404-worlds.txt`, `/workspace/spawn/maps/open-missing-head-worlds.txt`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
+Witness: command output `head404=256 old259=259 head-present-manifest404=3 subset=256/256 extra=3 head-present-match=3/3 ids=5db79de6dae84ceca2ddb9b9a0e216d9,fd80e9d941624c2fbc48fc89193a7417,ffb0a8fbdca948a5933be7bd62fb44b5`
+Tag: required-in-jayzee
+
+### OPEN-012
+Claim: head status 0 x1 for world 9f7b1a067caa46e2b2c1c7dceb48bc2b is transient with re-check HEAD 200, and manifest 404 x3 had head.json 200 on re-check.
+Status: BEHAVIOUR
+Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/spawn/maps/head-present-manifest404-worlds.txt`
+Witness: command output "223:Stage failures: head 404 x256 (all head_not_found), head status 0 x1 (world 9f7b1a067caa46e2b2c1c7dceb48bc2b, not in the 259 list, HEAD 200 on re-check), manifest 404 x3 (head present, see below)."
+Tag: required-in-jayzee
+
+### OPEN-013
+Claim: 2 open non-CDN refs remain in unverified-noncdn-refs.tsv: one ttf 401 credentialed and one mp4 connection timeout. Reconciled counts are 83 first-seen status-0 refs, 81 resolved HEAD 200 on retry, 2 open and 83 TSV data rows; the earlier 84 counted the header line and 82 was an arithmetic error.
+Status: OPEN
+Source paths: `/workspace/spawn/maps/unverified-noncdn-refs.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
+Witness: command output `noncdn first0=83 retry200=81 open=2 tsvDataRows=83 linesIncludingHeader=84 ttf401=d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed mp4timeout=537d6321e14ca1fec788632ca4dcce598c8c901bdf123681d0119caab7815a2c`
+Tag: required-in-jayzee
+
+### OPEN-014
+Claim: owner-reported 84 first-seen status 0 and 82 resolved on retry are UNVERIFIED; the surviving TSV has 83 zero-status rows and 81 retry-200 rows.
+Status: UNVERIFIED
+Source paths: `/workspace/spawn/maps/unverified-noncdn-refs.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
+Witness: command output `noncdn owner=84/82 lines=84 rows=83 first0=83 retry200=81 open=2 ttf401=d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed mp4timeout=537d6321e14ca1fec788632ca4dcce598c8c901bdf123681d0119caab7815a2c`
+
+### OPEN-015
+Claim: world.assets/<xx>/ bucket rule is UNDETERMINED after 74 tested pairs and no hypothesis is promoted.
+Status: UNVERIFIED
+Source paths: `/workspace/jayzee/docs/PARITY.md`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
+Witness: command output `bucket-rule owner=74-tested-pairs status=UNDETERMINED hypothesis=none-promoted`
+Tag: required-in-jayzee
+
+### OPEN-016
+Claim: name encoder, resolve redirect/gone bodies, manifest frames after the sheet, and ledger bucket rule remain OPEN/UNVERIFIED; only token buckets exist at LagCompensator.js lines 6-7 with capacity 10 and refill 20 per second.
+Status: UNVERIFIED
+Source paths: `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/src/netcode/LagCompensator.js`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/tmp/spoint-parity/GAPS.md`
+Witness: command output `lag constants REWIND_BUCKET_CAPACITY=10 REWIND_REFILL_PER_SEC=20`
+Tag: required-in-jayzee
+
+### OPEN-017
+Claim: with reorder>0, 1011/2000 jayzee transport-sim payloads arrived before minimum latency, so the min-latency gate runs with reorder OFF; this is witnessed behaviour, not a claim about real transports.
+Status: BEHAVIOUR
+Source paths: `/workspace/spoint/src/transport/NetworkSimTransport.js`, `/workspace/spoint/client/core/RenderControls.js`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `transport-sim owner=1011/2000 reorder>0 min-latency-gate=reorder-off`
+Tag: required-in-jayzee
+
+### OPEN-018
+Claim: site/manifest.json was generated at 501c76e while HEAD is 6c39a16, and engine-deep README.md wrongly says savi is not a git repo although it is main to AnEntrypoint/savi.
+Status: OPEN
+Source paths: `/workspace/savi/site/manifest.json`, `/workspace/savi/.spawn/reference/engine-deep/README.md`
+Witness: command output `site commit=501c76e HEAD=6c39a16 branch=main origin=AnEntrypoint/savi`
+
+### OPEN-019
+Claim: CHARTEST-est-s1-3 is a confirmed REAL gap at PlanetFrame.js installGroundSource line 348, where a placement-only prototype-linked install changes the shared base frame's groundSource.
+Status: BEHAVIOUR
+Source paths: `/workspace/spoint/src/terrain/PlanetFrame.js`, `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `real-gaps CHARTEST=REAL WADLER=REAL nonPrdREAL=5 bundleFreshnessRefs=2 deltaUpdateRefs=2 port3002Refs=3 trimeshLogged=true`
+Tag: required-in-jayzee
+
+### OPEN-020
+Claim: other confirmed real gaps are WADLER-relocation-probegroundy, GAP-bundle-freshness with 2 package.json refs to absent `scripts/bundle-freshness-witness.mjs`, GAP-fire-kernel-witness, MSG.DELTA_UPDATE declared but never sent or handled, AppRuntime trimesh failure logged with collider dropped, and port 3002 shared by three world defs.
+Status: OPEN
+Source paths: `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/GAPS.md`, `/tmp/spoint-parity/FAMILIES.md`, `/workspace/spoint/src/sdk/Relocation.js`, `/workspace/spoint/package.json`, `/workspace/spoint/src/shared/fire/fireKernel.js`, `/workspace/spoint/src/protocol/MessageTypes.js`, `/workspace/spoint/src/apps/AppRuntime.js`, `/workspace/spoint/apps/world/tps-game.js`, `/workspace/spoint/apps/world/tutorial.js`, `/workspace/spoint/apps/world/tutorial-rpg.js`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `real-gaps CHARTEST=REAL WADLER=REAL nonPrdREAL=5 bundleFreshnessRefs=2 deltaUpdateRefs=2 port3002Refs=3 trimeshLogged=true`
+Tag: required-in-jayzee
+
+### OPEN-021
+Claim: spoint PRD matrix has 15 open rows classified STALE 11, DOC-ONLY 2, REAL 2; .gm/prd.yml has 103 rows (fixed 34, refuted 28, retired 26, open 15), no row numbered 2-4, 76 tracked verdict paths, and no untracked verdict paths.
+Status: OPEN
+Source paths: `/tmp/spoint-parity/prd-matrix.json`, `/workspace/spoint/.gm/prd.yml`, `/tmp/spoint-parity/INVENTORY.md`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `prd rows=103 fixed=34 refuted=28 retired=26 open=15 numbered2-4=0 trackedVerdictPaths=76 untrackedVerdictPaths=0 matrix STALE=11 DOC-ONLY=2 REAL=2 nonPrdREAL=5`
+Tag: required-in-jayzee
+
+### OPEN-022
+Claim: the 13 unchecked savi/spawn gap-report claims remain open and the 47 checked claims are explicitly NOT independently verified.
+Status: UNVERIFIED
+Source paths: `/workspace/spoint/.gm/witness-out/savi-spawn-feature-gap.md`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `gap unchecked=13 checked=47 total=60 implemented=47`
+Detail: Terrain mark vocabulary and world-def wiring; named terrain field paint with PLAYER and CREATOR layers; decoration item layers and graphics-tier reach; rigged-model ragdoll activation; vibe pattern core and transport; PostFX look DSL and render-graph operators; private preview room and separate publish; browser readiness, fault and chat contract; declarative world tree and state scopes; shared spec parse boundary for all ctx.define* factories; surface the tick drop counter; SES availability preflight with distinct reason codes; fail-loud asset loading gate for model errors.
+Tag: required-in-jayzee
+
+### OPEN-023
+Claim: COVERAGE.md records 26 verbatim job gaps and 5 open items, including the docs-door contradiction, tome INDEX Gaps: 0 scope, shallow CLI reference, API-type update, and guide-job engine clone omission.
+Status: OPEN
+Source paths: `/workspace/savi/.spawn/reference/COVERAGE.md`
+Witness: command output `coverage gaps=26 open-items=5 owner-improvements=5`
+
+### OPEN-024
+Claim: five netcode owner improvements await an owner decision: document 24 undocumented src/netcode modules, size the lag ring from window or clamp to 255 ticks, document WIRE_UNITS_PER_METER, put wire layouts in docs/code, and document gm maxInflight: 8.
+Status: HELD-OWNER
+Source paths: `/workspace/savi/gaps/netcode-optimization-gaps.md`, `/workspace/spoint/src/netcode/LagCompensator.js`, `/tmp/spoint-parity/INVENTORY.md`
+Witness: command output `coverage gaps=26 open-items=5 owner-improvements=5`
+
+### OPEN-025
+Claim: spoint-side HELD-OWNER decisions remain with the owner, never resolved: GAP-bundle-freshness fix choice, 11 STALE PRD rows, spoint PRD items 2-4, four lost verdict files, and Wave C model browser.
+Status: HELD-OWNER
+Source paths: `/tmp/spoint-parity/GAPS.md`, `/tmp/spoint-parity/prd-matrix.json`, `/workspace/spoint/.gm/prd.yml`, `/tmp/spoint-parity/INVENTORY.md`, `/tmp/spoint-parity/FAMILIES.md`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/package.json`
+Witness: command output `held-owner spoint=5 jayzee=2 external=3 total=10 source-paths present=19/19`
+
+### OPEN-026
+Claim: jayzee-side HELD-OWNER decisions remain with the owner, never resolved: jayzee license/visibility and jayzee's 4 node:test suite deletions.
+Status: HELD-OWNER
+Source paths: `/workspace/jayzee/AGENTS.md`, `/workspace/jayzee/package.json`, `/workspace/jayzee/test/world.test.js`, `/workspace/jayzee/test/protocol.test.js`, `/workspace/jayzee/test/kernel.test.js`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `node:test current-suites=3 owner-deletions=4 files=kernel.test.js,oracle.js,protocol.test.js,world.test.js`
+
+### OPEN-027
+Claim: external HELD-OWNER decisions remain with the owner, never resolved: fx-19 push target, txiki.js shim-layer port, and Studio/text-job CDP Hunyuan session.
+Status: HELD-OWNER
+Source paths: `/workspace/gm/work/tooling-fix-units.json`, `/workspace/gm/work/rows/prd-mw698vaf1e27.yml`, `/workspace/thebird/ARCHITECTURE.md`, `/workspace/thebird/DESIGN.md`, `/workspace/hy3d/README.md`, `/workspace/hy4-relay/README.md`, `/workspace/spoint/scripts/lib/cdp-browser.mjs`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `held-owner spoint=5 jayzee=2 external=3 total=10 source-paths present=19/19`
+
+### OPEN-028
+Claim: owner directive requires 93 savi endpoints, 23 served skills, 68 Tome headings and 23 builtin modules; the local corpus reproduces only 21 builtin module names, so the owner's 23 is not reproducible locally and the delta stays open.
+Status: UNVERIFIED
+Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/.spawn/reference/COVERAGE.md`, `/workspace/savi/.spawn/reference/engine-deep/api-b.md`, `/workspace/savi/.spawn/reference/engine/api-reference.md`, `/workspace/jayzee/docs/PARITY.md`
+Witness: command output `reference-counts tome-headings=68 served-skills=23 builtin-module-names=21 owner-directive-builtin-modules=23`; `ls tome/sections | grep -c '^builtin-'` = 21 and `grep -c '| builtin/' engine-deep/api-b.md` = 21, the two sets match exactly; block-shape appears in 4 reference files but has no section or table row, so it is not a module and counting it gives 22; local count stays 21, owner 23 not reproducible locally.
+Tag: required-in-jayzee
+
+## Required feature support
+
+Tag: required-in-jayzee
+
+Jayzee must support the spawn boot chain head.json -> manifests/<hash> -> values/<sha>; file-map key escapes ~2f and ~3a; /cdn/value.<sha>.<ext> content-addressed GLBs with sha256, glTF magic, and HEAD 200 model/gltf-binary; 16-shard HEAD/Range probing with retry and idempotent aggregation; tolerance of 256 missing heads and transient ECONNRESET; bounded-offset feed enumeration with per-sort duplicates; address -> worldId/appId/creator resolution; creator profiles with no direct GLB URLs because models resolve from world state; world-store JSON values for scene, placement, terrain and UI versus binary assets on /cdn/; local store names and derivedGeometry shards:16; LOD format 1.3.0; and 93 savi endpoints, 23 served skills, 68 Tome headings and 23 builtin modules. Naming parity is not required. OPEN-028 records the builtin-module count delta.
+
+Source paths: `/workspace/savi/spawn-engine/FEED_SCOPE.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/spawn/maps/glb-urls-all.tsv`, `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/.spawn/reference/COVERAGE.md`, `/workspace/savi/.spawn/reference/engine-deep/api-b.md`, `/workspace/savi/.spawn/reference/engine/api-reference.md`.
