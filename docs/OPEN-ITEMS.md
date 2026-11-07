@@ -208,3 +208,16 @@ Tag: required-in-jayzee
 Jayzee must support the spawn boot chain head.json -> manifests/<hash> -> values/<sha>; file-map key escapes ~2f and ~3a; /cdn/value.<sha>.<ext> content-addressed GLBs with sha256, glTF magic, and HEAD 200 model/gltf-binary; 16-shard HEAD/Range probing with retry and idempotent aggregation; tolerance of 256 missing heads and transient ECONNRESET; bounded-offset feed enumeration with per-sort duplicates; address -> worldId/appId/creator resolution; creator profiles with no direct GLB URLs because models resolve from world state; world-store JSON values for scene, placement, terrain and UI versus binary assets on /cdn/; local store names and derivedGeometry shards:16; LOD format 1.3.0; and 93 savi endpoints, 23 served skills, 68 Tome headings and 23 builtin modules. Naming parity is not required. OPEN-028 records the builtin-module count delta.
 
 Source paths: `/workspace/savi/spawn-engine/FEED_SCOPE.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/spawn/maps/glb-urls-all.tsv`, `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/.spawn/reference/COVERAGE.md`, `/workspace/savi/.spawn/reference/engine-deep/api-b.md`, `/workspace/savi/.spawn/reference/engine/api-reference.md`
+
+
+Spawn learnings, witnessed in `docs/FEATURESET.md` with exact commands. Figures marked UNVERIFIED there are not claims of fact here.
+
+- Spawnfile-family scan: 16 of 16 shards, 2,848 worlds, 0 refs, scoped to that set and not proof of universal absence (OPEN-007).
+- `/cdn/` GLB family: 2,416 verified refs across 399 worlds and 2,355 unique sha256, each HEAD 200 `model/gltf-binary` with glTF magic. 2,416 is a LOWER BOUND for that family only (OPEN-006).
+- Missing heads: 256 is the correct head404 count. The earlier 259 list over-counts by 3 head-present missing-manifest worlds (OPEN-011, OPEN-012).
+- Non-CDN refs: 83 first-seen status 0, 81 resolved HEAD 200 on retry, 2 open (OPEN-013, OPEN-014).
+- Endpoints: 93 = 39 published + 21 per-game or per-id + 3 disabled + 30 not in spec. HTTP doors: 70 = 17 exercised + 53 documented (REPRODUCED in FEATURESET.md).
+- API types: 305 type files in `.spawn/reference/cli/types/`, plus 3 `_` meta files (308 files total). The live "308 types" claim needs a Bearer token and is UNVERIFIED (OPEN-002).
+- Tome: 68 distinct headings across 69 index rows, with `World Queries` appearing twice. 21 local builtin modules against the owner's 23 (OPEN-028, UNVERIFIED).
+- Reference index total of 208 is not reproduced: the tome bucket measures 75 files (73 `.md`), so the total is 207 or 209 depending on the rule (UNVERIFIED).
+- Jayzee PARITY rows 6-10, 32 and 33 are documented with durable spoint paths and line numbers in `docs/FEATURESET.md`, section "Stream 11". Their closure status is not verified here.
