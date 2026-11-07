@@ -354,7 +354,7 @@ Not folded here, with the reason for each:
 - `EditorHandlers.js`: already excluded, because it has witness scripts.
 - `chartWire.js`: chart re-anchor wire, #19 territory, not verified here.
 - `ServerWeather.js`: fire wind, #23 adjacency, not verified here.
-- `chartState/migratePlayers.js` and `chartState/migrateWorldAnchors.js`: stream 19 walks the `chartState` directory (`src/sdk/chartState/index.js:21` attaches the migrators, and its re-anchor service names have zero matches in that directory). The two files are not named in savi's docs, so their coverage is at directory level under #19, not per file.
+- The two chartState migrators, `migratePlayers.js` and `migrateWorldAnchors.js`, are not folded in this section. They are folded per file in the stream 19 addendum below. An earlier sentence here said savi's docs do not name them, and that was wrong.
 
 These are static claims. No server is started and no migration is run.
 
@@ -446,6 +446,47 @@ Importers, from exact-path `git grep -lE` over `src`, `client`, `apps`, `package
 Witnesses: `git grep -lE "StaticCache|ServerBoot" -- scripts` at `d5e3860` finds no file, so neither module has a witness script. Savi's `docs/JAYZEE-GAPS.md`, `docs/OPEN-ITEMS.md`, `docs/PARITY-INPUTS.md` and `scripts/` name neither module. `docs/FEATURESET.md` names both only as importers and as the not-covered statement in the stream 25 part 2 and stream 27 sections.
 
 These are static claims. No server is booted and no cache is exercised here.
+
+## chartState per-file migrators (stream 19 addendum, spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 4 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. The two migrators are folded per file here, so they are no longer covered at directory level only.
+
+- `src/sdk/chartState/migratePlayers.js:25` (`export function createPlayerMigrator({ playerManager, networkState, lagCompensator, physicsIntegration }) {`): the player migrator factory. The file is 51 lines with one export.
+- `src/sdk/chartState/migrateWorldAnchors.js:5` (`export function createWorldAnchorMigrator({ ctx, stageLoader }) {`): the world-anchor migrator factory. The file is 27 lines with one export.
+- `src/sdk/chartState/index.js:3` (`import { createPlayerMigrator } from './migratePlayers.js'`): the only importer of `migratePlayers.js`.
+- `src/sdk/chartState/index.js:5` (`import { createWorldAnchorMigrator } from './migrateWorldAnchors.js'`): the only importer of `migrateWorldAnchors.js`.
+
+Witnesses: `git grep -l` for either basename under `scripts/` at `d5e3860` finds no file, so neither migrator has a witness script. Neither is imported outside `chartState/index.js`.
+
+These are static claims. No migration is run here.
+
+## Stream 29: client HUD modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 17 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. Spoint's narrowing took the 18 tracked `client/hud/*.js` files and removed `PeerHostUI.js`, which is covered at `docs/FEATURESET.md` line 561. The 17 remaining files total 2254 lines by `wc -l` and carry 31 `export` lines.
+
+- `client/hud/Chat.js:21` (`export function createChatHUD(uiRoot, getBridge) {`): the chat HUD factory. Its importer is `client/app.js`.
+- `client/hud/ChatQuickWheel.js:3` (`export const DEFAULT_QUICK_MESSAGES`): the default quick messages, with a second export; imported by `client/app.js`.
+- `client/hud/EmoteWheel.js:31` (`export function createEmoteWheel(slots) {`): the emote wheel; imported by `client/app.js` and `client/hud/ChatQuickWheel.js`.
+- `client/hud/HudStats.js:3` (`export function publishHudStat(key, value) {`): the HUD stat publisher, with three exports; imported by `client/app.js` and `client/xr/XRSystem.js`.
+- `client/hud/MeshDebugPanel.js:17` (`export function createMeshDebugPanel(uiRoot) {`): the mesh debug panel; imported by `client/app.js` and `client/core/RenderControls.js`.
+- `client/hud/MinimapGlyphs.js:20` (`export function paintChunkGlyphs(ctx, packed, originX, originZ, pxPerMeter, dpr, relief) {`): the chunk glyph painter; imported by `client/hud/MinimapHUD.js`.
+- `client/hud/MinimapHUD.js:28` (`export function minimapGridOrigin(centreM, spanM, cells) {`): the minimap grid origin, with five exports; imported by `client/app.js`.
+- `client/hud/MinimapModels.js:36` (`export function createModelFootprints() {`): the model footprints; imported by `client/hud/MinimapHUD.js`.
+- `client/hud/MinimapPlacements.js:6` (`export const GLYPH_STRIDE = 4`): the glyph stride, with four exports; imported by `client/hud/MinimapGlyphs.js` and `client/hud/MinimapHUD.js`.
+- `client/hud/MobileControlsUI.js:107` (`export function createMobileControlsUI(controls, buttons = DEFAULT_MOBILE_BUTTONS) {`): the mobile controls UI; imported by `client/app.js`.
+- `client/hud/PauseMenu.js:48` (`export function createPauseMenu({ requestPointerLock = null,`): the pause menu; imported by `client/app.js`.
+- `client/hud/RenderDebugPanel.js:3` (`export function leafPhrase(leafOffM) {`): the render debug panel, with four exports; imported by `client/app.js` and `client/core/RenderControls.js`.
+- `client/hud/SettingsMenu.js:80` (`export function createSettingsMenu({ getCam = () => null,`): the settings menu; imported by `client/app.js`.
+- `client/hud/VoiceIndicator.js:43` (`export function createVoiceIndicator(uiRoot, getBridge,`): the voice indicator; imported by `client/app.js`.
+- `client/hud/createLoadingScreen.js:3` (`export function createLoadingScreen(loadingManager) {`): the loading screen; imported by `client/app.js`.
+- `client/hud/createLobby.js:21` (`export function createLobby({ world = null, onClose: onCloseCb = null } = {}) {`): the lobby; imported by `client/app.js`.
+- `client/hud/ensureStyle.js:1` (`export function ensureStyle(id, css) {`): the style helper, imported by ten `client/hud` files, including `PeerHostUI.js`.
+
+Witnesses: `git grep -lwF` over `scripts/` at `d5e3860` finds no file for any of the 17 names.
+
+Savi: the case-sensitive word `Chat` has no hit in `docs/` or `gaps` (the `docs/OPEN-ITEMS.md` line 167 phrase "chat contract" is lowercase and generic). `docs/PARITY-INPUTS.md:42`, `docs/FEATURESET.md:85`, `docs/JAYZEE-GAPS.md:73` and `docs/JAYZEE-GAPS.md:92` are directory-level client lists and name none of the 17 modules.
+
+These are static claims. No HUD is rendered here.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 

@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -339,6 +339,43 @@ const streamTwentyEightNamedInScripts = streamTwentyEightModules.filter((m) => s
 if (streamTwentyEightNamedInScripts.length !== 0) errors.push(`savi scripts name stream 28 modules: ${streamTwentyEightNamedInScripts.join(", ")}`)
 counts.stream28 = { lines: streamTwentyEightLines, exports: streamTwentyEightExports, importersStaticCache: staticCacheImporters.length, witnesses: streamTwentyEightWitnesses.length }
 console.log(`STREAM 28 AT spoint ${spointPin}: ${streamTwentyEightLines} lines, ${streamTwentyEightExports} exports, StaticCache importers ${staticCacheImporters.length}, witnesses ${streamTwentyEightWitnesses.length}`)
+const hudModules = ["Chat", "ChatQuickWheel", "EmoteWheel", "HudStats", "MeshDebugPanel", "MinimapGlyphs", "MinimapHUD", "MinimapModels", "MinimapPlacements", "MobileControlsUI", "PauseMenu", "RenderDebugPanel", "SettingsMenu", "VoiceIndicator", "createLoadingScreen", "createLobby", "ensureStyle"]
+const hudText = (m) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:client/hud/${m}.js`], { encoding: "utf8" })
+const hudLines = hudModules.reduce((sum, m) => sum + hudText(m).split("\n").length - 1, 0)
+if (hudLines !== 2254) errors.push(`spoint client/hud stream 29 at ${spointPin} is ${hudLines} lines, expected 2254`)
+const hudExports = hudModules.reduce((sum, m) => sum + hudText(m).split("\n").filter((l) => l.startsWith("export")).length, 0)
+if (hudExports !== 31) errors.push(`spoint client/hud stream 29 at ${spointPin} has ${hudExports} exports, expected 31`)
+const hudWitnesses = hudModules.filter((m) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lwF", m, spointPin, "--", "scripts"], { encoding: "utf8" }).trim().length > 0 } catch { return false } })
+if (hudWitnesses.length !== 0) errors.push(`client/hud modules have witness scripts at ${spointPin}: ${hudWitnesses.join(", ")}`)
+const hudSection = texts["FEATURESET.md"].split("\n## Stream 29")[1]?.split("\n## ")[0] ?? ""
+const docsOutsideStreamTwentyNine = [texts["FEATURESET.md"].replace(hudSection, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
+const hudNamedInDocs = hudModules.filter((m) => docsOutsideStreamTwentyNine.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (hudNamedInDocs.length !== 0) errors.push(`savi docs outside stream 29 name client/hud modules: ${hudNamedInDocs.join(", ")}`)
+const hudNamedInScripts = hudModules.filter((m) => scriptJsTexts.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (hudNamedInScripts.length !== 0) errors.push(`savi scripts name client/hud modules: ${hudNamedInScripts.join(", ")}`)
+counts.stream29 = { lines: hudLines, exports: hudExports, namedInDocs: hudNamedInDocs.length, namedInScripts: hudNamedInScripts.length }
+console.log(`STREAM 29 AT spoint ${spointPin}: ${hudLines} lines, ${hudExports} exports, witnesses ${hudWitnesses.length}; savi docs name ${hudNamedInDocs.length}; scripts name ${hudNamedInScripts.length}`)
+const chartMigratorModules = ["migratePlayers", "migrateWorldAnchors"]
+const chartMigratorText = (m) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/sdk/chartState/${m}.js`], { encoding: "utf8" })
+const chartMigratorLines = chartMigratorModules.reduce((sum, m) => sum + chartMigratorText(m).split("\n").length - 1, 0)
+if (chartMigratorLines !== 78) errors.push(`chartState migrators at ${spointPin} are ${chartMigratorLines} lines, expected 78`)
+const chartMigratorWitnesses = chartMigratorModules.filter((m) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", m, spointPin, "--", "scripts"], { encoding: "utf8" }).trim().length > 0 } catch { return false } })
+if (chartMigratorWitnesses.length !== 0) errors.push(`chartState migrators have witness scripts at ${spointPin}: ${chartMigratorWitnesses.join(", ")}`)
+counts.chartStateMigrators = { lines: chartMigratorLines, witnesses: chartMigratorWitnesses.length }
+console.log(`CHARTSTATE MIGRATORS AT spoint ${spointPin}: ${chartMigratorLines} lines; witnesses ${chartMigratorWitnesses.length}`)
+const chartAddendum = texts["FEATURESET.md"].split("\n## chartState per-file migrators")[1]?.split("\n## ")[0] ?? ""
+const chartCites = [...chartAddendum.matchAll(streamCitePattern)]
+let chartVerified = 0
+for (const [, path, lineNumber, snippet] of chartCites) {
+  claimsChecked++
+  let source = null
+  try { source = execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:${path}`], { encoding: "utf8" }).split("\n") } catch { source = null }
+  if (source === null) { errors.push(`FEATURESET.md chartState addendum: ${path} is not in spoint at ${spointPin}`); continue }
+  if ((source[Number(lineNumber) - 1] ?? "").includes(snippet)) chartVerified++
+  else errors.push(`FEATURESET.md chartState addendum: ${path}:${lineNumber} does not contain the cited text: ${snippet}`)
+}
+if (chartCites.length !== 4) errors.push(`FEATURESET.md chartState addendum: expected 4 citations, found ${chartCites.length}`)
+console.log(`CHARTSTATE ADDENDUM CITATIONS VERIFIED AGAINST spoint ${spointPin}: ${chartVerified} of ${chartCites.length}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
