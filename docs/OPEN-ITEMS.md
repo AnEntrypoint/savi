@@ -1,6 +1,6 @@
 # Open items
 
-Status values: OPEN, INFERRED, UNVERIFIED, BEHAVIOUR, DIFFERENT-DATASET, HELD-OWNER. HELD-OWNER means awaiting an owner decision and is never a resolved status. Witness lines are command output or file paths. Tag `required-in-jayzee` marks the owner's parity directive; naming parity is not required, and feature support for everything spawn is learning is non-negotiable. Directive sources: `/tmp/spoint-parity/INVENTORY.md`, `/workspace/jayzee/docs/PARITY.md`.
+Status values: OPEN, INFERRED, UNVERIFIED, BEHAVIOUR, DIFFERENT-DATASET, HELD-OWNER. HELD-OWNER means awaiting an owner decision and is never a resolved status. Witness lines are command output or file paths. Tag `required-in-jayzee` marks the owner's parity directive; naming parity is not required, and feature support for everything spawn is learning is non-negotiable. Directive sources: `/workspace/jayzee/docs/PARITY.md`, and the spoint INVENTORY (external, not in this repo).
 
 ## Register
 
@@ -110,7 +110,7 @@ Tag: required-in-jayzee
 ### OPEN-016
 Claim: name encoder, resolve redirect/gone bodies, manifest frames after the sheet, and ledger bucket rule remain OPEN/UNVERIFIED; only token buckets exist at LagCompensator.js lines 6-7 with capacity 10 and refill 20 per second.
 Status: UNVERIFIED
-Source paths: `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/src/netcode/LagCompensator.js`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/tmp/spoint-parity/GAPS.md`
+Source paths: `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/src/netcode/LagCompensator.js`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`
 Witness: command output `lag constants REWIND_BUCKET_CAPACITY=10 REWIND_REFILL_PER_SEC=20`
 Tag: required-in-jayzee
 
@@ -130,28 +130,28 @@ Witness: command output `site commit=501c76e HEAD=6c39a16 branch=main origin=AnE
 ### OPEN-019
 Claim: CHARTEST-est-s1-3 is a confirmed REAL gap at PlanetFrame.js installGroundSource line 348, where a placement-only prototype-linked install changes the shared base frame's groundSource.
 Status: BEHAVIOUR
-Source paths: `/workspace/spoint/src/terrain/PlanetFrame.js`, `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`
+Source paths: `/workspace/spoint/src/terrain/PlanetFrame.js`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `real-gaps CHARTEST=REAL WADLER=REAL nonPrdREAL=5 bundleFreshnessRefs=2 deltaUpdateRefs=2 port3002Refs=3 trimeshLogged=true`
 Tag: required-in-jayzee
 
 ### OPEN-020
 Claim: other confirmed real gaps are WADLER-relocation-probegroundy, GAP-bundle-freshness with 2 package.json refs to absent `scripts/bundle-freshness-witness.mjs`, GAP-fire-kernel-witness, MSG.DELTA_UPDATE declared but never sent or handled, AppRuntime trimesh failure logged with collider dropped, and port 3002 shared by three world defs.
 Status: OPEN
-Source paths: `/tmp/spoint-parity/prd-matrix.json`, `/tmp/spoint-parity/GAPS.md`, `/tmp/spoint-parity/FAMILIES.md`, `/workspace/spoint/src/sdk/Relocation.js`, `/workspace/spoint/package.json`, `/workspace/spoint/src/shared/fire/fireKernel.js`, `/workspace/spoint/src/protocol/MessageTypes.js`, `/workspace/spoint/src/apps/AppRuntime.js`, `/workspace/spoint/apps/world/tps-game.js`, `/workspace/spoint/apps/world/tutorial.js`, `/workspace/spoint/apps/world/tutorial-rpg.js`, `/workspace/jayzee/docs/PARITY.md`
+Source paths: `/workspace/spoint/src/sdk/Relocation.js`, `/workspace/spoint/package.json`, `/workspace/spoint/src/shared/fire/fireKernel.js`, `/workspace/spoint/src/protocol/MessageTypes.js`, `/workspace/spoint/src/apps/AppRuntime.js`, `/workspace/spoint/apps/world/tps-game.js`, `/workspace/spoint/apps/world/tutorial.js`, `/workspace/spoint/apps/world/tutorial-rpg.js`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `real-gaps CHARTEST=REAL WADLER=REAL nonPrdREAL=5 bundleFreshnessRefs=2 deltaUpdateRefs=2 port3002Refs=3 trimeshLogged=true`
 Tag: required-in-jayzee
 
 ### OPEN-021
 Claim: spoint PRD matrix has 15 open rows classified STALE 11, DOC-ONLY 2, REAL 2; .gm/prd.yml has 103 rows (fixed 34, refuted 28, retired 26, open 15), no row numbered 2-4, 76 tracked verdict paths, and no untracked verdict paths.
 Status: OPEN
-Source paths: `/tmp/spoint-parity/prd-matrix.json`, `/workspace/spoint/.gm/prd.yml`, `/tmp/spoint-parity/INVENTORY.md`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`
+Source paths: `/workspace/spoint/.gm/prd.yml`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `prd rows=103 fixed=34 refuted=28 retired=26 open=15 numbered2-4=0 trackedVerdictPaths=76 untrackedVerdictPaths=0 matrix STALE=11 DOC-ONLY=2 REAL=2 nonPrdREAL=5`
 Tag: required-in-jayzee
 
 ### OPEN-022
 Claim: the 13 unchecked savi/spawn gap-report claims remain open and the 47 checked claims are explicitly NOT independently verified.
 Status: UNVERIFIED
-Source paths: `/workspace/spoint/.gm/witness-out/savi-spawn-feature-gap.md`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`
+Source paths: `/workspace/spoint/.gm/witness-out/savi-spawn-feature-gap.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `gap unchecked=13 checked=47 total=60 implemented=47`
 Detail: Terrain mark vocabulary and world-def wiring; named terrain field paint with PLAYER and CREATOR layers; decoration item layers and graphics-tier reach; rigged-model ragdoll activation; vibe pattern core and transport; PostFX look DSL and render-graph operators; private preview room and separate publish; browser readiness, fault and chat contract; declarative world tree and state scopes; shared spec parse boundary for all ctx.define* factories; surface the tick drop counter; SES availability preflight with distinct reason codes; fail-loud asset loading gate for model errors.
 Tag: required-in-jayzee
@@ -165,13 +165,13 @@ Witness: command output `coverage gaps=26 open-items=5 owner-improvements=5`
 ### OPEN-024
 Claim: five netcode owner improvements await an owner decision: document 24 undocumented src/netcode modules, size the lag ring from window or clamp to 255 ticks, document WIRE_UNITS_PER_METER, put wire layouts in docs/code, and document gm maxInflight: 8.
 Status: HELD-OWNER
-Source paths: `/workspace/savi/gaps/netcode-optimization-gaps.md`, `/workspace/spoint/src/netcode/LagCompensator.js`, `/tmp/spoint-parity/INVENTORY.md`
+Source paths: `/workspace/savi/gaps/netcode-optimization-gaps.md`, `/workspace/spoint/src/netcode/LagCompensator.js`
 Witness: command output `coverage gaps=26 open-items=5 owner-improvements=5`
 
 ### OPEN-025
 Claim: spoint-side HELD-OWNER decisions remain with the owner, never resolved: GAP-bundle-freshness fix choice, 11 STALE PRD rows, spoint PRD items 2-4, four lost verdict files, and Wave C model browser.
 Status: HELD-OWNER
-Source paths: `/tmp/spoint-parity/GAPS.md`, `/tmp/spoint-parity/prd-matrix.json`, `/workspace/spoint/.gm/prd.yml`, `/tmp/spoint-parity/INVENTORY.md`, `/tmp/spoint-parity/FAMILIES.md`, `/tmp/spoint-parity/parity-crossmap.json`, `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/package.json`
+Source paths: `/workspace/spoint/.gm/prd.yml`, `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/package.json`
 Witness: command output `held-owner spoint=5 jayzee=2 external=3 total=10 source-paths present=19/19`
 
 ### OPEN-026
