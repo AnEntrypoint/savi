@@ -130,14 +130,14 @@ Scoped to the scanned sets. Sources: `/workspace/spawn/maps/spawn-root-worlds-ma
 
 ## Stream 12: spoint counterparts for jayzee rows 13, 19, 36 and 47 (read-only at `d5e3860`)
 
-Each line gives the durable spoint path and line witness, or the grep that found no counterpart. Jayzee rows are `docs/PARITY.md` at `156a943`. Quoted open-item text for rows 13 and 36 is from that pin; spoint's line citations are unchanged.
+Each line gives the durable spoint path and line witness, or the grep that found no counterpart. Jayzee rows are `docs/PARITY.md` at `2db34a0`. Quoted open-item text for rows 13 and 36 is from that pin; spoint's line citations are unchanged.
 
 - Worker bridge (row 13 open: "the worker bridge, which is injected and has no jayzee adapter"; row 47 partial): `src/sdk/WorkerEntry.js` lines 207-212 hold the `hasWorkerPostMessage` branch, with line 210 creating `WorkerTransport`, line 211 `ctx.onClientConnect(_transport)`, and line 212 `ctx.peerSession?.start()`. `src/transport/WorkerTransport.js` line 22 defines `WorkerTransport extends TransportWrapper`, lines 25-27 the constructor (`type = 'worker'`, `ready = true`), and lines 29-34 `send`, which posts `{ type: 'SEND_CLIENT', data: buf, mt }` with the buffer as a transfer. `client/core/WorkerRenderer.js` exists, and was not read in this pass.
 - TickSystemBase timer (row 13 open: "the TickSystemBase timer"): `src/netcode/TickSystemBase.js` lines 8-23 hold the `_timerGranularityMs` probe, which measures `setTimeout(r, 1)` and keeps the worst value. Line 26 is `export class TickSystemBase`, line 42 `schedulerStats = { ticks, droppedMs, maxLateMs, spinWakeups, timerWakeups }`, and line 73 `getSchedulerStats()`. `start()` is at line 92 and sets `this._timer` at line 113, with `unref()` at line 114. `stop()` at lines 188-190 calls `clearTimeout`. Paused scheduler (a deliberate deviation recorded for jayzee row 13): `git grep -n -E "_schedule\(\) \{|this._state !== 'paused'|this._timer = setTimeout|this._state = 'paused'" -- src/netcode/TickSystemBase.js` gives line 101 `_schedule()`, line 102 `if (!this.running && this._state !== 'paused') return`, line 113 `this._timer = setTimeout(..., Math.max(0, wait))`, and line 176 `this._state = 'paused'`. spoint's `_schedule` still passes the guard while paused and arms a wake. jayzee arms none while paused. This is a difference, not a bug on either side.
 - Stats interval (row 13 open: "the stats interval"): scoped negative for `TickSystemBase`. `git grep -n setInterval -- src/netcode` finds one hit, `src/netcode/PeerSimSession.js` line 135, `statsTimer = setInterval(() => post({ type: 'PEER_STATS', stats: this.getStats() }), STATS_POST_INTERVAL_MS)`. The stats interval lives in `PeerSimSession`, not `TickSystemBase`.
 - Rollback-only PeerSimSession (row 13 open): `src/netcode/PeerSimSession.js` line 16 is `createPeerSimSession(ctx, { roster, localPubkey, post })`, and line 18 refuses a profile not in `PEER_SIMULATED_PROFILES`. Lines 93-98 are `observeRollback` with `before` and `after` snapshots of connected player positions. Lines 117-119 select `buildPeerLoop = PEER_LOOP_FACTORIES[profile.name]`, which throws when a profile has no loop. `src/netcode/peerLoops.js` line 9 is the frozen `PEER_LOOP_FACTORIES`, and line 25 derives `PEER_SIMULATED_PROFILES` from its keys. The rollback factory is located. `git grep -n -E "^export let PEER_LOOP_FACTORIES|^  rollback: \(|^  lockstep: \(" -- src/netcode/peerLoops.js` gives line 9 `export let PEER_LOOP_FACTORIES = Object.freeze({`, line 10 `rollback: (...) => {`, lines 11-14 that build the rollback transport and loops and return `{ loop, transport, voter: null }`, and line 16 where the lockstep entry starts. The rollback-only PeerSimSession stays OPEN.
 - Bandwidth horizons (row 36 open: "bandwidth horizons, which are not in Metrics"): scoped negative: no named bandwidth horizon in the grep set below. `git grep -n -i horizon -- src/sdk/Metrics.js src/netcode src/sdk/TickHandler.js src/sdk/TickHandlerAOI.js` returns only `src/netcode/ConsensusVoter.js` lines 11, 93 and 97, which are checksum horizons. The closest is `src/sdk/TickHandlerAOI.js` line 6, `BANDWIDTH_BUDGET_BYTES_PER_TICK = 900`, with trim constants on lines 7-8, and the trim gate at `src/sdk/TickHandler.js` line 378. These are a per-tick byte budget, not a horizon.
-- Host GC observer (row 36): jayzee ports it as `src/telemetry-pure/gcObserver.js` and lists it under Ported at `156a943`, so it is not an open item there. spoint side: `src/sdk/Metrics.js` line 71 is `createGcTracker()`, line 72 the histogram `spoint_gc_pause_ms`, lines 76-87 a `PerformanceObserver` with `observer.observe({ entryTypes: ['gc'], buffered: false })` at line 87, and line 96 `disconnect()`.
+- Host GC observer (row 36): jayzee ports it as `src/telemetry-pure/gcObserver.js` and lists it under Ported at `2db34a0`, so it is not an open item there. spoint side: `src/sdk/Metrics.js` line 71 is `createGcTracker()`, line 72 the histogram `spoint_gc_pause_ms`, lines 76-87 a `PerformanceObserver` with `observer.observe({ entryTypes: ['gc'], buffered: false })` at line 87, and line 96 `disconnect()`.
 - `/metrics` route (row 36 render): `src/sdk/ServerAPI.js` line 148 routes `GET /metrics` to `handleMetrics`. `src/sdk/ServerAPIRoutes.js` line 112 is `handleMetrics(req, res, ctx)`. `src/sdk/Metrics.js` line 130 is `renderMetrics(sources = {})`, which emits Prometheus text. Consumers are `client/metrics-dashboard.html` line 393, which polls `/metrics`, and `scripts/perf-gate.mjs` line 48.
 - TickHandler wiring (row 19 open: "the full tick ordering (movement, collision, physics, snapshot) has no witness; the tick orchestrator ... not ported"): `src/sdk/TickHandler.js` line 12 imports `recordSnapshotBytes` and `recordTickPhase` from `Metrics.js`. Lines 169 and 181 call `recordSnapshotBytes(buf.length)`. Line 572 calls `recordTickPhase` for `total`, `mv`, `phys` and `snap`, which is the tick ordering with its four phase timers. Line 592 is `onTick.getMetrics`.
 
@@ -239,6 +239,33 @@ Self-produced from `/workspace/spoint` at `d5e3860` (clean tree), not from a pee
 - Protocol version: `src/protocol/MessageTypes.js:1` (`export let WIRE_PROTOCOL_VERSION = 5`). Consumer: `src/client/MessageHandler.js:117` (`if (serverVersion !== WIRE_PROTOCOL_VERSION) {`).
 - Registry: `src/protocol/MessageTypes.js:146` (`export function isRegisteredMessage(id)`), `src/protocol/MessageTypes.js:154` (`export let UNRELIABLE_MSGS = new Set([`). Consumers outside the module: `scripts/src-batch1-rules-witness.mjs:15` (`assert.equal(isRegisteredMessage(unreliableId), true)`) and `scripts/chart-reanchor-wire-harness.mjs:120`.
 - Input codec: `src/protocol/InputCodec.js:5` (`export const MAX_INPUT_BUTTONS = 32`), `src/protocol/InputCodec.js:6` (`export const MAX_INPUTS_PER_PACKET = 8`), `src/protocol/InputCodec.js:18` (`const FLAG_EPOCH_TAGGED = 0x80`), `src/protocol/InputCodec.js:242` (`export function tryEncodeInputPacket(schema, entries, chartEpoch = 0)`). Consumer: `src/client/BaseClient.js:191` (`const packet = tryEncodeInputPacket(schema, entries, this._chart.epoch ?? 0)`).
+
+## Stream 23: fire behaviour modules (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 21 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. The fire kernel under `src/shared/fire/` is covered by PARITY row 26 (GAP-fire-kernel-witness). This stream covers the four behaviour modules that row does not name. Savi's documents name `fireKernel` only.
+
+Weather reading:
+- The two weather constants: `src/behaviours/fireWeather.js:5` (`const NO_WEATHER = Object.freeze({ kind: 'no-weather', intensity: 0, wind: null })`) and `src/behaviours/fireWeather.js:6` (`const UNREADABLE_WEATHER = Object.freeze({ kind: 'unreadable-weather', intensity: 0, wind: null })`).
+- The reader is `src/behaviours/fireWeather.js:18` (`function parseWeather(w) {`). A non-finite intensity returns the unreadable kind at `src/behaviours/fireWeather.js:22` (`return { kind: 'unreadable-weather', intensity: 0, wind }`).
+- The kinds follow the type field: `src/behaviours/fireWeather.js:24` (`if (w.type === 'rain') return { kind: 'rain', intensity, wind }`), `src/behaviours/fireWeather.js:25` (`if (w.type === 'snow') return { kind: 'snow', intensity, wind }`) and `src/behaviours/fireWeather.js:26` (`return { kind: 'dry-other', intensity, wind }`).
+- Snow yields less rain: `src/behaviours/fireWeather.js:31` (`if (reading.kind === 'snow') return Math.round(reading.intensity * config.rainPerIntensity * config.snowRainFraction)`).
+- The factory is `src/behaviours/fireWeather.js:35` (`export function createFireWeather({ config, readWeather, stepTicks, wind: initialWind = [0, 0, 0] }) {`), and each step reads the weather at `src/behaviours/fireWeather.js:45` (`reading = parseWeather(readWeather())`).
+
+Spec and defaults:
+- `src/behaviours/fireSpec.js:4` (`export const DEFAULT_FIRE = Object.freeze({`) and `src/behaviours/fireSpec.js:87` (`export function resolveFireSpec(spec) {`). The helpers are re-exported at `src/behaviours/fireSpec.js:134` (`export { describeValue, isVec3 }`).
+- Gameplay defaults: `src/behaviours/fireSpec.js:145` (`export const DEFAULT_FIRE_GAMEPLAY = Object.freeze({ damageEveryTicks: 15, burnStatusSeconds: 4, statusDamagePerSec: 5`).
+- The rain-per-intensity rule accepts an integer from 0 to 255: `src/behaviours/fireSpec.js:161` (`rainPerIntensity: { rule: 'an integer from 0 to 255'`).
+- Weather defaults: `src/behaviours/fireSpec.js:168` (`export const DEFAULT_FIRE_WEATHER = Object.freeze({ rainPerIntensity: 255, snowRainFraction: 0.25`).
+
+Firebreaks and gameplay:
+- `src/behaviours/fireTerrain.js:1` (`export function createFirebreakFuel({ baseClassAt, breaks, frame, lattice, terrain }) {`). Construction refuses three cases: a non-positive planet radius at `src/behaviours/fireTerrain.js:4` (`frame.radius must be a positive finite number`), water breaks without both samplers at `src/behaviours/fireTerrain.js:8` (`firebreaks.water needs both a height and a sea-level sampler`), and kind breaks without a kind sampler at `src/behaviours/fireTerrain.js:9` (`firebreaks.kinds needs a terrain kind sampler`).
+- The gameplay factory is `src/behaviours/fireGameplay.js:3` (`export function createFireGameplay({ appCtx, gameplay, getWorld, cellOfPosition, frameOf }) {`).
+
+Negatives:
+- `git grep -l -F` over `scripts` at `d5e3860` finds `fireGameplay`, `fireSpec`, `fireTerrain` and `fireWeather` in 0 files each, so none has a witness.
+- Savi's `docs/FEATURESET.md`, `docs/PARITY-INPUTS.md` and `docs/JAYZEE-GAPS.md` each name these four modules 0 times.
+
+These are static claims. The weather contract is pinned by reading the code, and the fire simulation is not run here.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
@@ -415,10 +442,10 @@ These are facts about spoint. They do not change any jayzee row. Jayzee may idea
 The inputs are spawn's scan output, which exists only in spawn's ephemeral directory and has no durable copy here: `dt/results.jsonl` (2580 rows) and `dt/keys.txt`. The aggregates were re-derived from those two files. The decode itself was not re-run, so the result stays scoped to spawn's run.
 
 Four denominators, kept separate:
-- 307 text-visible keys (the earlier census in the escape-token bullet above). This is a different scope.
-- 11987 unique decoded-frame `world.assets` keys. `keys.txt` has 12186 lines, which is 11987 unique keys plus 199 duplicate lines.
+- 307 text-visible keys, spawn-reported and partly re-derived: re-derived here from spawn's `witness/text-visible-307-keys.txt` (spawn-local, not durable in savi) as 307 unique keys, 298 value keys and 9 named keys, with `~2f` 614 occurrences and `~3a` 0 and `~7e` 0. The original 1173-file input (`/tmp/spawn-probe`, ephemeral) is not preserved, and the same script now returns 11987 from newer files, so the 307 stays spawn-reported. This is a different scope.
+- 11987 unique decoded-frame `world.assets` keys. `keys.txt` has 12186 lines, which is 11987 unique keys plus 199 duplicate lines. spawn-reported: its only input is the ephemeral `dt/keys.txt`.
 - 2580 manifests reached. All returned status 200, and 1240 have `world.assets` keys. 1584 have a `/cdn/` slash.
-- 399 worlds with `/cdn/` GLB references. This is the census denominator used elsewhere in this file and is not compared with the rows above.
+- 399 worlds with `/cdn/` GLB references. This is the census denominator used elsewhere in this file and is not compared with the rows above. spawn-reported: its input is the spawn-local `glb-urls-all.tsv`, not a durable file in savi.
 
 Scoped results, decoded-frame scope only, re-derived:
 - Frames 229921, gzip frames 1, decode failures 0.
@@ -442,16 +469,16 @@ These are body-level witnesses from spawn. They are scoped as stated, do not cha
 
 Partial, scoped witnesses from spawn. They do not close OPEN-010 or OPEN-015. Copies are in `/workspace/spawn/maps/witness/encoder-bucket/`. The scripts read `/tmp/spawn-probe` as an ephemeral input (labelled here, not a Source path) and `/workspace/spawn/maps/witness` as the durable input.
 
-- Encoder `/` to `~2f`: `node encoder-test.mjs` gives `distinctKeys` 307, `~2f` escapes 614, `roundTripEncodeOfDecode` 307, and `fails` []. Scope: 307 distinct keys.
+- Encoder `/` to `~2f`: `node encoder-test.mjs` gives `distinctKeys` 307, `~2f` escapes 614, `roundTripEncodeOfDecode` 307, and `fails` []. Scope: 307 distinct keys. Spawn-reported and historical: at the current inputs the same script returns 11987.
 - Encoder `:` to `~3a`: witnessed only in the FAULTS F3 sample (`spawn-engine/FAULTS.md`), not in the 307. OPEN.
 - Encoder `~` to `~7e`: unwitnessed. OPEN.
-- Escape-token census over the reached file-map keys, SCOPED to text-visible keys (spawn-reported; the 307 keys, the `~2f` count and the round trip were re-run here with `spawn-evidence/maps/witness/encoder-bucket/encoder-test.mjs`): distinct keys 307, `~2f` 614 occurrences, round trip 307/307, `fails` []. Spawn-reported, not re-run here: 298 keys start `~2fcdn~2fvalue.` (content-addressed) and 9 start `~2fcdn~2f` with a name rather than a sha; `~3a` is 0 of 307 reached keys (it appears only in the FAULTS F3 sample, the ASSETS.md:35 placeholder and jayzee's fixtures); `~7e` has 0 reached occurrences (only encode code and jayzee's constructed fixture at `check-spawn.mjs:50`); bare tilde 0; spawnfile host 0. The manifest sample binaries have 0 `world.assets` matches, so this census covers text-visible keys only and makes no universal claim.
+- Escape-token census over the reached file-map keys, SCOPED to text-visible keys (spawn-reported; the 307 keys, the `~2f` count and the round trip were reproduced once at the earlier inputs with `spawn-evidence/maps/witness/encoder-bucket/encoder-test.mjs`; at the current inputs that script returns 11987, so the 307 is held open): distinct keys 307, `~2f` 614 occurrences, round trip 307/307, `fails` []. Spawn-reported, not re-run here: 298 keys start `~2fcdn~2fvalue.` (content-addressed) and 9 start `~2fcdn~2f` with a name rather than a sha; `~3a` is 0 of 307 reached keys (it appears only in the FAULTS F3 sample, the ASSETS.md:35 placeholder and jayzee's fixtures); `~7e` has 0 reached occurrences (only encode code and jayzee's constructed fixture at `check-spawn.mjs:50`); bare tilde 0; spawnfile host 0. The manifest sample binaries have 0 `world.assets` matches, so this census covers text-visible keys only and makes no universal claim.
 - Bucket `world.assets/<xx>/`: `node bucket-test.mjs` gives 1163 files, 298 distinct (xx, sha) pairs and 135 buckets. The best of 8 tested hash rules scores 2 matches, which is chance-level, so those rules are NEGATIVE. The rule itself stays OPEN (OPEN-015).
 - `node bucket-test3.mjs` over 279 keys: `frameBody` 0, `frameWhole` 0, `keyText` 0, `valueSha` 0 matches. NEGATIVE for those four.
 
 ## Jayzee gap register
 
-The per-row implementation gaps are in `docs/JAYZEE-GAPS.md`. It maps each FEATURESET group to its jayzee PARITY rows, quotes each open clause at jayzee `156a943`, and tags each gap required-in-jayzee. Rows 13 and 36 are UNVERIFIED as closed: jayzee's PARITY.md still says partial at `156a943`. Rows 62 to 65 are catalogs and are open.
+The per-row implementation gaps are in `docs/JAYZEE-GAPS.md`. It maps each FEATURESET group to its jayzee PARITY rows, quotes each open clause at jayzee `2db34a0`, and tags each gap required-in-jayzee. Rows 13 and 36 are UNVERIFIED as closed: jayzee's PARITY.md still says partial at `2db34a0`. Rows 62 to 65 are catalogs and are open.
 
 ## Feature-support contract
 

@@ -136,8 +136,8 @@ tableRows.forEach((cells, index) => {
   }
 })
 if (tableRows.length !== parityRows.size) errors.push(`JAYZEE-GAPS.md: ${tableRows.length} rows against ${parityRows.size} ranked rows at ${pin}`)
-const expectedOpenWithoutTarget = [9, 32]
-const expectedNamedNotCreated = [9, 23, 32]
+const expectedOpenWithoutTarget = [32]
+const expectedNamedNotCreated = [32]
 const sameList = (a, b) => a.length === b.length && a.every((n, i) => n === b[i])
 if (!sameList(openWithoutTarget, expectedOpenWithoutTarget)) errors.push(`JAYZEE-GAPS.md: feature-coverage rows citing no existing jayzee path are [${openWithoutTarget.join(", ")}], expected [${expectedOpenWithoutTarget.join(", ")}]`)
 if (!sameList(namedNotCreated, expectedNamedNotCreated)) errors.push(`JAYZEE-GAPS.md: open required rows citing a jayzee path not created at ${pin} are [${namedNotCreated.join(", ")}], expected [${expectedNamedNotCreated.join(", ")}]`)
@@ -222,7 +222,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -287,6 +287,23 @@ const v3Phrase = `${v3.rows} rows, ${v3.status200} status 200, ${v3.eof} eof tru
 if (!spawnRecord.includes(v3Phrase)) errors.push(`FEATURESET.md spawn record: durable v3 figures are not stated as "${v3Phrase}"`)
 counts.spawnV3 = v3
 console.log(`SPAWN V3 RE-DERIVED FROM spawn-evidence/data: ${v3Phrase}`)
+const nonDurableDenominators = { textVisibleKeys: 307, uniqueDecodedKeys: 11987, worldsWithCdnGlb: 399 }
+const denominatorProblems = (text) => {
+  const lines = text.split("\n")
+  const problems = []
+  for (const [name, value] of Object.entries(nonDurableDenominators)) {
+    const line = lines.find((l) => denominatorPatterns[name].test(l))
+    if (line === undefined) { problems.push(`${name}: no line states the denominator`); continue }
+    const stated = Number(line.match(denominatorPatterns[name])[1])
+    if (stated !== value) problems.push(`${name} is stated as ${stated}, expected ${value}`)
+    if (!line.includes("spawn-reported")) problems.push(`${name} is not labelled spawn-reported`)
+  }
+  return problems
+}
+const denominatorLabelProblems = denominatorProblems(denominatorSection)
+for (const problem of denominatorLabelProblems) errors.push(`FEATURESET.md denominators: ${problem}`)
+if (denominatorProblems(denominatorSection.replace("307 text-visible keys", "11987 text-visible keys")).length === 0) errors.push("negative witness failed: substituting a different-scope number for a labelled denominator was not refused")
+console.log(`DENOMINATOR LABELS (non-durable figures): ${denominatorLabelProblems.length === 0 ? "all spawn-reported" : denominatorLabelProblems.join("; ")}; substitution negative refused: true`)
 const stream17 = texts["FEATURESET.md"].split("\n## Stream 17")[1]?.split("\n## ")[0] ?? ""
 const stream17Cites = [...stream17.matchAll(/`((?:src|client|apps|scripts)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g)]
 let stream17Verified = 0

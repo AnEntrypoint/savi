@@ -54,6 +54,7 @@ Tag: required-in-jayzee
 ### OPEN-008
 Claim: "all GLBs served only from play.spawn.co/cdn/" is INFERRED, not witnessed.
 Status: INFERRED
+Observation (scoped to spawn's probe of 308 named `/cdn/` keys, not universal): with `.yaml` stripped, 304 of 308 return 302 to a `value-origin` path that is not under `/cdn/`; 302 of those 304 targets return 200 model/gltf-binary and 2 time out. Controls: `.yaml` kept 10 of 10 return 401; value-sha controls 20 of 20 return 200 directly under `/cdn/value.<sha>.glb`; 82 non-CDN rows return 200 and 1 returns 401. The claim stays INFERRED and is weakened for the named-key family only.
 Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output "217:Model URL naming: the only witnessed rule is world.assets/<xx>/~2fcdn~2fvalue.<sha256>.glb.yaml in a file-map value, which maps to /cdn/value.<sha256>.glb. Inferred (not witnessed): that every GLB is served only under play.spawn.co/cdn/"
 Tag: required-in-jayzee
@@ -90,6 +91,7 @@ Tag: required-in-jayzee
 ### OPEN-013
 Claim: 2 open non-CDN refs remain in unverified-noncdn-refs.tsv: one ttf 401 credentialed and one mp4 connection timeout. Reconciled counts are 83 first-seen status-0 refs, 81 resolved HEAD 200 on retry, 2 open and 83 TSV data rows; the earlier 84 counted the header line and 82 was an arithmetic error.
 Status: OPEN
+Detail: the mp4 retry, one GET with `curl -sS -m 60`, returned 200 video/mp4 with 2350318 of 46469835 bytes before the 60 s limit and first bytes `ftyp isom`; the earlier connect timeout did not recur. The full body and sha are UNCONFIRMED. The ttf 401 is a credentialed-looking refusal and is not bypassed.
 Source paths: `/workspace/spawn/maps/unverified-noncdn-refs.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
 Witness: command output `noncdn first0=83 retry200=81 open=2 tsvDataRows=83 linesIncludingHeader=84 ttf401=d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed mp4timeout=537d6321e14ca1fec788632ca4dcce598c8c901bdf123681d0119caab7815a2c`
 Tag: required-in-jayzee
