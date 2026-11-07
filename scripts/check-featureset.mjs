@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages|edge)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4], [50, 4], [51, 7], [52, 6], [53, 3], [54, 3], [55, 3], [56, 4]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4], [50, 4], [51, 7], [52, 6], [53, 3], [54, 3], [55, 3], [56, 4], [57, 7], [58, 4]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -907,6 +907,70 @@ if (candidate54to56Mismatch.length !== 0) errors.push(`stream 54 to 56 candidate
 const candidate54to56ShiftRefused = candidates54to56.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
 if (!candidate54to56ShiftRefused) errors.push("stream 54 to 56 candidate line-shift negative was not refused")
 console.log(`STREAM 54 TO 56 CANDIDATES AT spoint ${spointPin}: ${candidates54to56.length} located, line-shift negative refused: ${candidate54to56ShiftRefused}`)
+const s57 = ["WorldLocator", "RoomHealth", "RoomPick", "RoomRouting", "SceneImport", "TiledImport", "scaffold"]
+if (["WorldLocator", "RoomHealth", "RoomPick", "RoomRouting", "SceneImport", "TiledImport", "scaffold"].map((m) => spointLineCount(`src/sdk/${m}.js`)).reduce((a, b) => a + b, 0) !== 356) errors.push(`stream 57 at ${spointPin} is not 356 lines`)
+const s57Expected = { WorldLocator: ["bin/router-boot.js", "scripts/bake-heightfield.mjs", "scripts/bake-minimap.mjs", "scripts/bake-navmesh.mjs", "scripts/bundle-apps-manifest.mjs", "scripts/chart-reanchor-wire-harness.mjs", "scripts/cluster-world-harness.mjs", "scripts/netcode-conditioner-harness.mjs", "scripts/peer-profile-harness.mjs", "scripts/planet-multiplayer-harness.mjs", "src/sdk/MinimapBake.js", "src/sdk/RoomDirectory.js", "src/sdk/ServerBoot.js"], RoomHealth: [], RoomPick: ["src/sdk/RoomOrchestrator.js"], RoomRouting: ["scripts/room-routing-witness.mjs"], SceneImport: [], TiledImport: [], scaffold: [] }
+if (streamImporterMismatch(s57, s57Expected).length !== 0) errors.push(`stream 57 importers differ: ${streamImporterMismatch(s57, s57Expected).join(", ")}`)
+const worldLocatorWitnesses = behaviouralWitnesses("WorldLocator").sort()
+if (worldLocatorWitnesses.join() !== ["scripts/chart-reanchor-wire-harness.mjs", "scripts/cluster-world-harness.mjs", "scripts/grass-seam-card-witness.mjs", "scripts/planet-multiplayer-harness.mjs", "scripts/shared-lattice-surface-witness.mjs"].join()) errors.push(`stream 57 WorldLocator behavioural witnesses are [${worldLocatorWitnesses.join(", ")}]`)
+const roomRoutingWitnesses = behaviouralWitnesses("RoomRouting").sort()
+if (roomRoutingWitnesses.join() !== ["scripts/room-routing-witness.mjs"].join()) errors.push(`stream 57 RoomRouting behavioural witnesses are [${roomRoutingWitnesses.join(", ")}]`)
+if (["RoomHealth", "RoomPick", "SceneImport", "TiledImport", "scaffold"].some((m) => behaviouralWitnesses(m).length > 0)) errors.push("stream 57 has an unexpected behavioural witness")
+if (spointShow("scripts/lib/verify-doc-claims.mjs").length === 0) errors.push("verify-doc-claims.mjs is missing at spoint")
+console.log(`STREAM 57 AT spoint ${spointPin}: 356 lines (7 modules), importers as cited ${streamImporterMismatch(s57, s57Expected).length === 0}, WorldLocator behavioural ${worldLocatorWitnesses.length}, RoomRouting behavioural ${roomRoutingWitnesses.length}`)
+const s58 = ["NostrAuthServer", "ServerPresence", "RoomDirectory", "AgentAuthoringAPI"]
+if (s58.map((m) => spointLineCount(`src/sdk/${m}.js`)).reduce((a, b) => a + b, 0) !== 510) errors.push(`stream 58 at ${spointPin} is not 510 lines`)
+const s58Expected = { NostrAuthServer: ["src/sdk/ServerHandlers.js"], ServerPresence: ["src/sdk/ServerBoot.js"], RoomDirectory: ["bin/room-worker-boot.js", "src/sdk/RoomProcessWorker.js"], AgentAuthoringAPI: ["src/sdk/ServerAPI.js"] }
+if (streamImporterMismatch(s58, s58Expected).length !== 0) errors.push(`stream 58 importers differ: ${streamImporterMismatch(s58, s58Expected).join(", ")}`)
+if (s58.some((m) => behaviouralWitnesses(m).length > 0)) errors.push("stream 58 has an import-based behavioural witness")
+const verifyApp = spointShow("scripts/verify-app.mjs")
+if (!verifyApp.includes("`${base}/agent/apps`") || !verifyApp.includes("`${base}/agent/entities`") || !verifyApp.includes("RESULT:")) errors.push("stream 58 live /agent/ read-route witness is missing")
+console.log(`STREAM 58 AT spoint ${spointPin}: 510 lines (4 modules), importers as cited ${streamImporterMismatch(s58, s58Expected).length === 0}, live /agent/ read-route witness ${verifyApp.includes("/agent/apps")}`)
+const candidates57to58 = [
+  ["src/sdk/WorldLocator.js", 27, "const requested = name === '' ? null : name"],
+  ["src/sdk/WorldLocator.js", 30, "if (worldName == null) return { name: null, path: null }"],
+  ["src/sdk/WorldLocator.js", 37, "if (!path) return {}"],
+  ["src/sdk/WorldLocator.js", 38, ".default || {})"],
+  ["src/sdk/RoomPick.js", 22, "const requested = request.requestedRoom && open.find("],
+  ["src/sdk/RoomPick.js", 23, "if (requested) return requested"],
+  ["src/sdk/RoomHealth.js", 42, "ratio: ticks ? overBudgetTicks / ticks : 0"],
+  ["src/sdk/SceneImport.js", 8, "if (value == null) return [0, 0, 0]"],
+  ["src/sdk/SceneImport.js", 15, "if (value == null) return [0, 0, 0, 1]"],
+  ["src/sdk/SceneImport.js", 37, "object.scale ?? [1, 1, 1]"],
+  ["src/sdk/SceneImport.js", 38, "custom: object.state && typeof object.state === 'object'"],
+  ["src/sdk/TiledImport.js", 70, "width: map.width,"],
+  ["src/sdk/scaffold.js", 44, "spawnSync('bunx', ['skills', 'add', 'AnEntrypoint/spawnpoint'"],
+  ["src/sdk/scaffold.js", 20, "source = source.replace(ENGINE_DIR_IMPORT"],
+  ["src/sdk/RoomRouting.js", 46, "const requestedRoomId = body.requestedRoomId ?? body.requested ?? null"],
+  ["src/sdk/AgentAuthoringAPI.js", 53, "const token = process.env.SPOINT_AGENT_TOKEN"],
+  ["src/sdk/AgentAuthoringAPI.js", 54, "if (token && req.headers['x-agent-token'] !== token) {"],
+  ["src/sdk/AgentAuthoringAPI.js", 83, "try { content = getTemplateContent(template) } catch { content = null }"],
+  ["src/sdk/AgentAuthoringAPI.js", 122, "const eid = (typeof id === 'string'"],
+  ["src/sdk/AgentAuthoringAPI.js", 125, "const pos = Array.isArray(position)"],
+  ["src/sdk/AgentAuthoringAPI.js", 150, "port: ctx?.port || 3002"],
+  ["src/sdk/AgentAuthoringAPI.js", 170, "json(res, 500, { ok: false, error: String(e?.message || e) })"],
+  ["src/sdk/NostrAuthServer.js", 21, "arr[i] = Math.floor(Math.random() * 256)"],
+  ["src/sdk/NostrAuthServer.js", 9, "catch { _nodeCrypto = false; return false }"],
+  ["src/sdk/NostrAuthServer.js", 44, "try { transport.close() } catch {}"],
+  ["src/sdk/NostrAuthServer.js", 60, ".slice(0, MAX_PUBKEY_LEN)"],
+  ["src/sdk/NostrAuthServer.js", 73, "created_at: payload?.created_at || 0"],
+  ["src/sdk/NostrAuthServer.js", 74, "kind: payload?.kind || NIP98_HTTP_AUTH_KIND"],
+  ["src/sdk/ServerPresence.js", 16, "} catch { }"],
+  ["src/sdk/ServerPresence.js", 20, "await mkdir(join(process.cwd(), 'data')"],
+  ["src/sdk/ServerPresence.js", 94, "try { await publish('offline') } catch { }"],
+  ["src/sdk/ServerPresence.js", 99, "publish('heartbeat').catch(() => {})"],
+  ["src/sdk/RoomDirectory.js", 8, "throw new Error('RoomDirectory requires { sdkRoot }')"],
+  ["src/sdk/RoomDirectory.js", 36, "if (this._reservedPorts.has(port)) throw new Error("],
+  ["src/sdk/RoomDirectory.js", 44, "physicsRadius: worldDef.physicsRadius || 0"],
+  ["src/sdk/RoomDirectory.js", 48, "...opts.configOverrides,"],
+  ["src/sdk/RoomDirectory.js", 88, "handle.server.stop()"],
+  ["src/sdk/RoomDirectory.js", 111, "const avgTickMs = budgets.length ? ts._tickBudgetSum / budgets.length : 0"],
+]
+const candidate57to58Mismatch = candidates57to58.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate57to58Mismatch.length !== 0) errors.push(`stream 57 and 58 candidates not at cited lines: ${candidate57to58Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const candidate57to58ShiftRefused = candidates57to58.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
+if (!candidate57to58ShiftRefused) errors.push("stream 57 and 58 candidate line-shift negative was not refused")
+console.log(`STREAM 57 TO 58 CANDIDATES AT spoint ${spointPin}: ${candidates57to58.length} located, line-shift negative refused: ${candidate57to58ShiftRefused}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()

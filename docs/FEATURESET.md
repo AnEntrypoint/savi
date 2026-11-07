@@ -826,6 +826,31 @@ The four files total 272 lines by `wc -l`: 59, 102, 21 and 90. Savi's docs, gaps
 - `edge/cf-do/jolt-edge-init.js:8` (`export function initJoltForEdge() {`): 21 lines, 1 export. Imported by `edge/cf-do/spoint-do.js`. No tracked witness script at `d5e3860`.
 - `edge/cf-do/spoint-do.js:41` (`export class SpointGameRoom {`): 90 lines, 2 exports, the class and the default Worker export at line 73. Imported by no module, as the Worker entry. No tracked witness script at `d5e3860`.
 
+## Stream 57: src/sdk modules with no per-file citation (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The seven modules total 356 lines by `wc -l`: 39, 52, 30, 51, 58, 76 and 50. The citation test uses the full repository path, so a shorthand name in a list is NOT a citation.
+
+- `src/sdk/WorldLocator.js:7` (`export function worldRoots(project, sdkRoot) {`): 39 lines, 5 exports (`worldRoots`, `findWorldFile`, `readDefaultWorldName`, `locateWorld` and `loadWorldModule`). Imported by 13 tracked files at `d5e3860`, including `bin/router-boot.js`, `src/sdk/MinimapBake.js`, `src/sdk/RoomDirectory.js`, `src/sdk/ServerBoot.js` and the bake and harness scripts. Five RESULT-printing scripts import it and call `loadWorldModule`: `scripts/chart-reanchor-wire-harness.mjs`, `scripts/cluster-world-harness.mjs`, `scripts/grass-seam-card-witness.mjs`, `scripts/planet-multiplayer-harness.mjs` and `scripts/shared-lattice-surface-witness.mjs`. The last two load it through `href(...)`. All five are behavioural witnesses, checked by import and RESULT at `d5e3860`. The stream 57 message's "no witness names it for behaviour" does not hold for this module. `src/static/BakeCodeVersion.js` lists it as a bake input, which is NOT coverage.
+- `src/sdk/RoomHealth.js:1` (`export class RoomHealthError extends Error {`): 52 lines, 2 exports (`RoomHealthError` and `createRoomHealth`). No importer in the tracked tree. No tracked witness script at `d5e3860`.
+- `src/sdk/RoomPick.js:3` (`export class RoomPickError extends Error {`): 30 lines, 2 exports (`RoomPickError` and `selectRoomForJoin`). Imported by `src/sdk/RoomOrchestrator.js`. No tracked witness script at `d5e3860`.
+- `src/sdk/RoomRouting.js:22` (`export function firstOpenRoom(rooms, options = {}) {`): 51 lines, 4 exports. No importer in `src/`. `scripts/room-routing-witness.mjs` imports the exports and prints `RESULT:`, so it is a behavioural witness. That file is the only one.
+- `src/sdk/SceneImport.js:28` (`export function mapSceneObject(object, kindToTemplate, index = 0) {`): 58 lines, 2 exports (`mapSceneObject` and `mapScene`). No importer in the tracked tree. No tracked witness script at `d5e3860`.
+- `src/sdk/TiledImport.js:58` (`export function importTiledMap(map) {`): 76 lines, 1 export. No importer in the tracked tree. No tracked witness script at `d5e3860`.
+- `src/sdk/scaffold.js:34` (`export async function scaffold() {`): 50 lines, 1 export. No importer in the tracked tree. `scripts/lib/verify-doc-claims.mjs` names it in a claim string and imports nothing from it, so that is NOT a witness. No tracked witness script at `d5e3860`.
+
+Disclosed, NOT coverage: the savi lists in `docs/PARITY-INPUTS.md` and `docs/FEATURESET.md` name these modules as shorthand list items. `docs/JAYZEE-GAPS.md` row 50 names `RoomHealth`, `RoomPick` and `RoomRouting` in concept-level prose. `docs/FEATURESET.md` names `WorldLocator` only as an importer of `worldPresets.js` in the stream 33 section.
+
+## Stream 58: src/sdk server presence, room directory, agent authoring and nostr auth modules (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The four modules total 510 lines by `wc -l`: 109, 102, 126 and 173. `ServerWeather.js` is HELD by spoint and is NOT in this stream.
+
+- `src/sdk/NostrAuthServer.js:27` (`export function createNostrAuthServer({ enableChallenge = false, challengeTimeoutMs = DEFAULT_TIMEOUT_MS } = {}) {`): 109 lines, 1 export. Imported by `src/sdk/ServerHandlers.js`. No tracked witness script at `d5e3860`.
+- `src/sdk/ServerPresence.js:37` (`export async function createServerPresence(opts = {}) {`): 102 lines, 1 export. Imported by `src/sdk/ServerBoot.js`. No tracked witness script at `d5e3860`.
+- `src/sdk/RoomDirectory.js:6` (`export class RoomDirectory {`): 126 lines, 1 export. Imported by `bin/room-worker-boot.js` and by the `src/sdk` process worker covered in stream 25, part 2. No tracked witness script at `d5e3860`. The importer-only citation of `RoomDirectory` in that stream 25, part 2 section is NOT coverage.
+- `src/sdk/AgentAuthoringAPI.js:51` (`export function createAgentAuthoringHandler() {`): 173 lines, 1 export. Imported by `src/sdk/ServerAPI.js` and routed for `/agent/` paths. `scripts/verify-app.mjs` calls the read routes `/agent/apps` and `/agent/entities` over HTTP against a live server and prints `RESULT:`. That is a live behavioural witness of the read routes only. The module is not imported there, and no tracked witness covers the write routes.
+
+Disclosed, NOT coverage: `docs/PARITY-INPUTS.md`, `docs/FEATURESET.md` and `docs/JAYZEE-GAPS.md` row 50 list all four modules as concept-level prose. `docs/FEATURESET.md:580` records that `src/sdk/AgentAuthoringAPI.js` names `create-app.js`. That is a reference from another module, and it is NOT coverage of `AgentAuthoringAPI.js`.
+
 ## Improvement opportunities (not behaviour to match)
 
 The owner's rule is that the documented featureset is a floor. Where spoint's design is weaker, jayzee should build the better version, and matching spoint's behaviour is not the requirement. Each item below is spoint's weaker design, recorded here as an improvement opportunity for jayzee.
@@ -1006,6 +1031,40 @@ The items below come from streams 54 to 56. They are GREP-BASED CANDIDATES, not 
 - `edge/cf-do/accept-request.js:4` (`const DEFAULT_ROOM_BINDING = 'SPOINT_GAME_ROOM'`) and `edge/cf-do/accept-request.js:5` (`const DEFAULT_ROOM_KEY = 'probe-room'`): the probe default stays a silent production fallback when the environment value is absent.
 - `edge/cf-do/accept-request.js:32` (`: refused(UPGRADE_REQUIRED_STATUS, 'expected websocket upgrade')`), `edge/cf-do/accept-request.js:43` (`return refused(NO_ROOM_BINDING_STATUS, 'no durable object binding "' + bindingName + '" on this Worker')`) and `edge/cf-do/accept-request.js:51` (`'edge Worker has no STATIC_ORIGIN configured for non-WebSocket requests'`): prose reason strings with no reason code.
 - `edge/cf-do/do-client-probe.mjs:52` (`const rec = players.find(p => Array.isArray(p) && p[0] === playerId) || players[0]`): if the probe's own player is missing, it falls back to the first record, which may belong to another player. A silent default inside a manual probe.
+
+The items below come from streams 57 and 58. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `src/sdk/WorldLocator.js:27` (`const requested = name === '' ? null : name`): an empty name silently means the default world.
+- `src/sdk/WorldLocator.js:30` (`if (worldName == null) return { name: null, path: null }`) and `src/sdk/WorldLocator.js:37` (`if (!path) return {}`): an absent world reaches an empty definition with no refusal. NEEDING A CHECK: whether any caller reaches the `{}` path.
+- `src/sdk/WorldLocator.js:38` (`.default || {})`): an absent default export is silently `{}`.
+- `src/sdk/RoomPick.js:22` (`const requested = request.requestedRoom && open.find(`) and `src/sdk/RoomPick.js:23` (`if (requested) return requested`): a requested room that is not open is ignored silently.
+- `src/sdk/RoomHealth.js:42` (`ratio: ticks ? overBudgetTicks / ticks : 0`): zero stands in for no ticks.
+- `src/sdk/SceneImport.js:8` (`if (value == null) return [0, 0, 0]`) and `src/sdk/SceneImport.js:15` (`if (value == null) return [0, 0, 0, 1]`): an absent position or rotation becomes the origin or the identity, with no refusal. `src/sdk/SceneImport.js:37` (`object.scale ?? [1, 1, 1]`) is a literal default.
+- `src/sdk/SceneImport.js:38` (`custom: object.state && typeof object.state === 'object'`): a non-object state silently becomes `{}`.
+- `src/sdk/TiledImport.js:70` (`width: map.width,`): the map width is passed through unvalidated.
+- `src/sdk/scaffold.js:44` (`spawnSync('bunx', ['skills', 'add', 'AnEntrypoint/spawnpoint'`): a remote package is fetched at run time with no version pin and no confirmation. A supply-chain observation for review, not a verdict.
+- `src/sdk/scaffold.js:20` (`source = source.replace(ENGINE_DIR_IMPORT`): NEEDING A CHECK on whether `ENGINE_DIR_IMPORT` covers every engine directory.
+- `src/sdk/RoomRouting.js:46` (`const requestedRoomId = body.requestedRoomId ?? body.requested ?? null`): two field names are accepted silently.
+- `src/sdk/AgentAuthoringAPI.js:53` (`const token = process.env.SPOINT_AGENT_TOKEN`) and `src/sdk/AgentAuthoringAPI.js:54` (`if (token && req.headers['x-agent-token'] !== token) {`): if the token is unset the check is skipped, so the `/agent/` routes run unauthenticated. SECURITY CANDIDATE, NEEDING A CHECK against a live server. This is read from source and has not been run.
+- `src/sdk/AgentAuthoringAPI.js:83` (`try { content = getTemplateContent(template) } catch { content = null }`): any template error is reported as an unknown template.
+- `src/sdk/AgentAuthoringAPI.js:122` (`const eid = (typeof id === 'string'`): an invalid or taken id is silently replaced by a generated id.
+- `src/sdk/AgentAuthoringAPI.js:125` (`const pos = Array.isArray(position)`): an invalid position falls back to a default position with no refusal.
+- `src/sdk/AgentAuthoringAPI.js:150` (`port: ctx?.port || 3002`): a literal default port.
+- `src/sdk/AgentAuthoringAPI.js:170` (`json(res, 500, { ok: false, error: String(e?.message || e) })`): the error message is echoed to the client.
+- `src/sdk/NostrAuthServer.js:21` (`arr[i] = Math.floor(Math.random() * 256)`): the challenge nonce falls back to `Math.random()` when no secure source is available. NEEDING A CHECK on reachability.
+- `src/sdk/NostrAuthServer.js:9` (`catch { _nodeCrypto = false; return false }`) and `src/sdk/NostrAuthServer.js:44` (`try { transport.close() } catch {}`): silent catches.
+- `src/sdk/NostrAuthServer.js:60` (`.slice(0, MAX_PUBKEY_LEN)`): the pubkey is truncated silently instead of refused.
+- `src/sdk/NostrAuthServer.js:73` (`created_at: payload?.created_at || 0`) and `src/sdk/NostrAuthServer.js:74` (`kind: payload?.kind || NIP98_HTTP_AUTH_KIND`): silent defaults.
+- `src/sdk/ServerPresence.js:16` (`} catch { }`): an empty catch on the identity file. NEEDING A CHECK on whether an unparsable identity file is silently replaced with a new key.
+- `src/sdk/ServerPresence.js:20` (`await mkdir(join(process.cwd(), 'data')`): the failure is ignored, and the identity path is built from the working directory, not the project root.
+- `src/sdk/ServerPresence.js:94` (`try { await publish('offline') } catch { }`): silent.
+- `src/sdk/ServerPresence.js:99` (`publish('heartbeat').catch(() => {})`): heartbeat failures never surface.
+- `src/sdk/RoomDirectory.js:8` (`throw new Error('RoomDirectory requires { sdkRoot }')`): a prose error with no reason code. The same holds for the other refusals in this module.
+- `src/sdk/RoomDirectory.js:36` (`if (this._reservedPorts.has(port)) throw new Error(`): an explicit port is checked only against in-flight reservations. NEEDING A CHECK.
+- `src/sdk/RoomDirectory.js:44` (`physicsRadius: worldDef.physicsRadius || 0`): silent zero defaults.
+- `src/sdk/RoomDirectory.js:48` (`...opts.configOverrides,`): the spread comes last, so overrides can replace `port`, `worldPath` or `appsDirs`.
+- `src/sdk/RoomDirectory.js:88` (`handle.server.stop()`): not inside a try. NEEDING A CHECK on whether a throw leaves a stale handle registered.
+- `src/sdk/RoomDirectory.js:111` (`const avgTickMs = budgets.length ? ts._tickBudgetSum / budgets.length : 0`): a zero average stands in for no ticks yet.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
