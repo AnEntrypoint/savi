@@ -113,6 +113,7 @@ Status: UNVERIFIED
 Source paths: `/workspace/jayzee/docs/PARITY.md`, `/workspace/spoint/src/netcode/LagCompensator.js`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`
 EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/GAPS.md`
 Witness: command output `lag constants REWIND_BUCKET_CAPACITY=10 REWIND_REFILL_PER_SEC=20`
+Scoped note (spawn body witnesses, UNVERIFIED beyond scope): manifest frames after the sheet are witnessed for 3 manifests only, chain exact to EOF with every frame body in the sheet. The ordered frame-to-hash mapping and the other 396 worlds are UNCHECKED. Resolve redirects (308/307) and the 400 body are witnessed; gone 410 was not reached in 22 probes, so it stays OPEN. Witness copies at /workspace/spawn/maps/witness/. Status unchanged.
 Tag: required-in-jayzee
 
 ### OPEN-017
