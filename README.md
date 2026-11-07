@@ -9,6 +9,7 @@ Some files are not published and are left out of the build.
 ## Build locally
 
     npm run build
+    npm run endpoints
     npm run check
 
 The generated site is in site/. No npm packages are required.
