@@ -192,7 +192,8 @@ Witness: command output `node:test current-suites=3 owner-deletions=4 files=kern
 ### OPEN-027
 Claim: external HELD-OWNER decisions remain with the owner, never resolved: fx-19 push target, txiki.js shim-layer port, and Studio/text-job CDP Hunyuan session.
 Status: HELD-OWNER
-Source paths: `/workspace/gm/work/tooling-fix-units.json`, `/workspace/gm/work/rows/prd-mw698vaf1e27.yml`, `/workspace/thebird/ARCHITECTURE.md`, `/workspace/thebird/DESIGN.md`, `/workspace/hy3d/README.md`, `/workspace/hy4-relay/README.md`, `/workspace/spoint/scripts/lib/cdp-browser.mjs`, `/workspace/jayzee/docs/PARITY.md`
+Detail: the gm row file under work/rows was removed by gm commit 03183ad ("close prd-mw698vaf1e27"); the durable closure pointer is `/workspace/gm/closes/prd-mw698vaf1e27.txt`, and `gm.prd_list status open` returned (none), per orchestrate's read-only check.
+Source paths: `/workspace/gm/work/tooling-fix-units.json`, `/workspace/gm/closes/prd-mw698vaf1e27.txt`, `/workspace/thebird/ARCHITECTURE.md`, `/workspace/thebird/DESIGN.md`, `/workspace/hy3d/README.md`, `/workspace/hy4-relay/README.md`, `/workspace/spoint/scripts/lib/cdp-browser.mjs`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `held-owner spoint=5 jayzee=2 external=3 total=10 source-paths present=19/19`
 
 ### OPEN-028

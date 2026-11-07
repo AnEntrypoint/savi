@@ -58,6 +58,13 @@ for (const path of workspacePaths) {
   if (!existsSync(path)) errors.push(`missing cited path: ${path}`)
 }
 
+const closedPointers = (body) => (body.match(/\/workspace\/gm\/closes\/[A-Za-z0-9_.\/-]+/g) || []).map((path) => path.replace(/[.,;:)\]]+$/, ""))
+const closedPointerErrors = (body) => closedPointers(body).filter((path) => !existsSync(path)).map((path) => `closed-row pointer does not resolve: ${path}`)
+for (const item of items) errors.push(...closedPointerErrors(item.body.join("\n")))
+const negativeWitness = closedPointerErrors("Source paths: `/workspace/gm/closes/no-such-closure-for-negative-witness.txt`")
+if (negativeWitness.length !== 1) errors.push("negative witness failed: a nonexistent closes pointer was not refused")
+console.log(`CLOSED-ROW POINTERS: ${items.reduce((n, item) => n + closedPointers(item.body.join("\n")).length, 0)} cited, negative witness refused ${negativeWitness.length}`)
+
 console.log(`OPEN-ITEMS COUNT: ${items.length}`)
 console.log(`CITED WORKSPACE PATHS: ${workspacePaths.length}`)
 for (const error of errors) console.log(`ERROR: ${error}`)

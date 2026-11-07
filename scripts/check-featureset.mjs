@@ -234,6 +234,38 @@ for (const [, path, lineNumber, snippet] of stream17Cites) {
 }
 counts.stream17 = { citations: stream17Cites.length, verified: stream17Verified }
 console.log(`STREAM 17 CITATIONS VERIFIED AGAINST spoint ${spointPin}: ${stream17Verified} of ${stream17Cites.length}`)
+const stream18 = texts["FEATURESET.md"].split("\n## Stream 18")[1]?.split("\n## ")[0] ?? ""
+const stream18Cites = [...stream18.matchAll(/`((?:src|client|apps|scripts)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g)]
+let stream18Verified = 0
+for (const [, path, lineNumber, snippet] of stream18Cites) {
+  claimsChecked++
+  let source = null
+  try { source = execFileSync("git", ["-C", spointRoot, "show", `d5e3860:${path}`], { encoding: "utf8" }).split("\n") } catch { source = null }
+  if (source === null) { errors.push(`FEATURESET.md stream 18: ${path} is not in spoint at d5e3860`); continue }
+  if ((source[Number(lineNumber) - 1] ?? "").includes(snippet)) stream18Verified++
+  else errors.push(`FEATURESET.md stream 18: ${path}:${lineNumber} does not contain the cited text: ${snippet}`)
+}
+if (stream18Cites.length !== 25) errors.push(`FEATURESET.md stream 18: expected 25 citations, found ${stream18Cites.length}`)
+const scopedNegatives = [
+  ["Content-Security-Policy|Strict-Transport-Security", "", 0],
+  ["Cross-Origin-Resource-Policy", "", 0],
+  ["Access-Control-Allow-Origin", "", 1],
+  ["rate.?limit", "src/sdk/UploadHandler.js src/sdk/StaticHandler.js src/sdk/llmJobs.js", 0],
+]
+const negativeCounts = scopedNegatives.map(([pattern, paths, expected]) => {
+  const args = ["-C", spointRoot, "grep", "-i", "-c", "-E", pattern, "d5e3860", "--", ...(paths ? paths.split(" ") : ["src"])]
+  let out = ""
+  try { out = execFileSync("git", args, { encoding: "utf8" }) } catch { out = "" }
+  const lines = out.split("\n").filter(Boolean).reduce((n, row) => n + Number(row.split(":").pop()), 0)
+  if (lines !== expected) errors.push(`FEATURESET.md stream 18 negative ${pattern} expected ${expected}, counted ${lines}`)
+  return lines
+})
+const callSites = execFileSync("git", ["-C", spointRoot, "grep", "-c", "timingSafeTokenEqual(", "d5e3860", "--", "src"], { encoding: "utf8" }).split("\n").filter(Boolean).map((row) => row.split(":").pop())
+if (callSites.join(",") !== "3,1,1") errors.push(`FEATURESET.md stream 18: timingSafeTokenEqual call sites are ${callSites.join(",")}, expected 3,1,1`)
+counts.stream18 = { citations: stream18Cites.length, verified: stream18Verified }
+console.log(`STREAM 18 CITATIONS VERIFIED AGAINST spoint d5e3860: ${stream18Verified} of ${stream18Cites.length}`)
+console.log(`STREAM 18 SCOPED NEGATIVES (CSP+HSTS, CORP, ACAO, rate limit): ${negativeCounts.join(", ")}`)
+console.log(`STREAM 18 timingSafeTokenEqual CALL SITES (ServerAPIRoutes, ServerHandlers, authCompare): ${callSites.join(", ")}`)
 console.log(`FEATURESET CHECK FILES: ${files.length}`)
 console.log(`CITED WORKSPACE PATHS: ${counts.workspacePaths}`)
 console.log(`TMP REFERENCES LABELLED: ${counts.tmpReferences}`)
