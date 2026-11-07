@@ -683,6 +683,25 @@ Each line gives `path:line` and the first export at `d5e3860`. The three modules
 
 Witness-less: `VegetationBuild` and `VegImpostorTier`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for either.
 
+## Stream 43: WebGPU instancing pair with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The two modules total 1247 lines by `wc -l`: `client/core/WebGPULodInstancer.js` 970 and `client/core/WebGPUInstancing.js` 277. Savi's docs and scripts have zero case-insensitive word hits for either basename, `WebGPU instancing` or `instancing`.
+
+- `client/core/WebGPULodInstancer.js:7` (`export const LOD_REEVAL_MOVE_M = 0.5`): 970 lines, 2 exports. Imported by `client/core/Vegetation.js`, which is stream 42, and by `scripts/.veg-lod-mismatch-probe.mjs`. Three scripts name it: `scripts/.veg-lod-mismatch-probe.mjs`, `scripts/.veg-lod-path-probe.mjs` and `scripts/.veg-lod-stream-control.mjs`. None of the three prints a `RESULT:` line, so none is a witness under the check rule (exit 0 plus `RESULT: PASS`). The stream-control script defines its own copy of the instancer and does not import this module, so it exercises a copy, not the module.
+- `client/core/WebGPUInstancing.js:8` (`export function isWebGPUInstancingSupported(renderer) {`): 277 lines, 5 exports. Imported by nine `client/core` modules already cited in streams 35, 36, 40 and 42: `Grass.js`, `GrassTSL.js`, `PlayerLOD.js`, `PlayerLODTSL.js`, `PlayerVAT.js`, `PlayerVATTSL.js`, `VegImpostorTier.js`, `Weather.js` and `WeatherMaterialsTSL.js`. Those are importer-only citations of this module, so they are NOT coverage. No witness.
+
+Witness-less: `WebGPUInstancing`. `git grep -lwF` over `scripts/` returns no file for it. `WebGPULodInstancer` has three script names and no behavioural witness.
+
+## Stream 44: render graph and program readiness modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The three modules total 789 lines by `wc -l`: `client/core/RenderGraph.js` 273, `client/core/RenderGraph.nodes.js` 234 and `client/core/ProgramReadiness.js` 282. Savi's docs and scripts have zero case-insensitive word hits for the three basenames, `render graph`, `rendergraph`, `render node` and `program readiness`. `readiness` appears in unrelated PR and terrain text.
+
+- `client/core/RenderGraph.js:1` (`export function createRenderGraph(nodes, opts = {}) {`): 273 lines, 1 export. Imported by `client/app.js`. Witnessed by two behavioural scripts, `scripts/postfx-graph-structure-witness.mjs` and `scripts/postfx-render-graph-witness.mjs`. Each imports the module and prints `RESULT:`.
+- `client/core/RenderGraph.nodes.js:29` (`export function buildRenderSectionNodes() {`): 234 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/ProgramReadiness.js:3` (`export function renderDeferringUnreadyPrograms(renderer, scene, camera) {`): 282 lines, 8 exports. Imported by `client/app.js`, `client/core/Grass.js`, `client/core/PlacementScheduler.js`, `client/core/RenderGraph.nodes.js`, `client/core/Rocks.js`, `client/core/SSAO.js`, `client/core/SSR.js`, `client/core/SceneSetup.js`, `client/core/ThreeVdrs.js` and `client/core/Vegetation.js`. Most of those are already cited in streams 35, 39, 41 and 42, and they are importer-only, so they are NOT coverage. Witnessed by `scripts/program-readiness-render-witness.mjs`, which imports the module and prints `RESULT:`. `scripts/lint/comment-lint.mjs` also names it, as a lint scope, which is not a behavioural witness.
+
+Witness-less: `RenderGraph.nodes`.
+
 ## Improvement opportunities (not behaviour to match)
 
 The owner's rule is that the documented featureset is a floor. Where spoint's design is weaker, jayzee should build the better version, and matching spoint's behaviour is not the requirement. Each item below is spoint's weaker design, recorded here as an improvement opportunity for jayzee.
@@ -755,6 +774,21 @@ The items below come from stream 42. They are GREP-BASED CANDIDATES, not verifie
 - `client/core/Vegetation.js:262` logs and rethrows a species failure, which is consistent with the AGENTS.md rule, so it is not a candidate.
 
 The note below is a DOCUMENTATION IMPROVEMENT OPPORTUNITY, scoped to one example in savi's reference. Savi's reference gives `new LineBasicNodeMaterial({ color, linewidth: 3 })` at `.spawn/reference/engine/api-reference.md:2198`, and `.spawn/reference/engine-deep/api-b.md:309` says `linewidth` is in CSS pixels at every distance. Jayzee's gate at `37bd320` accepts the example as written (`scripts/check-savi-builtin-three.mjs:94`), and jayzee keeps this note OPEN in its AGENTS.md. The claim that three's public docs give a line width of 1 on most WebGL platforms, so that `Line2NodeMaterial` may be needed for every-distance width, is NOT verified here: three is not installed in this repository, and the claim is recorded as the reviewer's statement, not a checked fact.
+
+The items below come from streams 43 and 44. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce. Items marked NEEDING A CHECK are not yet verified in what they do.
+
+- `client/core/WebGPULodInstancer.js:139` (`const hysteresis = Number.isFinite(opts.hysteresis) ? opts.hysteresis : 0`) and `:140` and `:141` (`shadowDistance` with `-1` as its no-shadow value): a non-finite option silently takes a default, and the `-1` sentinel stands in for "no shadow" without a refusal.
+- `client/core/WebGPULodInstancer.js:296` (`return rec === null || rec === undefined ? -1 : id`): `-1` is the sentinel for absence.
+- `client/core/WebGPUInstancing.js:14` (`if (!interleaved) throw new Error(`): a prose `Error` with no code at a refusal boundary.
+- `client/core/RenderGraph.js:22` (`const t = (n.targets && n.targets[key]) || key`): a silent default for a missing target name.
+- `client/core/RenderGraph.js:151` (`if (hook && (typeof hook.before !== 'function'`): a prose `TypeError`. A null hook clears the profiler.
+- `client/core/RenderGraph.js:227` (`try { node.run(ctx) } catch (e) { ... _nodeThrew(node.id, e, graph.frameId); return }`): NEEDING A CHECK. The node's failure is caught and `_nodeThrew` runs, but what `_nodeThrew` reports has not been verified here.
+- `client/core/RenderGraph.nodes.js:39` (`ctx.vegetation ? ctx.vegetation.renderDistance || 0 : 0`): a zero stands in for an absent distance, which AGENTS.md's no-sentinel-for-absence rule forbids.
+- `client/core/RenderGraph.nodes.js:56` (`const planetRadius = (ctx.terrainBackdrop.planet && ctx.terrainBackdrop.planet.radius) || 63600`): a silent literal default for a planet radius.
+- `client/core/RenderGraph.nodes.js:170` (`const scale = +RenderControls.get('threeVdrsScale') || 1.0`): a stored 0 is replaced by 1.0.
+- `client/core/ProgramReadiness.js:5` (`renderer.deferredProgramDraws = renderer.deferredProgramDraws || 0`): writes a property onto the renderer when it is absent.
+- `client/core/ProgramReadiness.js:93` and `:206` (`window.__spointAsyncPipelineEscort !== false` and `window.__spointDeferFirstUse !== false`): default-on flags, so an absent global enables the path.
+- `client/core/ProgramReadiness.js:18`, `:114` and `:242` (`} catch (e) {`): NEEDING A CHECK. What these blocks do with the error has not been verified here.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 

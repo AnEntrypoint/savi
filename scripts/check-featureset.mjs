@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -598,6 +598,46 @@ const docNoteJayzee = (() => { try { return execFileSync("git", ["-C", "/workspa
 if (!docNoteSavi) errors.push("documentation note: the savi LineBasicNodeMaterial or linewidth reference line is not where it is cited")
 if (!docNoteJayzee) errors.push(`documentation note: jayzee check-savi-builtin-three.mjs:94 does not name linewidth 3 at ${pin}`)
 console.log(`IMPROVEMENT CANDIDATES 42 AT spoint ${spointPin}: ${candidates42.length} located, documentation note savi ${docNoteSavi}, jayzee ${docNoteJayzee}`)
+const s43 = ["WebGPULodInstancer", "WebGPUInstancing"]
+if (coreLines(s43) !== 1247) errors.push(`stream 43 at ${spointPin}: ${coreLines(s43)} lines, expected 1247`)
+const s43Probes = spointWitnessFiles("WebGPULodInstancer").sort()
+if (s43Probes.join() !== ["scripts/.veg-lod-mismatch-probe.mjs", "scripts/.veg-lod-path-probe.mjs", "scripts/.veg-lod-stream-control.mjs"].sort().join()) errors.push(`stream 43 WebGPULodInstancer script names are [${s43Probes.join(", ")}]`)
+const s43WithResult = s43Probes.filter((f) => spointShow(f).includes("RESULT"))
+if (s43WithResult.length !== 0) errors.push(`stream 43 probes print RESULT and would be witnesses: ${s43WithResult.join(", ")}`)
+if (coreWitnessed(["WebGPUInstancing"]).length !== 0) errors.push("stream 43 WebGPUInstancing has a witness")
+if (s43.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 42 name stream 43 modules: ${s43.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 43 AT spoint ${spointPin}: ${coreLines(s43)} lines, probes ${s43Probes.length} with RESULT ${s43WithResult.length}, WebGPUInstancing witness-less, savi names ${s43.filter(saviNamesModule).length}`)
+const s44 = ["RenderGraph", "RenderGraph.nodes", "ProgramReadiness"]
+if (coreLines(s44) !== 789) errors.push(`stream 44 at ${spointPin}: ${coreLines(s44)} lines, expected 789`)
+const rgWitnesses = spointWitnessFiles("RenderGraph").sort()
+if (rgWitnesses.join() !== ["scripts/postfx-graph-structure-witness.mjs", "scripts/postfx-render-graph-witness.mjs"].sort().join()) errors.push(`stream 44 RenderGraph witnesses are [${rgWitnesses.join(", ")}]`)
+if (!rgWitnesses.every((f) => spointShow(f).includes("RESULT"))) errors.push("stream 44 RenderGraph witness does not print RESULT")
+const prWitnesses = spointWitnessFiles("ProgramReadiness").sort()
+if (!prWitnesses.includes("scripts/program-readiness-render-witness.mjs") || !spointShow("scripts/program-readiness-render-witness.mjs").includes("RESULT")) errors.push("stream 44 ProgramReadiness behavioural witness is missing or prints no RESULT")
+if (spointWitnessFiles("RenderGraph.nodes").length !== 0) errors.push("stream 44 RenderGraph.nodes has a witness")
+if (s44.some(saviNamesModule)) errors.push(`savi docs or scripts outside streams 32 to 42 name stream 44 modules: ${s44.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 44 AT spoint ${spointPin}: ${coreLines(s44)} lines, RenderGraph witnesses ${rgWitnesses.length} (RESULT), ProgramReadiness behavioural ${prWitnesses.includes("scripts/program-readiness-render-witness.mjs")}, RenderGraph.nodes witness-less, savi names ${s44.filter(saviNamesModule).length}`)
+const candidates43to44 = [
+  ["client/core/WebGPULodInstancer.js", 139, "const hysteresis = Number.isFinite(opts.hysteresis) ? opts.hysteresis : 0"],
+  ["client/core/WebGPULodInstancer.js", 140, "const shadowDistSq = Number.isFinite(opts.shadowDistance)"],
+  ["client/core/WebGPULodInstancer.js", 141, "const shadowOnSq = Number.isFinite(opts.shadowDistance)"],
+  ["client/core/WebGPULodInstancer.js", 296, "return rec === null || rec === undefined ? -1 : id"],
+  ["client/core/WebGPUInstancing.js", 14, "if (!interleaved) throw new Error("],
+  ["client/core/RenderGraph.js", 22, "const t = (n.targets && n.targets[key]) || key"],
+  ["client/core/RenderGraph.js", 151, "if (hook && (typeof hook.before !== 'function'"],
+  ["client/core/RenderGraph.js", 227, "try { node.run(ctx) } catch (e) {"],
+  ["client/core/RenderGraph.nodes.js", 39, "ctx.vegetation ? ctx.vegetation.renderDistance || 0 : 0"],
+  ["client/core/RenderGraph.nodes.js", 56, "const planetRadius = (ctx.terrainBackdrop.planet && ctx.terrainBackdrop.planet.radius) || 63600"],
+  ["client/core/RenderGraph.nodes.js", 170, "const scale = +RenderControls.get('threeVdrsScale') || 1.0"],
+  ["client/core/ProgramReadiness.js", 5, "renderer.deferredProgramDraws = renderer.deferredProgramDraws || 0"],
+  ["client/core/ProgramReadiness.js", 93, "return typeof window === 'undefined' || window.__spointAsyncPipelineEscort !== false"],
+  ["client/core/ProgramReadiness.js", 206, "return typeof window === 'undefined' || window.__spointDeferFirstUse !== false"],
+  ["client/core/ProgramReadiness.js", 18, "} catch (e) {"],
+  ["client/core/ProgramReadiness.js", 114, "} catch (e) {"],
+  ["client/core/ProgramReadiness.js", 242, "} catch (e) {"],
+]
+const candidate43Mismatch = candidates43to44.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate43Mismatch.length !== 0) errors.push(`stream 43 and 44 candidates not at cited lines: ${candidate43Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
