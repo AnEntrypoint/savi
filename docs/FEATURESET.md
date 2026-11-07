@@ -388,6 +388,36 @@ Directory-level disclosure: `JAYZEE-GAPS.md` row 53 names buoyancy, fluid, destr
 
 These are static claims. No behaviour is run here.
 
+## Stream 27: src/apps modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 19 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. Spoint's narrowing took the 23 tracked `src/apps/*.js` files and removed 4 with a case-sensitive savi basename hit (AppContext, AppRuntime, Progression, Ragdoll), which leaves these 19. They total 2545 lines by `wc -l` and 54 `export` lines. Importers were re-derived with exact-path `git grep -lE` at `d5e3860` and match spoint's list.
+
+- `src/apps/AccountState.js:6` (`export class AccountStateError extends Error {`): imported by `src/apps/AppRuntime.js`; no witness script.
+- `src/apps/AppBehaviours.js:9` (`export const BEHAVIOUR_FACTORIES = Object.freeze({`): imported by `src/apps/AppRuntime.js`; no witness script.
+- `src/apps/AppGameplay.js:21` (`export const MAX_FOOTPRINT_INTRUSION_M = 0.15`): imported by `client/app.js`, `client/editor/sdk-typings.generated.d.ts`, `src/apps/AccountState.js` and `src/apps/AppContext.js`; no witness script.
+- `src/apps/AppLoader.js:29` (`export class AppLoader {`): imported by `src/sdk/WorkerEntry.js` and `src/sdk/server.js`; witnessed by `scripts/app-loader-refusal-witness.mjs`.
+- `src/apps/AppPhysics.js:13` (`export function parseInteractable(config = {}) {`): imported by `src/apps/AppContext.js`, `src/apps/AppRuntime.js` and `src/apps/AppRuntimePhysics.js`; no witness script.
+- `src/apps/AppRuntimePhysics.js:5` (`export function mixinPhysics(runtime) {`): imported by `src/apps/AppRuntime.js`; no witness script.
+- `src/apps/AppRuntimeState.js:33` (`export { containedAssetPath, tagAppState, untagAppState,`): imported by `src/apps/AppRuntime.js`; no witness script.
+- `src/apps/AppRuntimeStaticMotion.js:4` (`export function captureTransform(xf, e) {`): imported by `src/apps/AppRuntime.js`, `src/apps/AppRuntimeTick.js` and `src/static/BakeCodeVersion.js`. The last is an importer only; stream 22 does not name this module.
+- `src/apps/AppRuntimeTick.js:11` (`export function mixinTick(runtime) {`): imported by `src/apps/AppRuntime.js` and `src/static/BakeCodeVersion.js` (importer only); no witness script.
+- `src/apps/AppSeats.js:1` (`export class SeatError extends Error {`): imported by `src/apps/AppRuntime.js`; no witness script.
+- `src/apps/ComponentPool.js:10` (`export function createComponentPool(spec) {`): imported by `apps/_lib/ComponentPool.js`, `src/behaviours/health.js`, `src/behaviours/steering.js` and `src/sdk/scaffold.js`; no witness script.
+- `src/apps/CustomVersion.js:1` (`export function installCustomVersion(entity) {`): imported by `src/apps/AppRuntime.js`; no witness script.
+- `src/apps/EcsEntityMap.js:7` (`export function createEcsEntityMap() {`): imported by `src/apps/AppRuntime.js` and `src/static/BakeCodeVersion.js` (importer only); no witness script.
+- `src/apps/EventBus.js:1` (`export class EventBus {`): imported by `src/apps/AppRuntime.js`, `src/sdk/WorkerEntry.js` and `src/sdk/server.js`; no witness script.
+- `src/apps/HotReloadQueue.js:3` (`export class HotReloadQueue {`): imported by `src/apps/AppRuntime.js`; no witness script.
+- `src/apps/SurfaceSelector.js:3` (`export function parseSurfaceSelector(spec) {`): imported by `client/core/MobileControls.js`; no witness script.
+- `src/apps/SurfaceSelectorRuntime.js:7` (`export function createSurfaceSelectorRuntime({ labels = {}, maxSwapsPerSecond = 4, now,`): imported by `scripts/touch-selector-channels-witness.mjs`, which is its witness.
+- `src/apps/appImports.js:1` (`export const ENGINE_ALIASES = Object.freeze({`): imported by `client/BrowserServer.js`, `src/apps/AppLoader.js`, `src/apps/appsManifest.js`, `scripts/check-app-imports.mjs` and `scripts/static-export.mjs`; witnessed by `check-app-imports.mjs` and `static-export.mjs`.
+- `src/apps/appsManifest.js:10` (`export function resolveAppEntry(name, dirs) {`): imported by `src/sdk/ServerBoot.js` (an importer only; ServerBoot is not covered by stream 18 and is not claimed here), `scripts/bundle-apps-manifest.mjs` and `scripts/static-export.mjs`; witnessed by `bundle-apps-manifest.mjs` and `static-export.mjs`.
+
+Negatives: `git grep -lE "/<name>\.js['\"]"` over `scripts/*.mjs` and `scripts/*.js` at `d5e3860` finds no file for the 15 modules with no witness script (AccountState, AppBehaviours, AppGameplay, AppPhysics, AppRuntimePhysics, AppRuntimeState, AppRuntimeStaticMotion, AppRuntimeTick, AppSeats, ComponentPool, CustomVersion, EcsEntityMap, EventBus, HotReloadQueue, SurfaceSelector). Savi's `docs/` and `scripts/` name none of the 19 modules, except `AppBehaviours`, which appears only as an importer in four of the stream 26 citations. That is disclosed here and not claimed for stream 26. Conversely, `steering` appears in this section only as the importer `src/behaviours/steering.js` of `ComponentPool`, a disclosed mention for stream 26.
+
+Directory-level disclosure: `JAYZEE-GAPS.md:65` (row 32, apps runtime) is jayzee's family-level status. `docs/FEATURESET.md:116` names only `AppRuntime.js` line 430. The consumers of `src/apps/AppContext.js` named at `docs/FEATURESET.md` lines 173 to 181 are excluded from this stream.
+
+These are static claims. No app is loaded or run here.
+
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the snippet at `d5e3860`. The citations were re-read from `git -C /workspace/spoint show d5e3860:<path>`, and the line counts were checked: `src/connection/SessionStore.js` has 121 lines and `src/stage/Stage.js` has 109. Nothing was written into spoint. Savi's documents name `SessionStore` 0 times and `StageLoader` 0 times.

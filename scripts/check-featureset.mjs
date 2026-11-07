@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -299,12 +299,31 @@ if (projectileImporters.length !== 0) errors.push(`projectile.js has exact-path 
 const behaviourSection = texts["FEATURESET.md"].split("\n## Stream 26")[1]?.split("\n## ")[0] ?? ""
 const docsOutsideStreamTwentySix = [texts["FEATURESET.md"].replace(behaviourSection, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
 const behaviourNamedInDocs = behaviourModules.filter((m) => docsOutsideStreamTwentySix.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
-if (behaviourNamedInDocs.length !== 0) errors.push(`savi docs outside stream 26 name behaviour modules: ${behaviourNamedInDocs.join(", ")}`)
+if (behaviourNamedInDocs.join() !== ["steering"].join()) errors.push(`savi docs outside stream 26 name behaviour modules [${behaviourNamedInDocs.join(", ")}], expected [steering] (stream 27 importer citation)`)
 const scriptJsTexts = walk(join(savi, "scripts")).filter((f) => /\.(mjs|js)$/.test(f) && !f.endsWith("check-featureset.mjs")).map((f) => readFileSync(f, "utf8"))
 const behaviourNamedInScripts = behaviourModules.filter((m) => scriptJsTexts.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
 if (behaviourNamedInScripts.length !== 0) errors.push(`savi scripts name behaviour modules: ${behaviourNamedInScripts.join(", ")}`)
 counts.stream26 = { lines: behaviourLines, exports: behaviourExports, namedInDocs: behaviourNamedInDocs.length, namedInScripts: behaviourNamedInScripts.length }
 console.log(`STREAM 26 AT spoint ${spointPin}: ${behaviourLines} lines, ${behaviourExports} exports, projectile importers ${projectileImporters.length}; savi docs name ${behaviourNamedInDocs.length}; scripts name ${behaviourNamedInScripts.length}`)
+const appModules = ["AccountState", "AppBehaviours", "AppGameplay", "AppLoader", "AppPhysics", "AppRuntimePhysics", "AppRuntimeState", "AppRuntimeStaticMotion", "AppRuntimeTick", "AppSeats", "ComponentPool", "CustomVersion", "EcsEntityMap", "EventBus", "HotReloadQueue", "SurfaceSelector", "SurfaceSelectorRuntime", "appImports", "appsManifest"]
+const appText = (m) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/apps/${m}.js`], { encoding: "utf8" })
+const appLines = appModules.reduce((sum, m) => sum + appText(m).split("\n").length - 1, 0)
+if (appLines !== 2545) errors.push(`spoint src/apps stream 27 at ${spointPin} is ${appLines} lines, expected 2545`)
+const appExports = appModules.reduce((sum, m) => sum + appText(m).split("\n").filter((l) => l.startsWith("export")).length, 0)
+if (appExports !== 54) errors.push(`spoint src/apps stream 27 at ${spointPin} has ${appExports} exports, expected 54`)
+const appsWithNoWitness = ["AccountState", "AppBehaviours", "AppGameplay", "AppPhysics", "AppRuntimePhysics", "AppRuntimeState", "AppRuntimeStaticMotion", "AppRuntimeTick", "AppSeats", "ComponentPool", "CustomVersion", "EcsEntityMap", "EventBus", "HotReloadQueue", "SurfaceSelector"]
+for (const m of appsWithNoWitness) {
+  const hits = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lE", `/${m}\\.js['"]`, spointPin, "--", "scripts/*.mjs", "scripts/*.js"], { encoding: "utf8" }).split("\n").filter(Boolean) } catch { return [] } })()
+  if (hits.length !== 0) errors.push(`${m} has a witness script at ${spointPin}: ${hits.join(", ")}`)
+}
+const appSection = texts["FEATURESET.md"].split("\n## Stream 27")[1]?.split("\n## ")[0] ?? ""
+const docsOutsideStreamTwentySeven = [texts["FEATURESET.md"].replace(appSection, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")]
+const appNamedInDocs = appModules.filter((m) => docsOutsideStreamTwentySeven.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (appNamedInDocs.join() !== ["AppBehaviours"].join()) errors.push(`savi docs outside stream 27 name app modules [${appNamedInDocs.join(", ")}], expected [AppBehaviours] (stream 26 importer citations)`)
+const appNamedInScripts = appModules.filter((m) => scriptJsTexts.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (appNamedInScripts.length !== 0) errors.push(`savi scripts name app modules: ${appNamedInScripts.join(", ")}`)
+counts.stream27 = { lines: appLines, exports: appExports, namedInDocs: appNamedInDocs, namedInScripts: appNamedInScripts.length }
+console.log(`STREAM 27 AT spoint ${spointPin}: ${appLines} lines, ${appExports} exports; witness-less negatives refused: ${appsWithNoWitness.length}; savi docs name ${appNamedInDocs.join(",")} (disclosed); scripts name ${appNamedInScripts.length}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
