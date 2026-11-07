@@ -4,7 +4,7 @@ Read-only survey of morluto/rea (public) for PR 9234, `fix(javascript): keep cas
 
 **Status: the CI failure's cause is confirmed in the cited observations and the fix passes CI on `32df15f`; the rea test output and root-cause interpretation remain open for independent review.**
 
-**Validation caveat: facts audit NOT RUN (two API 502 errors); links/file-list/push-claim audit NOT RUN (agent stopped before returning a result). The words verified, confirmed, resolved and passed below record cited observations, not an independently audited pass.**
+**Validation caveat: facts audit NOT RUN (retry fork hung through a bounded wait and was stopped without a result); links/file-list/push-claim audit PASS (0 public URLs, 0 markdown links, 10 local path references checked; generated NodeNext `tests/support/cli/cliFixture.js` import specifier is not a committed-source failure; PR diff 4/4, head delta 3/3, commit/run/job refs resolved, 0 positive upstream push/ready/re-run claims, 0 Co-Authored-By lines). The words verified, confirmed, resolved and passed below record cited observations, not an independently audited pass.**
 
 ## Summary
 
