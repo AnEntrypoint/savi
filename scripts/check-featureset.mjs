@@ -229,8 +229,8 @@ const spointRoot = "/workspace/spoint"
 const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
-const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4], [50, 4], [51, 7], [52, 6], [53, 3]]) {
+const streamCitePattern = /`((?:src|client|apps|scripts|packages|edge)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4], [50, 4], [51, 7], [52, 6], [53, 3], [54, 3], [55, 3], [56, 4]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -835,6 +835,78 @@ if (candidate50to53Mismatch.length !== 0) errors.push(`stream 50 to 53 candidate
 const candidate50to53ShiftRefused = candidates50to53.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
 if (!candidate50to53ShiftRefused) errors.push("stream 50 to 53 candidate line-shift negative was not refused")
 console.log(`STREAM 50 TO 53 CANDIDATES AT spoint ${spointPin}: ${candidates50to53.length} located, line-shift negative refused: ${candidate50to53ShiftRefused}`)
+const s54 = ["FluidSurface", "MapspinnerWebGPUFeasibility", "StaticInstanceStore"]
+if (spointLineCount("client/core/FluidSurface.js") + spointLineCount("client/core/MapspinnerWebGPUFeasibility.js") + spointLineCount("client/core/StaticInstanceStore.js") !== 613) errors.push(`stream 54 at ${spointPin} is not 613 lines`)
+const s54Expected = { FluidSurface: ["client/EntityLoaderMeshBuild.js"], MapspinnerWebGPUFeasibility: [], StaticInstanceStore: ["client/EntityLoader.js"] }
+if (streamImporterMismatch(s54, s54Expected).length !== 0) errors.push(`stream 54 importers differ: ${streamImporterMismatch(s54, s54Expected).join(", ")}`)
+if (noTrackedBehaviouralWitness(s54).length !== 0) errors.push("stream 54 has a behavioural witness")
+if (spointWitnessFiles("MapspinnerWebGPUFeasibility").length !== 0) errors.push("stream 54 MapspinnerWebGPUFeasibility has a script hit")
+if (s54.filter(saviNamesModule).length !== 0) errors.push(`savi names outside streams name stream 54 modules: ${s54.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 54 AT spoint ${spointPin}: 613 lines (3 modules), importers as cited ${streamImporterMismatch(s54, s54Expected).length === 0}, behavioural witnesses 0`)
+const s55 = ["ThreeVdrs", "TerrainBackdrop", "SceneSetup"]
+if (spointLineCount("client/core/ThreeVdrs.js") + spointLineCount("client/core/TerrainBackdrop.js") + spointLineCount("client/core/SceneSetup.js") !== 1035) errors.push(`stream 55 at ${spointPin} is not 1035 lines`)
+const s55Expected = { ThreeVdrs: ["client/app.js"], TerrainBackdrop: ["client/app.js"], SceneSetup: ["client/app.js"] }
+if (streamImporterMismatch(s55, s55Expected).length !== 0) errors.push(`stream 55 importers differ: ${streamImporterMismatch(s55, s55Expected).join(", ")}`)
+if (noTrackedBehaviouralWitness(s55).length !== 0) errors.push("stream 55 has a behavioural witness")
+const sceneSetupSourceWitness = spointShow("scripts/three-loader-error-witness.mjs")
+if (!sceneSetupSourceWitness.includes("readFileSync('client/core/SceneSetup.js'") || !sceneSetupSourceWitness.includes("RESULT")) errors.push("stream 55 SceneSetup source-text witness is missing or prints no RESULT")
+if (spointWitnessFiles("TerrainBackdrop").some((f) => spointShow(f).includes("RESULT") && importsModule("TerrainBackdrop", spointShow(f)))) errors.push("stream 55 TerrainBackdrop has an import-based witness")
+if (s55.filter(saviNamesModule).length !== 0) errors.push(`savi names outside streams name stream 55 modules: ${s55.filter(saviNamesModule).join(", ")}`)
+console.log(`STREAM 55 AT spoint ${spointPin}: 1035 lines (3 modules), importers as cited ${streamImporterMismatch(s55, s55Expected).length === 0}, behavioural witnesses 0, SceneSetup source-text witness ${sceneSetupSourceWitness.includes("readFileSync('client/core/SceneSetup.js'")}`)
+const s56Lines = ["edge/cf-do/accept-request.js", "edge/cf-do/do-client-probe.mjs", "edge/cf-do/jolt-edge-init.js", "edge/cf-do/spoint-do.js"].reduce((sum, p) => sum + spointLineCount(p), 0)
+if (s56Lines !== 272) errors.push(`stream 56 at ${spointPin}: ${s56Lines} lines, expected 272`)
+const edgeImportersOf = (base) => spointGrep(["-lE", `(from|import\\(|href\\()\\s*['"][^'"]*${base}['"]`, spointPin, "--", "src", "client", "apps", "packages", "scripts", "bin", "edge"]).map((l) => l.replace(`${spointPin}:`, "")).filter((f) => !f.endsWith(`${base.replace(/\\/g, "")}`))
+if (!sameSet(edgeImportersOf("/accept-request\\.js"), ["edge/cf-do/spoint-do.js"])) errors.push("stream 56 accept-request importers differ")
+if (!sameSet(edgeImportersOf("/jolt-edge-init\\.js"), ["edge/cf-do/spoint-do.js"])) errors.push("stream 56 jolt-edge-init importers differ")
+if (edgeImportersOf("/spoint-do\\.js").length !== 0) errors.push("stream 56 spoint-do has an importer")
+if (edgeImportersOf("/do-client-probe\\.mjs").length !== 0) errors.push("stream 56 do-client-probe has an importer")
+if (behaviouralWitnesses("accept-request").length !== 0 || behaviouralWitnesses("jolt-edge-init").length !== 0) errors.push("stream 56 has a behavioural witness")
+if (spointShow("edge/cf-do/do-client-probe.mjs").includes("RESULT:")) errors.push("stream 56 do-client-probe prints RESULT and would be a witness")
+const s56Named = ["accept-request", "do-client-probe", "jolt-edge-init", "spoint-do", "SpointGameRoom"].filter(saviNamesModule)
+if (s56Named.length !== 0) errors.push(`savi names outside streams name stream 56 modules: ${s56Named.join(", ")}`)
+console.log(`STREAM 56 AT spoint ${spointPin}: ${s56Lines} lines (4 files), importers as cited, behavioural witnesses 0, RESULT in do-client-probe 0`)
+const candidates54to56 = [
+  ["client/core/MapspinnerWebGPUFeasibility.js", 150, "rationale: '613 gl.* call sites across 5 files."],
+  ["client/core/StaticInstanceStore.js", 55, "try { bucket.bvh = new MeshBVH(bucket.geometry) } catch (e) { }"],
+  ["client/core/StaticInstanceStore.js", 60, "if (_entityToSlot.has(entityId)) return entityId"],
+  ["client/core/StaticInstanceStore.js", 9, "let _capacity = Math.max(64, opts.initialCapacity || 1024)"],
+  ["client/core/StaticInstanceStore.js", 82, "if (slot == null) return false"],
+  ["client/core/StaticInstanceStore.js", 94, "if (slot == null || !_active[slot]) return null"],
+  ["client/core/StaticInstanceStore.js", 105, "if (slot == null || !_active[slot]) return -1"],
+  ["client/core/StaticInstanceStore.js", 120, "return slot == null ? -1 : _lodTier[slot]"],
+  ["client/core/FluidSurface.js", 135, "const ox = originPos?.[0] || 0"],
+  ["client/core/FluidSurface.js", 142, "if (!Number.isFinite(minX)) return null"],
+  ["client/core/FluidSurface.js", 146, "if (n2d === 0) return null"],
+  ["client/core/TerrainBackdrop.js", 30, "import('/node_modules/mapspinner/src/tsl/planet-tsl.js').catch(() => {})"],
+  ["client/core/TerrainBackdrop.js", 210, "} catch (_) { glTex = null }"],
+  ["client/core/TerrainBackdrop.js", 272, "} catch (_) {}"],
+  ["client/core/TerrainBackdrop.js", 300, "} catch (_) {}"],
+  ["client/core/TerrainBackdrop.js", 42, "const radius = cfg.radius || 6360000"],
+  ["client/core/TerrainBackdrop.js", 185, "const epoch = Number.isFinite(frame.chartEpoch) ? frame.chartEpoch : 0"],
+  ["client/core/ThreeVdrs.js", 169, "const s = Math.min(1.0, Math.max(0.3, scale || 1.0))"],
+  ["client/core/ThreeVdrs.js", 248, "export const THREE_VDRS_WEBGPU_UNSUPPORTED = "],
+  ["client/core/ThreeVdrs.js", 240, "if (on !== appliedOn) { window.__threeVdrs = on; appliedOn = on }"],
+  ["client/core/SceneSetup.js", 18, "if (typeof window !== 'undefined' && !Number.isFinite(window.__fogFar)) window.__fogFar = 200"],
+  ["client/core/SceneSetup.js", 323, "const _far = s.fogFar ?? 200"],
+  ["client/core/SceneSetup.js", 69, "} catch (_) { return false }"],
+  ["client/core/SceneSetup.js", 312, "MeshoptDecoder.useWorkers(2)"],
+  ["client/core/SceneSetup.js", 164, "if (!probeWebGL2()) { const e = new Error('WebGL2 is not available'); e.code = 'NO_WEBGL2'; throw e }"],
+  ["edge/cf-do/jolt-edge-init.js", 12, "WebAssembly.instantiate(wasmModule, imports).then(instance => {"],
+  ["edge/cf-do/spoint-do.js", 63, "server.accept()"],
+  ["edge/cf-do/spoint-do.js", 32, "} catch (e) { return false }"],
+  ["edge/cf-do/spoint-do.js", 37, "try { this.ws.close() } catch (e) {}"],
+  ["edge/cf-do/accept-request.js", 4, "const DEFAULT_ROOM_BINDING = 'SPOINT_GAME_ROOM'"],
+  ["edge/cf-do/accept-request.js", 5, "const DEFAULT_ROOM_KEY = 'probe-room'"],
+  ["edge/cf-do/accept-request.js", 32, ": refused(UPGRADE_REQUIRED_STATUS, 'expected websocket upgrade')"],
+  ["edge/cf-do/accept-request.js", 43, "return refused(NO_ROOM_BINDING_STATUS,"],
+  ["edge/cf-do/accept-request.js", 51, "'edge Worker has no STATIC_ORIGIN configured for non-WebSocket requests'"],
+  ["edge/cf-do/do-client-probe.mjs", 52, "const rec = players.find(p => Array.isArray(p) && p[0] === playerId) || players[0]"],
+]
+const candidate54to56Mismatch = candidates54to56.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate54to56Mismatch.length !== 0) errors.push(`stream 54 to 56 candidates not at cited lines: ${candidate54to56Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const candidate54to56ShiftRefused = candidates54to56.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
+if (!candidate54to56ShiftRefused) errors.push("stream 54 to 56 candidate line-shift negative was not refused")
+console.log(`STREAM 54 TO 56 CANDIDATES AT spoint ${spointPin}: ${candidates54to56.length} located, line-shift negative refused: ${candidate54to56ShiftRefused}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()

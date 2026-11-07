@@ -801,6 +801,31 @@ The three modules total 348 lines by `wc -l`: 78, 140 and 130. Savi's docs, gaps
 - `client/core/TimeOfDay.js:52` (`export function createTimeOfDay(sun, ambient, opts = {}) {`): 140 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`. Its state is read through the globals `window.__timeOfDay` and `window.__timeOfDayApi`. `scripts/tsl-parity/bodies.mjs` drives `window.__timeOfDayApi`, which makes it a consumer of the global. That is NOT a per-file mention of the module.
 - `client/core/WorldPanels.js:83` (`export function createWorldPanels(THREE, scene) {`): 130 lines, 2 exports (`WorldPanelError` and `createWorldPanels`). Imported by `client/AppModuleSystem.js`. No tracked witness script at `d5e3860`.
 
+## Stream 54: client/core fluid surface, mapspinner feasibility probe and static instance store modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The three modules total 613 lines by `wc -l`: 237, 195 and 181. Savi's docs, gaps and scripts have zero word-bounded hits for `FluidSurface`, `MapspinnerWebGPUFeasibility` and `StaticInstanceStore`.
+
+- `client/core/FluidSurface.js:10` (`export function sampleScalarField(positions, count, minX, minZ, maxX, maxZ, smoothingRadius, cellSize) {`): 237 lines, 4 exports (`sampleScalarField`, `marchingSquares`, `findBoundaryEdges` and `buildFluidSurfaceMesh`). Imported by `client/EntityLoaderMeshBuild.js`, which takes `buildFluidSurfaceMesh`. No tracked witness script at `d5e3860`.
+- `client/core/MapspinnerWebGPUFeasibility.js:154` (`export function runFeasibilityProbe() {`): 195 lines, 1 export. No importer and no `scripts/` reference at `d5e3860`. No tracked witness script at `d5e3860`.
+- `client/core/StaticInstanceStore.js:8` (`export function createStaticInstanceStore(opts = {}) {`): 181 lines, 1 export. Imported by `client/EntityLoader.js`. No tracked witness script at `d5e3860`.
+
+## Stream 55: client/core three VDRS, terrain backdrop and scene setup modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The three modules total 1035 lines by `wc -l`: 259, 310 and 466. Savi's FEATURESET names each of them only as an importer of other modules. Those citations are NOT coverage and are disclosed below.
+
+- `client/core/ThreeVdrs.js:80` (`export class ThreeVdrs {`): 259 lines, 4 exports (`ThreeVdrs`, `createThreeVdrsController`, `THREE_VDRS_WEBGPU_UNSUPPORTED` and `installThreeVdrs`). Imported by `client/app.js`. No tracked witness script at `d5e3860`. The importer-only citation in the stream 44 section names it as an importer of `ProgramReadiness.js`. That citation is NOT coverage.
+- `client/core/TerrainBackdrop.js:35` (`export async function createTerrainBackdrop(renderer, scene, cfg = {}) {`): 310 lines, 2 exports (`prewarmMapspinnerPlanetModules` and `createTerrainBackdrop`). Imported by `client/app.js`. No tracked witness script at `d5e3860`. `scripts/lib/verify-doc-claims.mjs` names the module only in line-keyed claim maps. It is a doc-claim checker, so it is NOT a behavioural witness and NOT coverage. The importer-only citations in the stream 33 and stream 37 sections are NOT coverage either.
+- `client/core/SceneSetup.js:14` (`export function createScene() {`): 466 lines, 21 export statements. Imported by `client/app.js`. `scripts/three-loader-error-witness.mjs` reads `client/core/SceneSetup.js` as source text at its line 15 and prints `RESULT:`. That is a source-text witness of the file's text, NOT a runtime witness of its behaviour. The importer-only citations in the stream 33, 36, 37 and 44 sections are NOT coverage.
+
+## Stream 56: edge Cloudflare Durable Object files with no savi mention (spoint, read-only at `d5e3860`)
+
+The four files total 272 lines by `wc -l`: 59, 102, 21 and 90. Savi's docs, gaps and scripts have zero word-bounded hits for `accept-request`, `do-client-probe`, `jolt-edge-init`, `spoint-do` and `SpointGameRoom`.
+
+- `edge/cf-do/accept-request.js:29` (`export function acceptRoomRequest(request) {`): 59 lines, 3 exports (`acceptRoomRequest`, `acceptEdgeRequest` and `refuseResponse`). Imported by `edge/cf-do/spoint-do.js`. No tracked witness script at `d5e3860`.
+- `edge/cf-do/do-client-probe.mjs:1` (`import WebSocket from 'ws'`): 102 lines, 0 exports. A top-level Node script with no importer. It is run by hand against a live Worker and prints a JSON result with an `ok` field. It prints no `RESULT:` line, so it is NOT a RESULT witness. No tracked witness script at `d5e3860`.
+- `edge/cf-do/jolt-edge-init.js:8` (`export function initJoltForEdge() {`): 21 lines, 1 export. Imported by `edge/cf-do/spoint-do.js`. No tracked witness script at `d5e3860`.
+- `edge/cf-do/spoint-do.js:41` (`export class SpointGameRoom {`): 90 lines, 2 exports, the class and the default Worker export at line 73. Imported by no module, as the Worker entry. No tracked witness script at `d5e3860`.
+
 ## Improvement opportunities (not behaviour to match)
 
 The owner's rule is that the documented featureset is a floor. Where spoint's design is weaker, jayzee should build the better version, and matching spoint's behaviour is not the requirement. Each item below is spoint's weaker design, recorded here as an improvement opportunity for jayzee.
@@ -954,6 +979,33 @@ The items below come from streams 50 to 53. They are GREP-BASED CANDIDATES, not 
 - `client/core/TimeOfDay.js:121` (`function setFraction(frac) { if (Number.isFinite(frac)) {`): a non-finite input is ignored silently.
 - `client/core/WorkerRenderProtocol.js:67` (`if (!isWorkerRefusalCode(code)) {`): the one place the module refuses in prose, for an undeclared refusal code. Minor.
 - `client/core/WorldPanels.js:73` (`canvas.getContext('2d')`): the context is not checked for null, and line 59 uses it directly.
+
+The items below come from streams 54 to 56. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/MapspinnerWebGPUFeasibility.js:150` (`rationale: '613 gl.* call sites across 5 files.`): the rationale prose hard-codes counts. Spoint's own measurement at `d5e3860` gives 821 call sites across the five existing files, which is NOT verified here. This is a stale-prose issue, not a runtime one.
+- `client/core/StaticInstanceStore.js:55` (`try { bucket.bvh = new MeshBVH(bucket.geometry) } catch (e) { }`): an empty catch. A BVH build failure is silent, and the bucket is left with no BVH and no signal.
+- `client/core/StaticInstanceStore.js:60` (`if (_entityToSlot.has(entityId)) return entityId`): a re-add of an existing entity is a silent no-op, and a new transform is not applied.
+- `client/core/StaticInstanceStore.js:9` (`let _capacity = Math.max(64, opts.initialCapacity || 1024)`): a silent literal default.
+- `client/core/StaticInstanceStore.js:82` (`if (slot == null) return false`), `client/core/StaticInstanceStore.js:94` (`if (slot == null || !_active[slot]) return null`), `client/core/StaticInstanceStore.js:105` (`if (slot == null || !_active[slot]) return -1`) and `client/core/StaticInstanceStore.js:120` (`return slot == null ? -1 : _lodTier[slot]`): sentinels for absence, with no refusal code.
+- `client/core/FluidSurface.js:135` (`const ox = originPos?.[0] || 0`): a silent zero default for each origin component.
+- `client/core/FluidSurface.js:142` (`if (!Number.isFinite(minX)) return null`) and `client/core/FluidSurface.js:146` (`if (n2d === 0) return null`): null sentinels.
+- `client/core/TerrainBackdrop.js:30` (`import('/node_modules/mapspinner/src/tsl/planet-tsl.js').catch(() => {})`): a promise swallow. Silent catches also sit at `client/core/TerrainBackdrop.js:210` (`} catch (_) { glTex = null }`), `client/core/TerrainBackdrop.js:272` (`} catch (_) {}`) and `client/core/TerrainBackdrop.js:300` (`} catch (_) {}`). Failures on these paths are silent. NEEDING A CHECK.
+- `client/core/TerrainBackdrop.js:42` (`const radius = cfg.radius || 6360000`): a silent literal planet radius.
+- `client/core/TerrainBackdrop.js:185` (`const epoch = Number.isFinite(frame.chartEpoch) ? frame.chartEpoch : 0`): a silent epoch of 0.
+- `client/core/ThreeVdrs.js:169` (`const s = Math.min(1.0, Math.max(0.3, scale || 1.0))`): a zero or NaN scale becomes 1.0 silently, and the 0.3 floor is a literal.
+- `client/core/ThreeVdrs.js:248` (`export const THREE_VDRS_WEBGPU_UNSUPPORTED = `): a prose reason string in place of a code.
+- `client/core/ThreeVdrs.js:240` (`if (on !== appliedOn) { window.__threeVdrs = on; appliedOn = on }`): a window global write. Spoint's tracked-tree search found no reader of `__threeVdrsScale` or `__threeVdrsState`. NEEDING A CHECK: a write-only mirror, not confirmed as a silent-no-op knob.
+- `client/core/SceneSetup.js:18` (`if (typeof window !== 'undefined' && !Number.isFinite(window.__fogFar)) window.__fogFar = 200`): a default written into a window global.
+- `client/core/SceneSetup.js:323` (`const _far = s.fogFar ?? 200`): literal defaults for absent config, and a present but invalid value passes through unvalidated.
+- `client/core/SceneSetup.js:69` (`} catch (_) { return false }`): `probeWebGL2` returns false with no log.
+- `client/core/SceneSetup.js:312` (`MeshoptDecoder.useWorkers(2)`): a failure is warn-only.
+- `client/core/SceneSetup.js:164` (`if (!probeWebGL2()) { const e = new Error('WebGL2 is not available'); e.code = 'NO_WEBGL2'; throw e }`) is a conforming example, not a defect. It throws a coded error, as AGENTS.md asks.
+- `edge/cf-do/jolt-edge-init.js:12` (`WebAssembly.instantiate(wasmModule, imports).then(instance => {`): no rejection handler. If instantiate fails, the init promise never settles. NEEDING A CHECK: read from the source, not run under workerd.
+- `edge/cf-do/spoint-do.js:63` (`server.accept()`): the socket is accepted before `_ensureCtx` is awaited, so a rejection leaves the socket unclosed. NEEDING A CHECK.
+- `edge/cf-do/spoint-do.js:32` (`} catch (e) { return false }`) and `edge/cf-do/spoint-do.js:37` (`try { this.ws.close() } catch (e) {}`): both are silent.
+- `edge/cf-do/accept-request.js:4` (`const DEFAULT_ROOM_BINDING = 'SPOINT_GAME_ROOM'`) and `edge/cf-do/accept-request.js:5` (`const DEFAULT_ROOM_KEY = 'probe-room'`): the probe default stays a silent production fallback when the environment value is absent.
+- `edge/cf-do/accept-request.js:32` (`: refused(UPGRADE_REQUIRED_STATUS, 'expected websocket upgrade')`), `edge/cf-do/accept-request.js:43` (`return refused(NO_ROOM_BINDING_STATUS, 'no durable object binding "' + bindingName + '" on this Worker')`) and `edge/cf-do/accept-request.js:51` (`'edge Worker has no STATIC_ORIGIN configured for non-WebSocket requests'`): prose reason strings with no reason code.
+- `edge/cf-do/do-client-probe.mjs:52` (`const rec = players.find(p => Array.isArray(p) && p[0] === playerId) || players[0]`): if the probe's own player is missing, it falls back to the first record, which may belong to another player. A silent default inside a manual probe.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
