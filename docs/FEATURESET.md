@@ -349,7 +349,7 @@ Each line gives `path:line` and the snippet at `d5e3860`. The 17 citations were 
 Negatives: `git grep -lF` at `d5e3860` finds no importer for `ChaseCamera`, `RoomLog`, `SharedEventEnvelope` and `scatterSpec` outside their own files.
 
 Not folded here, with the reason for each:
-- `ServerBoot.js` and `StaticCache.js`: savi's docs name neither, and stream 18 does not name them either, so they are not covered by #18. They belong in stream #26 when spoint sends them with their own citations.
+- `ServerBoot.js` and `StaticCache.js`: savi's docs name neither, and stream 18 does not name them either, so they are not covered by #18. They are folded as stream 28 below.
 - `bundleFreshness.js`: held owner decision.
 - `EditorHandlers.js`: already excluded, because it has witness scripts.
 - `chartWire.js`: chart re-anchor wire, #19 territory, not verified here.
@@ -417,6 +417,35 @@ Negatives: `git grep -lE "/<name>\.js['\"]"` over `scripts/*.mjs` and `scripts/*
 Directory-level disclosure: `JAYZEE-GAPS.md:65` (row 32, apps runtime) is jayzee's family-level status. `docs/FEATURESET.md:116` names only `AppRuntime.js` line 430. The consumers of `src/apps/AppContext.js` named at `docs/FEATURESET.md` lines 173 to 181 are excluded from this stream.
 
 These are static claims. No app is loaded or run here.
+
+## Stream 28: ServerBoot and StaticCache, not covered by #18 (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 18 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. The two modules total 684 lines (`src/sdk/ServerBoot.js` 308, `src/sdk/StaticCache.js` 376) and carry 33 `export` lines (15 and 18). Stream 18 does not cover them, so they are folded here and not claimed for #18.
+
+- `src/sdk/ServerBoot.js:16` (`export function buildUniquePathList(paths) {`): the first of 15 exports, which also include `collectWatchableFiles`, `CLIENT_ROOT_BUNDLE`, `CLIENT_ROOT_RAW`, `clientBundleFreshness`, `workerBundleFreshness`, `clientRootState`, `staticClientRoot`, `buildStaticDirs`, `assertNodeModulesLinked`, `resolveAppsDirs`, `worldScopedManifestFile`, `ensureServedAppsManifest`, `boot` and `installGracefulShutdown`.
+- `src/sdk/ServerBoot.js:23` (`export function collectWatchableFiles(dir, out = []) {`): the watchable file walk.
+- `src/sdk/ServerBoot.js:39` (`export const CLIENT_ROOT_BUNDLE = 'bundle'`): the bundled client root name.
+- `src/sdk/ServerBoot.js:42` (`export function clientBundleFreshness(sdkRoot) {`): the bundle freshness check.
+- `src/sdk/ServerBoot.js:56` (`export function staticClientRoot(sdkRoot) {`): the static client root.
+- `src/sdk/ServerBoot.js:75` (`export function buildStaticDirs(sdkRoot, project, appsDirs) {`): the static directory list.
+- `src/sdk/ServerBoot.js:107` (`export function assertNodeModulesLinked(sdkRoot) {`): the node_modules link check.
+- `src/sdk/ServerBoot.js:130` (`export async function ensureServedAppsManifest(sdkRoot, appsDirs, {`): the served apps manifest.
+- `src/sdk/ServerBoot.js:166` (`export async function boot(overrides = {}) {`): the boot entry point.
+- `src/sdk/ServerBoot.js:291` (`export function installGracefulShutdown(server, presence = null) {`): the shutdown hook.
+- `src/sdk/StaticCache.js:16` (`export function compress(raw, encoding) {`): the first of 18 exports, which also include `compressAsync`, `GZIP_EXTENSIONS`, `MAX_CACHEABLE_BYTES`, `ByteBudgetLRU`, `fileCache`, `transformedCache`, `contentHashETag`, `isNodeModulesPath`, `STATIC_CACHE_DIR`, `CACHE_REFUSAL`, `readCacheEntry`, `pruneStaticCache`, `getCached`, `getTransformedCached`, `prewarmCompression`, `parseRange` and `serveRangeable`.
+- `src/sdk/StaticCache.js:25` (`export const GZIP_EXTENSIONS = new Set(`): the gzip extension set.
+- `src/sdk/StaticCache.js:27` (`export const MAX_CACHEABLE_BYTES = 20 * 1024 * 1024`): the 20 MiB cacheable ceiling.
+- `src/sdk/StaticCache.js:31` (`export class ByteBudgetLRU {`): the byte-budget LRU.
+- `src/sdk/StaticCache.js:82` (`export function contentHashETag(fp, raw, mtime) {`): the content-hash ETag.
+- `src/sdk/StaticCache.js:155` (`export function readCacheEntry(fp, encoding, stamp) {`): the cache read.
+- `src/sdk/StaticCache.js:340` (`export function parseRange(rangeHeader, totalSize) {`): the range parser.
+- `src/sdk/StaticCache.js:361` (`export function serveRangeable(req, res, buf, headers) {`): the ranged serve.
+
+Importers, from exact-path `git grep -lE` over `src`, `client`, `apps`, `packages`, `scripts`, `bin` and `edge` at `d5e3860`: `ServerBoot.js` is imported by `bin/router-boot.js`, `src/sdk/server.js`, `src/sharding/RegionRouter.js` and `src/sharding/RegionWorkerEntry.js`. `StaticCache.js` is imported only by `src/sdk/StaticHandler.js`. The two sharding files sit in the area that #13 and #14 cover; `ServerBoot.js` is not named there, and the sharding files are cited only as importers.
+
+Witnesses: `git grep -lE "StaticCache|ServerBoot" -- scripts` at `d5e3860` finds no file, so neither module has a witness script. Savi's `docs/JAYZEE-GAPS.md`, `docs/OPEN-ITEMS.md`, `docs/PARITY-INPUTS.md` and `scripts/` name neither module. `docs/FEATURESET.md` names both only as importers and as the not-covered statement in the stream 25 part 2 and stream 27 sections.
+
+These are static claims. No server is booted and no cache is exercised here.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 

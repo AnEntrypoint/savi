@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -324,6 +324,21 @@ const appNamedInScripts = appModules.filter((m) => scriptJsTexts.some((t) => new
 if (appNamedInScripts.length !== 0) errors.push(`savi scripts name app modules: ${appNamedInScripts.join(", ")}`)
 counts.stream27 = { lines: appLines, exports: appExports, namedInDocs: appNamedInDocs, namedInScripts: appNamedInScripts.length }
 console.log(`STREAM 27 AT spoint ${spointPin}: ${appLines} lines, ${appExports} exports; witness-less negatives refused: ${appsWithNoWitness.length}; savi docs name ${appNamedInDocs.join(",")} (disclosed); scripts name ${appNamedInScripts.length}`)
+const streamTwentyEightModules = ["ServerBoot", "StaticCache"]
+const streamTwentyEightLines = streamTwentyEightModules.reduce((sum, m) => sum + execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/sdk/${m}.js`], { encoding: "utf8" }).split("\n").length - 1, 0)
+if (streamTwentyEightLines !== 684) errors.push(`spoint ServerBoot and StaticCache at ${spointPin} are ${streamTwentyEightLines} lines, expected 684`)
+const streamTwentyEightExports = streamTwentyEightModules.reduce((sum, m) => sum + execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:src/sdk/${m}.js`], { encoding: "utf8" }).split("\n").filter((l) => l.startsWith("export")).length, 0)
+if (streamTwentyEightExports !== 33) errors.push(`spoint ServerBoot and StaticCache at ${spointPin} have ${streamTwentyEightExports} exports, expected 33`)
+const staticCacheImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lE", "/StaticCache\\.js['\"]|'\\./StaticCache\\.js'", spointPin, "--", "src", "client", "apps", "packages", "scripts", "bin", "edge"], { encoding: "utf8" }).split("\n").filter(Boolean).map((l) => l.replace(`${spointPin}:`, "")) } catch { return [] } })()
+if (staticCacheImporters.join() !== "src/sdk/StaticHandler.js") errors.push(`StaticCache.js importers at ${spointPin} are [${staticCacheImporters.join(", ")}], expected [src/sdk/StaticHandler.js]`)
+const streamTwentyEightWitnesses = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lE", "StaticCache|ServerBoot", spointPin, "--", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean) } catch { return [] } })()
+if (streamTwentyEightWitnesses.length !== 0) errors.push(`ServerBoot or StaticCache has a witness script at ${spointPin}: ${streamTwentyEightWitnesses.join(", ")}`)
+const streamTwentyEightNamedInDocs = streamTwentyEightModules.filter((m) => [texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8")].some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (streamTwentyEightNamedInDocs.length !== 0) errors.push(`savi JAYZEE-GAPS, OPEN-ITEMS or PARITY-INPUTS name stream 28 modules: ${streamTwentyEightNamedInDocs.join(", ")}`)
+const streamTwentyEightNamedInScripts = streamTwentyEightModules.filter((m) => scriptJsTexts.some((t) => new RegExp(`\\b${m}\\b`).test(t)))
+if (streamTwentyEightNamedInScripts.length !== 0) errors.push(`savi scripts name stream 28 modules: ${streamTwentyEightNamedInScripts.join(", ")}`)
+counts.stream28 = { lines: streamTwentyEightLines, exports: streamTwentyEightExports, importersStaticCache: staticCacheImporters.length, witnesses: streamTwentyEightWitnesses.length }
+console.log(`STREAM 28 AT spoint ${spointPin}: ${streamTwentyEightLines} lines, ${streamTwentyEightExports} exports, StaticCache importers ${staticCacheImporters.length}, witnesses ${streamTwentyEightWitnesses.length}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
