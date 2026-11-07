@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -664,6 +664,97 @@ const candidates45 = [
 ]
 const candidate45Mismatch = candidates45.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
 if (candidate45Mismatch.length !== 0) errors.push(`stream 45 candidates not at cited lines: ${candidate45Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const s46 = ["StreamingScheduler", "PlacementScheduler", "macrotaskYield", "modelLoadGate", "TileExtent", "drawBands"]
+if (coreLines(s46) !== 335) errors.push(`stream 46 at ${spointPin}: ${coreLines(s46)} lines, expected 335`)
+const s46Importers = {
+  StreamingScheduler: ["client/app.js", "client/core/CacheRevalidationSweep.js"],
+  PlacementScheduler: ["client/app.js", "client/core/RenderGraph.nodes.js"],
+  macrotaskYield: ["client/core/Grass.js", "client/core/Rocks.js", "client/core/Vegetation.js", "client/dev/HmrRuntime.js"],
+  modelLoadGate: ["client/EntityLoader.js", "client/app.js", "scripts/model-gate-failure-witness.mjs", "scripts/model-load-gate-witness.mjs", "scripts/singleplayer-model-gate-witness.mjs"],
+  TileExtent: ["client/core/Grass.js", "client/core/Rocks.js", "client/core/Vegetation.js"],
+  drawBands: ["client/core/Weather.js"],
+}
+const spointImporters = (name) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lE", `(from|import\\()\\s*['"][^'"]*/${name}\\.js['"]`, spointPin, "--", "src", "client", "apps", "packages", "scripts", "bin", "edge"], { encoding: "utf8" }).split("\n").filter(Boolean).map((l) => l.replace(`${spointPin}:`, "")).filter((f) => f !== `client/core/${name}.js`).sort() } catch { return [] } }
+const s46ImporterMismatch = s46.filter((m) => spointImporters(m).join() !== [...s46Importers[m]].sort().join())
+if (s46ImporterMismatch.length !== 0) errors.push(`stream 46 importers differ from the cited set: ${s46ImporterMismatch.join(", ")}`)
+const importsModule = (name, text) => new RegExp(`(from|import\\()\\s*['"][^'"]*/${name}\\.js['"]`).test(text)
+const behaviouralWitnesses = (name) => spointWitnessFiles(name).filter((f) => spointShow(f).includes("RESULT") && importsModule(name, spointShow(f)))
+const s46Behavioural = s46.filter((m) => behaviouralWitnesses(m).length > 0)
+if (s46Behavioural.join() !== "modelLoadGate") errors.push(`stream 46 behavioural witnesses are [${s46Behavioural.join(", ")}], expected [modelLoadGate]`)
+const modelGateWitnesses = spointWitnessFiles("modelLoadGate").sort()
+if (modelGateWitnesses.join() !== ["scripts/model-gate-failure-witness.mjs", "scripts/model-load-gate-witness.mjs", "scripts/singleplayer-model-gate-witness.mjs"].join()) errors.push(`stream 46 modelLoadGate witnesses are [${modelGateWitnesses.join(", ")}]`)
+const modelGateNoResult = modelGateWitnesses.filter((f) => !spointShow(f).includes("RESULT"))
+if (modelGateNoResult.length !== 0) errors.push(`stream 46 modelLoadGate witnesses print no RESULT: ${modelGateNoResult.join(", ")}`)
+const macrotaskWitnessFiles = spointWitnessFiles("macrotaskYield")
+if (macrotaskWitnessFiles.join() !== "scripts/lib/verify-doc-claims.mjs") errors.push(`stream 46 macrotaskYield script hits are [${macrotaskWitnessFiles.join(", ")}], expected the claim file only`)
+if (behaviouralWitnesses("macrotaskYield").length !== 0) errors.push("stream 46 macrotaskYield has a behavioural witness")
+if (s46.filter((m) => m !== "modelLoadGate").some((m) => spointWitnessFiles(m).length > 0 && m !== "macrotaskYield")) errors.push("stream 46 has an unexpected script hit outside macrotaskYield")
+const s46Named = s46.filter(saviNamesModule)
+if (s46Named.length !== 0) errors.push(`savi docs or scripts outside streams name stream 46 modules [${s46Named.join(", ")}]`)
+console.log(`STREAM 46 AT spoint ${spointPin}: ${coreLines(s46)} lines (6 modules), importers as cited ${s46ImporterMismatch.length === 0}, behavioural witnesses [${s46Behavioural.join(", ")}] with ${modelGateWitnesses.length} modelLoadGate scripts, savi names ${s46Named.length}`)
+const candidates46 = [
+  ["client/core/StreamingScheduler.js", 5, "const distance = Number.isFinite(features.distance) && features.distance >= 0 ? features.distance : Infinity"],
+  ["client/core/StreamingScheduler.js", 6, "const screenSize = Number.isFinite(features.screenSize) && features.screenSize > 0 ? features.screenSize : 1"],
+  ["client/core/StreamingScheduler.js", 8, "const gameplayBoost = Number.isFinite(features.gameplayBoost) ? Math.min(1, Math.max(0, features.gameplayBoost)) : 0"],
+  ["client/core/StreamingScheduler.js", 134, "try { rec.run() } catch (e) { }"],
+  ["client/core/modelLoadGate.js", 11, "throw refusal('model-prefetch-url-invalid'"],
+  ["client/core/modelLoadGate.js", 22, "throw refusal('model-gate-hooks-invalid'"],
+  ["client/core/modelLoadGate.js", 23, "throw refusal('model-gate-failure-hook-invalid'"],
+]
+const candidate46Mismatch = candidates46.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate46Mismatch.length !== 0) errors.push(`stream 46 candidates not at cited lines: ${candidate46Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const candidate46ShiftRefused = candidates46.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
+if (!candidate46ShiftRefused) errors.push("stream 46 candidate line-shift negative was not refused")
+console.log(`STREAM 46 CANDIDATES AT spoint ${spointPin}: ${candidates46.length} located, line-shift negative refused: ${candidate46ShiftRefused}`)
+const s47 = ["MobileControls", "TouchDraft", "TouchSurfaceSpec", "keybindings"]
+if (coreLines(s47) !== 497) errors.push(`stream 47 at ${spointPin}: ${coreLines(s47)} lines, expected 497`)
+const s47Expected = { MobileControls: ["client/app.js"], TouchDraft: ["client/core/MobileControls.js"], TouchSurfaceSpec: [], keybindings: [] }
+const s47ImporterMismatch = s47.filter((m) => spointImporters(m).join() !== s47Expected[m].join())
+if (s47ImporterMismatch.length !== 0) errors.push(`stream 47 importers differ from the cited set: ${s47ImporterMismatch.join(", ")}`)
+if (s47.some((m) => behaviouralWitnesses(m).length > 0)) errors.push("stream 47 has a behavioural witness")
+const s47Named = s47.filter(saviNamesModule)
+if (s47Named.join() !== "MobileControls") errors.push(`savi names for stream 47 are [${s47Named.join(", ")}], expected [MobileControls] (FEATURESET.md:410 importer-only)`)
+console.log(`STREAM 47 AT spoint ${spointPin}: ${coreLines(s47)} lines (4 modules), importers as cited ${s47ImporterMismatch.length === 0}, behavioural witnesses 0, savi names ${s47Named.join("+")} (importer-only)`)
+const s48 = ["ClientMachine", "ConnectionStatus", "LoadingMachine", "PreviewReload"]
+if (coreLines(s48) !== 423) errors.push(`stream 48 at ${spointPin}: ${coreLines(s48)} lines, expected 423`)
+const s48Expected = { ClientMachine: ["client/app.js"], ConnectionStatus: ["client/app.js"], LoadingMachine: ["client/app.js", "scripts/force-ready-model-failure-witness.mjs", "scripts/loading-machine-model-failure-witness.mjs"], PreviewReload: ["client/app.js"] }
+const s48ImporterMismatch = s48.filter((m) => spointImporters(m).join() !== s48Expected[m].join())
+if (s48ImporterMismatch.length !== 0) errors.push(`stream 48 importers differ from the cited set: ${s48ImporterMismatch.join(", ")}`)
+const s48Behavioural = s48.filter((m) => behaviouralWitnesses(m).length > 0)
+if (s48Behavioural.join() !== "LoadingMachine") errors.push(`stream 48 behavioural witnesses are [${s48Behavioural.join(", ")}], expected [LoadingMachine]`)
+const loadingWitnesses = behaviouralWitnesses("LoadingMachine").sort()
+if (loadingWitnesses.join() !== ["scripts/force-ready-model-failure-witness.mjs", "scripts/loading-machine-model-failure-witness.mjs"].join()) errors.push(`stream 48 LoadingMachine behavioural witnesses are [${loadingWitnesses.join(", ")}]`)
+const s48Named = s48.filter(saviNamesModule)
+if (s48Named.length !== 0) errors.push(`savi docs or scripts outside streams name stream 48 modules: ${s48Named.join(", ")}`)
+const candidates48and49 = [
+  ["client/core/ClientMachine.js", 138, "return (m && typeof m === 'object' && m.spectator) ? m.spectator : null"],
+  ["client/core/ConnectionStatus.js", 135, "const rttOk = Number.isFinite(rtt)"],
+  ["client/core/LoadingMachine.js", 33, "event.reasonCode || 'model load failed'"],
+  ["client/core/LoadingMachine.js", 39, "entityPending: ({ event }) => event.count ?? 0"],
+  ["client/core/PreviewReload.js", 14, "if (seen === null) seen = build"],
+  ["client/core/RelocationSearch.js", 28, "return Number.isFinite(y) ? elevationAtLocal(frame, x, y, z) : NaN"],
+  ["client/core/RelocationSettle.js", 21, "const pending = (poolStats?.inFlight || 0) + (deferred?.queued ?? deferred?.pending ?? 0) + (scheduler?.queued || 0) + hpfPending"],
+  ["client/core/RelocationSettle.js", 48, "throw new Error('whenSettled: no connected client')"],
+  ["client/core/RelocationSettle.js", 61, "patchExact = Number.isFinite(frame._patchHeightOrNull(p[0], p[2]))"],
+  ["client/core/TransformLerp.js", 19, "if (!(Number.isFinite(target.rx) && Number.isFinite(target.ry) && Number.isFinite(target.rz) && Number.isFinite(target.rw))) return"],
+]
+const candidate48and49Mismatch = candidates48and49.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidate48and49Mismatch.length !== 0) errors.push(`stream 48 and 49 candidates not at cited lines: ${candidate48and49Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const candidate48and49ShiftRefused = candidates48and49.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
+if (!candidate48and49ShiftRefused) errors.push("stream 48 and 49 candidate line-shift negative was not refused")
+console.log(`STREAM 48 AT spoint ${spointPin}: ${coreLines(s48)} lines (4 modules), importers as cited ${s48ImporterMismatch.length === 0}, behavioural witnesses [${s48Behavioural.join(", ")}] with ${loadingWitnesses.length} scripts, savi names ${s48Named.length}`)
+const s49 = ["RelocationSearch", "RelocationSettle", "TransformLerp", "FloatingOrigin"]
+if (coreLines(["RelocationSearch", "RelocationSettle", "TransformLerp"]) !== 301) errors.push(`stream 49 relocation and lerp modules at ${spointPin} are not 301 lines`)
+if (coreLines(["FloatingOrigin"]) !== 61) errors.push(`FloatingOrigin.js at ${spointPin} is not 61 lines`)
+const s49Expected = { RelocationSearch: ["client/core/Relocation.js"], RelocationSettle: ["client/core/Relocation.js"], TransformLerp: ["client/core/SceneGraph.js"], FloatingOrigin: ["client/app.js"] }
+const s49ImporterMismatch = s49.filter((m) => spointImporters(m).join() !== s49Expected[m].join())
+if (s49ImporterMismatch.length !== 0) errors.push(`stream 49 importers differ from the cited set: ${s49ImporterMismatch.join(", ")}`)
+if (s49.some((m) => behaviouralWitnesses(m).length > 0)) errors.push("stream 49 has a behavioural witness")
+if (!texts["FEATURESET.md"].includes("`client/core/FloatingOrigin.js:3`")) errors.push("FloatingOrigin.js has no explicit per-file mention in FEATURESET.md")
+const s49Named = s49.filter(saviNamesModule)
+if (s49Named.length !== 0) errors.push(`savi docs or scripts outside streams name stream 49 modules: ${s49Named.join(", ")}`)
+console.log(`STREAM 49 AT spoint ${spointPin}: ${coreLines(["RelocationSearch", "RelocationSettle", "TransformLerp"])} lines (3 modules) plus FloatingOrigin ${coreLines(["FloatingOrigin"])} per file, importers as cited ${s49ImporterMismatch.length === 0}, behavioural witnesses 0, savi names ${s49Named.length}`)
+console.log(`STREAM 48 AND 49 CANDIDATES AT spoint ${spointPin}: ${candidates48and49.length} located, line-shift negative refused: ${candidate48and49ShiftRefused}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()

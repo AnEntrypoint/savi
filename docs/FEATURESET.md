@@ -557,21 +557,21 @@ These are static claims. No mesh is decoded here.
 Each line gives `path:line` and the first export at `d5e3860`. Fourteen `src/shared` modules total 1074 lines by `wc -l`. Savi's docs and scripts were scanned case-insensitively for the 14 basenames, outside this section, and the gate repeats the scan. Zero module-level mentions were found, except `SpawnSurface`, whose only hit is the identifier `spawnSurfaceGround` in `docs/JAYZEE-GAPS.md`, a different name in `src/sdk/Relocation.js`. The 45 `src/shared` files give this set of 14 once the fire modules, the chart modules and `cacheCodeVersions` are set aside. Those are covered elsewhere or are not in this stream.
 
 - `src/shared/MinimapBiome.js:9` (`export function biomeColor(height, temp, humidity, seaLevel) {`): 83 lines, 4 exports. Imported by one client HUD module (cited under stream 29 as an importer only), `scripts/bake-minimap.mjs` and `scripts/circumnavigate.mjs`. Both scripts are witnesses.
-- `src/shared/SpawnSurface.js:21` (`export function columnSurfaces(raycast, x, topY, z) {`): 79 lines, 2 exports. Imported by two `src/apps` modules and `src/sdk/Relocation.js`. No witness.
+- `src/shared/SpawnSurface.js:21` (`export function columnSurfaces(raycast, x, topY, z) {`): 79 lines, 2 exports. Imported by two `src/apps` modules and `src/sdk/Relocation.js`. No tracked witness script at `d5e3860`.
 - `src/shared/ballistics.js:21` (`export function elevation(speed, g, distance, rise) {`): 68 lines, 2 exports. Imported by `scripts/ballistics-lead-witness.mjs`, which is its witness. `scripts/check.mjs` also names it.
-- `src/shared/bookmarks.js:33` (`export function listBookmarks(worldDef, frame, fromBase = null) {`): 56 lines, 1 export. Imported by `client/core/Relocation.js`. No witness.
-- `src/shared/canonicalJSON.js:8` (`export function canonicalJSON(value) {`): 15 lines, 1 export. Imported by `src/netcode/LockstepGameLoop.js`, `src/netcode/RollbackGameLoop.js`, `src/sdk/WorldPersistence.js` and `src/shared/terrainConfig.js`. No witness.
-- `src/shared/clusterAssignment.js:4` (`export let CLUSTER_STAY_FACTOR = 1.25`): 220 lines, 8 exports. Imported by `src/sharding/ClusterManager.js` (the stream 14 sharding module, cited as an importer only) and `src/shared/clusterConfig.js`. No witness.
+- `src/shared/bookmarks.js:33` (`export function listBookmarks(worldDef, frame, fromBase = null) {`): 56 lines, 1 export. Imported by `client/core/Relocation.js`. No tracked witness script at `d5e3860`.
+- `src/shared/canonicalJSON.js:8` (`export function canonicalJSON(value) {`): 15 lines, 1 export. Imported by `src/netcode/LockstepGameLoop.js`, `src/netcode/RollbackGameLoop.js`, `src/sdk/WorldPersistence.js` and `src/shared/terrainConfig.js`. No tracked witness script at `d5e3860`.
+- `src/shared/clusterAssignment.js:4` (`export let CLUSTER_STAY_FACTOR = 1.25`): 220 lines, 8 exports. Imported by `src/sharding/ClusterManager.js` (the stream 14 sharding module, cited as an importer only) and `src/shared/clusterConfig.js`. No tracked witness script at `d5e3860`.
 - `src/shared/colliderLattice.js:2` (`export const COLLIDER_DEFAULT_EXTENT_M = 510`): 84 lines, 5 exports. Imported by `client/core/TerrainBackdrop.js` through a dynamic import. Witnessed by `scripts/grass-seam-card-witness.mjs` and `scripts/nearfield-lod-lattice-witness.mjs`.
 - `src/shared/equipment.js:1` (`export let EQUIP_UNARMED = 0`): 46 lines, 12 exports. Imported by `client/app.js` and `src/apps/AppRuntime.js`. Witnessed by `scripts/world-movement-parse-witness.mjs`.
-- `src/shared/materialSlots.js:33` (`export function parseMaterialSlots(raw) {`): 46 lines, 1 export. Imported by `src/sdk/EditorHandlers.js`. No witness.
+- `src/shared/materialSlots.js:33` (`export function parseMaterialSlots(raw) {`): 46 lines, 1 export. Imported by `src/sdk/EditorHandlers.js`. No tracked witness script at `d5e3860`.
 - `src/shared/modelLoadErrors.js:3` (`export function modelLoadRefusal(url, cause) {`): 76 lines, 9 exports. Imported by `client/core/SceneSetup.js`, `client/core/modelLoadGate.js`, `src/sdk/EditorHandlers.js` and `src/sdk/ServerAPI.js`. Witnessed by five scripts: `entity-loader-refusal-witness.mjs`, `failed-entity-no-env-done-witness.mjs`, `placed-model-load-witness.mjs`, `prefab-load-witness.mjs` and `three-loader-error-witness.mjs`.
 - `src/shared/relevanceRadius.js:1` (`export let DEFAULT_RELEVANCE_RADIUS_M = 200`): 11 lines, 2 exports. Imported by `src/sdk/ServerHandlers.js`, `src/sdk/TickHandler.js`, `src/sdk/WorkerEntry.js`, `src/sdk/server.js`, `src/spatial/Octree.js` and `src/stage/Stage.js`. Witnessed by `scripts/cluster-world-harness.mjs`, `scripts/lib/verify-doc-claims.mjs` and `scripts/netcode-conditioner-harness.mjs`.
 - `src/shared/vec3.js:7` (`export function readVec3(value, name = 'value') {`): 74 lines, 14 exports. Imported by one `src/behaviours` module, `src/interaction/pressRouter.js`, `src/physics/pivotTransform.js` and `src/physics/surfaceVelocity.js`. Witnessed by `scripts/vec3-witness.mjs`, `scripts/pivot-riders-witness.mjs`, `scripts/surface-velocity-witness.mjs` and a behaviour witness script. `scripts/check.mjs` also names it.
 - `src/shared/worldPresets.js:7` (`export let WORLD_PRESETS = Object.freeze({ tps, arena, planet, platformer, rts })`): 56 lines, 2 exports. Imported by 12 modules: `client/app.js`, `src/sdk/MinimapBake.js`, a reload handler in `src/sdk`, `src/sdk/ServerAPI.js`, `src/sdk/WorkerEntry.js`, `src/sdk/WorldLocator.js`, `scripts/bake-heightfield.mjs`, `scripts/bake-minimap.mjs`, `scripts/bake-navmesh.mjs`, `scripts/bundle-apps-manifest.mjs`, `scripts/check-app-imports.mjs` and `scripts/circumnavigate.mjs`. Seven scripts name it, and the bake and check scripts are the witnesses.
 - `src/shared/worldResolve.js:14` (`export let WORLD_NOT_A_PLAIN_OBJECT = 'world-not-a-plain-object'`): 160 lines, 6 exports. Imported by `client/app.js`, a reload handler in `src/sdk`, `src/sdk/ServerAPI.js` and `src/sdk/WorkerEntry.js`. Witnessed by `scripts/world-movement-parse-witness.mjs` and `scripts/lib/verify-doc-claims.mjs`.
 
-Witness-less: `SpawnSurface`, `bookmarks`, `canonicalJSON`, `clusterAssignment` and `materialSlots`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for these five.
+No tracked witness script at `d5e3860`: `SpawnSurface`, `bookmarks`, `canonicalJSON`, `clusterAssignment` and `materialSlots`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for these five.
 
 ## Stream 34: top-level bin boot and tooling scripts (spoint, read-only at `d5e3860`)
 
@@ -593,38 +593,38 @@ Witnesses: `git grep -lF` over `scripts/` at `d5e3860` returns no file for any o
 
 Each line gives `path:line` and the first export at `d5e3860`. The four modules total 832 lines by `wc -l`, and their export lines total 44 by `^export`. Savi's docs and scripts have zero case-insensitive word hits for the four basenames outside this section. The savi lines that mention grass name family-level rows or other files: `docs/JAYZEE-GAPS.md` row 39 at family level, `src/terrain/GrassPlacementLod.js` in the terrain area (rows 52 and the stream 20 terrain text), and `client/core/CaveMeshes` and `GrassPlacementLod` in the client lists. None names these four files.
 
-- `client/core/GrassClump.js:38` (`export function makeClumpAlphaTexture() {`): 100 lines, 2 exports. Imported by `client/core/Grass.js` and `client/core/GrassMaterial.js`. No witness.
-- `client/core/GrassMaterial.js:14` (`export const MAX_BENDERS = 8`): 323 lines, 15 exports. Imported by `client/core/Grass.js` and `client/core/GrassTSL.js`. No witness.
-- `client/core/GrassTSL.js:17` (`export { MAX_BENDERS, MAX_DECALS, UNUSED_BENDER_SLOT_XZ, makeWind }`): 226 lines, 3 exports. Imported by `client/core/Grass.js`. No witness.
+- `client/core/GrassClump.js:38` (`export function makeClumpAlphaTexture() {`): 100 lines, 2 exports. Imported by `client/core/Grass.js` and `client/core/GrassMaterial.js`. No tracked witness script at `d5e3860`.
+- `client/core/GrassMaterial.js:14` (`export const MAX_BENDERS = 8`): 323 lines, 15 exports. Imported by `client/core/Grass.js` and `client/core/GrassTSL.js`. No tracked witness script at `d5e3860`.
+- `client/core/GrassTSL.js:17` (`export { MAX_BENDERS, MAX_DECALS, UNUSED_BENDER_SLOT_XZ, makeWind }`): 226 lines, 3 exports. Imported by `client/core/Grass.js`. No tracked witness script at `d5e3860`.
 - `client/core/GrassWindField.js:3` (`export const GRASS_WIND_FIELD_CELLS = 64`): 183 lines, 24 exports. Imported by `client/core/GrassMaterial.js`. Witnessed by `scripts/grass-wind-field-seam-witness.mjs`, the only witnessed module in this family.
 
-Witness-less: `GrassClump`, `GrassMaterial` and `GrassTSL`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of the three.
+No tracked witness script at `d5e3860`: `GrassClump`, `GrassMaterial` and `GrassTSL`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of the three.
 
 ## Stream 36: client/core environment tint and weather modules with no savi mention (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the first export at `d5e3860`. The eight modules total 682 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for the eight basenames, and for the words `wetness`, `underwater` and `weather material`. The word `tint` appears only inside other words. `client/core` family rows in `docs/JAYZEE-GAPS.md` and `docs/PARITY-INPUTS.md` name the directory, not these files.
 
-- `client/core/WeatherGpu.js:3` (`export function makeSeedAttributes(capacity, fillSeed) {`): 44 lines, 5 exports. Imported by `client/core/Weather.js`. No witness.
-- `client/core/WeatherMaterials.js:3` (`export function makeStreakGeo() {`): 206 lines, 8 exports. Imported by `client/core/Weather.js`. No witness.
-- `client/core/WeatherMaterialsTSL.js:11` (`export function makeRainMaterialTSL() {`): 99 lines, 4 exports. Imported by `client/core/Weather.js`. No witness.
-- `client/core/WetnessTint.js:6` (`export function installWetnessTint() {`): 63 lines, 3 exports. Imported by `client/app.js`, `client/core/SSR.js` and `client/core/SSRWebGPU.js`. No witness.
-- `client/core/WetnessTintTSL.js:6` (`export const wetnessUniform = uniform(0)`): 39 lines, 4 exports. Imported by `client/ModelPoolAdapter.js`. No witness.
-- `client/core/UnderwaterTint.js:11` (`export const SEA_SURFACE_GLSL = [`): 99 lines, 4 exports. Imported by `client/core/SSR.js` and `client/core/SceneSetup.js`. No witness.
-- `client/core/UnderwaterTintTSL.js:10` (`export const seaUniform = uniform(new THREE.Vector4(-100000, 0, 0, 0))`): 62 lines, 5 exports. Imported by `client/ModelPoolAdapter.js`. No witness.
+- `client/core/WeatherGpu.js:3` (`export function makeSeedAttributes(capacity, fillSeed) {`): 44 lines, 5 exports. Imported by `client/core/Weather.js`. No tracked witness script at `d5e3860`.
+- `client/core/WeatherMaterials.js:3` (`export function makeStreakGeo() {`): 206 lines, 8 exports. Imported by `client/core/Weather.js`. No tracked witness script at `d5e3860`.
+- `client/core/WeatherMaterialsTSL.js:11` (`export function makeRainMaterialTSL() {`): 99 lines, 4 exports. Imported by `client/core/Weather.js`. No tracked witness script at `d5e3860`.
+- `client/core/WetnessTint.js:6` (`export function installWetnessTint() {`): 63 lines, 3 exports. Imported by `client/app.js`, `client/core/SSR.js` and `client/core/SSRWebGPU.js`. No tracked witness script at `d5e3860`.
+- `client/core/WetnessTintTSL.js:6` (`export const wetnessUniform = uniform(0)`): 39 lines, 4 exports. Imported by `client/ModelPoolAdapter.js`. No tracked witness script at `d5e3860`.
+- `client/core/UnderwaterTint.js:11` (`export const SEA_SURFACE_GLSL = [`): 99 lines, 4 exports. Imported by `client/core/SSR.js` and `client/core/SceneSetup.js`. No tracked witness script at `d5e3860`.
+- `client/core/UnderwaterTintTSL.js:10` (`export const seaUniform = uniform(new THREE.Vector4(-100000, 0, 0, 0))`): 62 lines, 5 exports. Imported by `client/ModelPoolAdapter.js`. No tracked witness script at `d5e3860`.
 - `client/core/PostFxLook.js:1` (`export class PostFxLookError extends Error {`): 70 lines, 5 exports. No importer in code. Witnessed by `scripts/postfx-graph-structure-witness.mjs`, `scripts/postfx-look-witness.mjs` and `scripts/postfx-render-graph-witness.mjs`, the only witnessed module in this stream.
 
-Witness-less: the seven other modules. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of them.
+No tracked witness script at `d5e3860`: the seven other modules. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of them.
 
 ## Stream 37: client/core culling, occlusion and terrain occlusion modules (spoint, read-only at `d5e3860`)
 
 This stream covers four modules and two held files. The two held files, `OcclusionPolicy` and `OcclusionQueryBudget`, are named per file here, so that their coverage does not rest on the family-level prose in `docs/JAYZEE-GAPS.md` row 39. Each citation is a `git show d5e3860` re-read.
 
-- `client/core/CullingHub.js:1` (`export function createCullingHub() {`): 25 lines, 1 export. Imported by `client/app.js`. No witness.
-- `client/core/TerrainOcclusion.js:6` (`export function createTerrainOcclusion(gl, opts = {}) {`): 228 lines, 1 export. Imported by `client/core/TerrainBackdrop.js`. No witness.
-- `client/core/WebGPUCullingHubIntegration.js:34` (`export async function runVegetationScalePerfAB({ counts = [12000, 30000],`): 193 lines, 2 exports. Imported by `client/app.js`. No witness.
-- `client/core/WebGPUCullingProbe.js:1` (`export async function probeWebGPU() {`): 176 lines, 3 exports. Imported by `client/core/SceneSetup.js` and `client/core/WebGPUCullingHubIntegration.js`. No witness.
-- `client/core/OcclusionPolicy.js:1` (`export function createOcclusionPolicy(config = {}) {`): 110 lines, 1 export. Imported by `client/core/SceneOcclusion.js` and `client/core/TerrainOcclusion.js`. No witness. Held before this stream, now accepted as coverage by this per-file entry.
-- `client/core/OcclusionQueryBudget.js:1` (`export function createOcclusionQueryBudget(opts = {}) {`): 79 lines, 1 export. Imported by `client/app.js`. No witness. Held before this stream, now accepted as coverage by this per-file entry.
+- `client/core/CullingHub.js:1` (`export function createCullingHub() {`): 25 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/TerrainOcclusion.js:6` (`export function createTerrainOcclusion(gl, opts = {}) {`): 228 lines, 1 export. Imported by `client/core/TerrainBackdrop.js`. No tracked witness script at `d5e3860`.
+- `client/core/WebGPUCullingHubIntegration.js:34` (`export async function runVegetationScalePerfAB({ counts = [12000, 30000],`): 193 lines, 2 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/WebGPUCullingProbe.js:1` (`export async function probeWebGPU() {`): 176 lines, 3 exports. Imported by `client/core/SceneSetup.js` and `client/core/WebGPUCullingHubIntegration.js`. No tracked witness script at `d5e3860`.
+- `client/core/OcclusionPolicy.js:1` (`export function createOcclusionPolicy(config = {}) {`): 110 lines, 1 export. Imported by `client/core/SceneOcclusion.js` and `client/core/TerrainOcclusion.js`. No tracked witness script at `d5e3860`. Held before this stream, now accepted as coverage by this per-file entry.
+- `client/core/OcclusionQueryBudget.js:1` (`export function createOcclusionQueryBudget(opts = {}) {`): 79 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`. Held before this stream, now accepted as coverage by this per-file entry.
 
 The four modules total 622 lines and the two held files total 189, for 811 lines in the stream. `SceneOcclusion.js` is covered by its own citation at `docs/FEATURESET.md` (see the occlusion lines above) and is not part of this stream. None of the six has a witness script.
 
@@ -632,88 +632,134 @@ The four modules total 622 lines and the two held files total 189, for 811 lines
 
 The four modules total 790 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for `Bloom`, `BloomWebGPU`, `FSR1` and `FSR1WebGPU`, and the words `bloom`, `FSR` and `fsr1` have zero hits. The `upscal` substring appears only in `scripts/openapi.json`, which is unrelated.
 
-- `client/core/Bloom.js:55` (`export class Bloom {`): 247 lines, 4 exports. Imported by `client/app.js`. No witness.
-- `client/core/BloomWebGPU.js:38` (`export class BloomWebGPU {`): 155 lines, 1 export. Imported by `client/app.js`. No witness.
-- `client/core/FSR1.js:65` (`export class FSR1 {`): 241 lines, 4 exports. Imported by `client/app.js`. No witness.
-- `client/core/FSR1WebGPU.js:52` (`export class FSR1WebGPU {`): 147 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/Bloom.js:55` (`export class Bloom {`): 247 lines, 4 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/BloomWebGPU.js:38` (`export class BloomWebGPU {`): 155 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/FSR1.js:65` (`export class FSR1 {`): 241 lines, 4 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/FSR1WebGPU.js:52` (`export class FSR1WebGPU {`): 147 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
 
-Witness-less: all four.
+No tracked witness script at `d5e3860`: all four.
 
 ## Stream 39: client/core screen-space ambient occlusion and reflection modules with no savi mention (spoint, read-only at `d5e3860`)
 
 The four modules total 1175 lines by `wc -l`. Savi's docs and scripts have zero word hits for `SSAO`, `SSAOWebGPU`, `SSR` and `SSRWebGPU`, checked word-bounded and case-insensitively. Substring hits of `ssr` inside other words are not module mentions. The words `ssao`, `ambient occlusion`, `screen-space` and `reflection` have zero hits.
 
-- `client/core/SSAO.js:113` (`export class SSAO {`): 289 lines, 4 exports. Imported by `client/app.js`. No witness.
-- `client/core/SSAOWebGPU.js:81` (`export class SSAOWebGPU {`): 194 lines, 1 export. Imported by `client/app.js`. No witness.
-- `client/core/SSR.js:114` (`export class SSR {`): 361 lines, 4 exports. Imported by `client/app.js`. No witness.
-- `client/core/SSRWebGPU.js:127` (`export class SSRWebGPU {`): 331 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/SSAO.js:113` (`export class SSAO {`): 289 lines, 4 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/SSAOWebGPU.js:81` (`export class SSAOWebGPU {`): 194 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/SSR.js:114` (`export class SSR {`): 361 lines, 4 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/SSRWebGPU.js:127` (`export class SSRWebGPU {`): 331 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
 
-Witness-less: all four.
+No tracked witness script at `d5e3860`: all four.
 
 ## Stream 40: client/core player LOD and vertex-animation-texture modules with no savi mention (spoint, read-only at `d5e3860`)
 
 The five modules total 807 lines by `wc -l`. Savi's docs and scripts have zero word hits for the five basenames and for `PlayerLOD`, `VAT`, `vertex animation` and `animation texture`. Substring hits of `vat` inside other words are not module mentions.
 
-- `client/core/PlayerLOD.js:6` (`export const PLAYER_LOD_FULL_COUNT = 30`): 248 lines, 10 exports. Imported by `client/app.js`. No witness.
-- `client/core/PlayerLODTSL.js:5` (`export function createDotMaterialTSL(matrixNode) {`): 21 lines, 1 export. Imported by `client/core/PlayerLOD.js`. No witness.
-- `client/core/PlayerVAT.js:7` (`export { bakeVAT, bakeVATMultiClip }`): 301 lines, 5 exports. Imported by `client/app.js`. No witness.
-- `client/core/PlayerVATBake.js:62` (`export function bakeVAT(skinnedMesh, mixerRoot, clip, opts = {}) {`): 155 lines, 2 exports. Imported by `client/core/PlayerVAT.js` and `client/core/PlayerVATTSL.js`. No witness.
-- `client/core/PlayerVATTSL.js:6` (`export { bakeVAT, bakeVATMultiClip }`): 82 lines, 2 exports. Imported by `client/core/PlayerVAT.js`. No witness.
+- `client/core/PlayerLOD.js:6` (`export const PLAYER_LOD_FULL_COUNT = 30`): 248 lines, 10 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/PlayerLODTSL.js:5` (`export function createDotMaterialTSL(matrixNode) {`): 21 lines, 1 export. Imported by `client/core/PlayerLOD.js`. No tracked witness script at `d5e3860`.
+- `client/core/PlayerVAT.js:7` (`export { bakeVAT, bakeVATMultiClip }`): 301 lines, 5 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/PlayerVATBake.js:62` (`export function bakeVAT(skinnedMesh, mixerRoot, clip, opts = {}) {`): 155 lines, 2 exports. Imported by `client/core/PlayerVAT.js` and `client/core/PlayerVATTSL.js`. No tracked witness script at `d5e3860`.
+- `client/core/PlayerVATTSL.js:6` (`export { bakeVAT, bakeVATMultiClip }`): 82 lines, 2 exports. Imported by `client/core/PlayerVAT.js`. No tracked witness script at `d5e3860`.
 
-Witness-less: all five.
+No tracked witness script at `d5e3860`: all five.
 
 ## Stream 41: client/core rock and vegetation shading modules with no savi mention (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the first export at `d5e3860`. The four modules total 496 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for `Rocks`, `RocksTSL`, `VegetationTSL` and `VegetationAmbientTSL`. The substring `rock` appears in `docs/JAYZEE-GAPS.md` only as `RockPhysics`, a different module. `Vegetation.js`, `VegetationBuild.js` and `VegImpostorTier.js` are separate streams and are not in this one.
 
 - `client/core/Rocks.js:83` (`export async function createRocks(opts = {}) {`): 342 lines, 1 export. Imported by `client/app.js`. Its only script mention is `scripts/rock-model-exclusion-witness.mjs`, which reads `client/core/Rocks.js` as source text and does not import it. That is a source-text witness, not an import witness, and it is disclosed as such.
-- `client/core/RocksTSL.js:22` (`export function applyRockTextureTSL(material) {`): 39 lines, 2 exports. Imported by `client/core/Rocks.js`. No witness.
-- `client/core/VegetationTSL.js:3` (`export function makeWindUniformsTSL() {`): 35 lines, 5 exports. Imported by `client/core/Vegetation.js`. No witness.
-- `client/core/VegetationAmbientTSL.js:10` (`export const vegAmbientUniforms = {`): 80 lines, 3 exports. Imported by `client/core/Vegetation.js`. No witness.
+- `client/core/RocksTSL.js:22` (`export function applyRockTextureTSL(material) {`): 39 lines, 2 exports. Imported by `client/core/Rocks.js`. No tracked witness script at `d5e3860`.
+- `client/core/VegetationTSL.js:3` (`export function makeWindUniformsTSL() {`): 35 lines, 5 exports. Imported by `client/core/Vegetation.js`. No tracked witness script at `d5e3860`.
+- `client/core/VegetationAmbientTSL.js:10` (`export const vegAmbientUniforms = {`): 80 lines, 3 exports. Imported by `client/core/Vegetation.js`. No tracked witness script at `d5e3860`.
 
-Witness-less: `RocksTSL`, `VegetationTSL` and `VegetationAmbientTSL`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of them.
+No tracked witness script at `d5e3860`: `RocksTSL`, `VegetationTSL` and `VegetationAmbientTSL`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for each of them.
 
 ## Stream 42: vegetation core, build and impostor-tier modules with no savi mention (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the first export at `d5e3860`. The three modules total 1731 lines by `wc -l`: `client/core/Vegetation.js` 917, `client/core/VegetationBuild.js` 581 and `client/core/VegImpostorTier.js` 233.
 
 - `client/core/Vegetation.js:55` (`export async function createVegetation(opts = {}) {`): 917 lines, 1 export. Imported by `client/app.js` and `apps/world/_shared/worldDefParse.js` (the second through a string `readBy` reference). Savi names it in `docs/FEATURESET.md:344`, where it is an importer of one atlas module only. That is importer-only, so it is NOT coverage of this module. Three scripts name it: `scripts/lib/verify-doc-claims.mjs`, `scripts/lint/comment-lint.mjs` (a lint scope) and `scripts/rock-model-exclusion-witness.mjs` (a source-text read). None is recorded here as a behavioural witness.
-- `client/core/VegetationBuild.js:110` (`export function treeTextureHalveRefusals() { return _halveRefusals.slice() }`): 581 lines, 5 exports. Imported by `client/core/Vegetation.js`. No witness.
-- `client/core/VegImpostorTier.js:10` (`export const IMPOSTOR_DISSOLVE_FADE_BAND_M = 3.0`): 233 lines, 5 exports. Imported by `client/core/Vegetation.js` and `client/core/VegetationBuild.js`. No witness.
+- `client/core/VegetationBuild.js:110` (`export function treeTextureHalveRefusals() { return _halveRefusals.slice() }`): 581 lines, 5 exports. Imported by `client/core/Vegetation.js`. No tracked witness script at `d5e3860`.
+- `client/core/VegImpostorTier.js:10` (`export const IMPOSTOR_DISSOLVE_FADE_BAND_M = 3.0`): 233 lines, 5 exports. Imported by `client/core/Vegetation.js` and `client/core/VegetationBuild.js`. No tracked witness script at `d5e3860`.
 
-Witness-less: `VegetationBuild` and `VegImpostorTier`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for either.
+No tracked witness script at `d5e3860`: `VegetationBuild` and `VegImpostorTier`. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for either.
 
 ## Stream 43: WebGPU instancing pair with no savi mention (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the first export at `d5e3860`. The two modules total 1247 lines by `wc -l`: `client/core/WebGPULodInstancer.js` 970 and `client/core/WebGPUInstancing.js` 277. Savi's docs and scripts have zero case-insensitive word hits for either basename, `WebGPU instancing` or `instancing`.
 
 - `client/core/WebGPULodInstancer.js:7` (`export const LOD_REEVAL_MOVE_M = 0.5`): 970 lines, 2 exports. Imported by `client/core/Vegetation.js`, which is stream 42, and by `scripts/.veg-lod-mismatch-probe.mjs`. Three scripts name it: `scripts/.veg-lod-mismatch-probe.mjs`, `scripts/.veg-lod-path-probe.mjs` and `scripts/.veg-lod-stream-control.mjs`. None of the three prints a `RESULT:` line, so none is a witness under the check rule (exit 0 plus `RESULT: PASS`). The stream-control script defines its own copy of the instancer and does not import this module, so it exercises a copy, not the module.
-- `client/core/WebGPUInstancing.js:8` (`export function isWebGPUInstancingSupported(renderer) {`): 277 lines, 5 exports. Imported by nine `client/core` modules already cited in streams 35, 36, 40 and 42: `Grass.js`, `GrassTSL.js`, `PlayerLOD.js`, `PlayerLODTSL.js`, `PlayerVAT.js`, `PlayerVATTSL.js`, `VegImpostorTier.js`, `Weather.js` and `WeatherMaterialsTSL.js`. Those are importer-only citations of this module, so they are NOT coverage. No witness.
+- `client/core/WebGPUInstancing.js:8` (`export function isWebGPUInstancingSupported(renderer) {`): 277 lines, 5 exports. Imported by nine `client/core` modules already cited in streams 35, 36, 40 and 42: `Grass.js`, `GrassTSL.js`, `PlayerLOD.js`, `PlayerLODTSL.js`, `PlayerVAT.js`, `PlayerVATTSL.js`, `VegImpostorTier.js`, `Weather.js` and `WeatherMaterialsTSL.js`. Those are importer-only citations of this module, so they are NOT coverage. No tracked witness script at `d5e3860`.
 
-Witness-less: `WebGPUInstancing`. `git grep -lwF` over `scripts/` returns no file for it. `WebGPULodInstancer` has three script names and no behavioural witness.
+No tracked witness script at `d5e3860`: `WebGPUInstancing`. `git grep -lwF` over `scripts/` returns no file for it. `WebGPULodInstancer` has three script names and no behavioural witness.
 
 ## Stream 44: render graph and program readiness modules with no savi mention (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the first export at `d5e3860`. The three modules total 789 lines by `wc -l`: `client/core/RenderGraph.js` 273, `client/core/RenderGraph.nodes.js` 234 and `client/core/ProgramReadiness.js` 282. Savi's docs and scripts have zero case-insensitive word hits for the three basenames, `render graph`, `rendergraph`, `render node` and `program readiness`. `readiness` appears in unrelated PR and terrain text.
 
 - `client/core/RenderGraph.js:1` (`export function createRenderGraph(nodes, opts = {}) {`): 273 lines, 1 export. Imported by `client/app.js`. Witnessed by two behavioural scripts, `scripts/postfx-graph-structure-witness.mjs` and `scripts/postfx-render-graph-witness.mjs`. Each imports the module and prints `RESULT:`.
-- `client/core/RenderGraph.nodes.js:29` (`export function buildRenderSectionNodes() {`): 234 lines, 1 export. Imported by `client/app.js`. No witness.
+- `client/core/RenderGraph.nodes.js:29` (`export function buildRenderSectionNodes() {`): 234 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
 - `client/core/ProgramReadiness.js:3` (`export function renderDeferringUnreadyPrograms(renderer, scene, camera) {`): 282 lines, 8 exports. Imported by `client/app.js`, `client/core/Grass.js`, `client/core/PlacementScheduler.js`, `client/core/RenderGraph.nodes.js`, `client/core/Rocks.js`, `client/core/SSAO.js`, `client/core/SSR.js`, `client/core/SceneSetup.js`, `client/core/ThreeVdrs.js` and `client/core/Vegetation.js`. Most of those are already cited in streams 35, 39, 41 and 42, and they are importer-only, so they are NOT coverage. Witnessed by `scripts/program-readiness-render-witness.mjs`, which imports the module and prints `RESULT:`. `scripts/lint/comment-lint.mjs` also names it, as a lint scope, which is not a behavioural witness.
 
-Witness-less: `RenderGraph.nodes`.
+No tracked witness script at `d5e3860`: `RenderGraph.nodes`.
 
 ## Stream 45: client/core diagnostics and profiling probes with no savi mention (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the first export at `d5e3860`. The five modules total 1135 lines by `wc -l`. Savi's docs and scripts have zero case-insensitive word hits for the five basenames, `profiler`, `overdraw`, `runtime stats`, `collider debug` and `debug overlay`, outside this stream.
 
-- `client/core/PerformanceProfiler.js:8` (`export function createPerformanceProfiler(renderer, scene) {`): 395 lines, 1 export. Imported by `client/core/DevToolsIntegration.js`, an unsent `client/core` module. `client/app.js` does not import it. No witness.
-- `client/core/RuntimeStats.js:52` (`export function createRuntimeStats() {`): 185 lines, 2 exports. Imported by `client/app.js`. No witness.
-- `client/core/OverdrawProbe.js:49` (`export function createOverdrawProbe({ renderer, scene, camera, readIntervalMs`): 292 lines, 1 export. Imported by `client/app.js`. No witness.
-- `client/core/MeshDebug.js:58` (`export function installMeshDebug({ maxTicks = POLL_MAX_TICKS } = {}) {`): 155 lines, 1 export. Imported by `client/app.js` and by one `client/hud` module. No witness.
-- `client/core/ColliderDebug.js:44` (`export function createColliderDebug({ scene, frame, cfg }) {`): 108 lines, 1 export. Imported by `client/app.js`. No witness.
-- `client/core/FrameMetrics.js:4` (`export function createPerfTracker() {`): 233 lines, 5 exports. Imported by `client/app.js`. No witness. This is the explicit per-file mention for the held module. The concept-level phrase "the frame metrics" in `docs/JAYZEE-GAPS.md` row 59 is prose and is NOT the coverage; this entry is.
+- `client/core/PerformanceProfiler.js:8` (`export function createPerformanceProfiler(renderer, scene) {`): 395 lines, 1 export. Imported by `client/core/DevToolsIntegration.js`, an unsent `client/core` module. `client/app.js` does not import it. No tracked witness script at `d5e3860`.
+- `client/core/RuntimeStats.js:52` (`export function createRuntimeStats() {`): 185 lines, 2 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/OverdrawProbe.js:49` (`export function createOverdrawProbe({ renderer, scene, camera, readIntervalMs`): 292 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/MeshDebug.js:58` (`export function installMeshDebug({ maxTicks = POLL_MAX_TICKS } = {}) {`): 155 lines, 1 export. Imported by `client/app.js` and by one `client/hud` module. No tracked witness script at `d5e3860`.
+- `client/core/ColliderDebug.js:44` (`export function createColliderDebug({ scene, frame, cfg }) {`): 108 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/FrameMetrics.js:4` (`export function createPerfTracker() {`): 233 lines, 5 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`. This is the explicit per-file mention for the held module. The concept-level phrase "the frame metrics" in `docs/JAYZEE-GAPS.md` row 59 is prose and is NOT the coverage; this entry is.
 
-Witness-less: all six. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for any of them.
+No tracked witness script at `d5e3860`: all six. `git grep -lwF` over `scripts/` at `d5e3860` returns no file for any of them.
+
+## Stream 46: client/core scheduling, yield, load-gate and band modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The six modules total 335 lines by `wc -l`: 161, 99, 13, 38, 15 and 9. Savi's docs and scripts have zero case-insensitive word hits for `StreamingScheduler`, `PlacementScheduler`, `macrotaskYield`, `TileExtent` and `drawBands` outside this stream. `modelLoadGate` is the exception, and it is covered below.
+
+- `client/core/StreamingScheduler.js:4` (`export function scoreRequest(features = {}) {`): 161 lines, 3 exports. Imported by `client/app.js` and `client/core/CacheRevalidationSweep.js`. No tracked witness script at `d5e3860`.
+- `client/core/PlacementScheduler.js:13` (`export function resolveCameraPose(camera, out) {`): 99 lines, 3 exports. Imported by `client/app.js` and `client/core/RenderGraph.nodes.js`. No tracked witness script at `d5e3860`.
+- `client/core/macrotaskYield.js:1` (`export function macrotaskYield() {`): 13 lines, 1 export. Imported by `client/core/Grass.js`, `client/core/Rocks.js`, `client/core/Vegetation.js` and `client/dev/HmrRuntime.js`. No witness import. `scripts/lib/verify-doc-claims.mjs` names it inside a claim string about the Grass prewarm at line 521. That is docs-claim text, not an import or a witness, and it is NOT coverage.
+- `client/core/modelLoadGate.js:10` (`export async function prefetchModel(url, load) {`): 38 lines, 3 exports, the third being `runModelLoadGate` at line 20. Imported by `client/EntityLoader.js` and `client/app.js`. Witnessed by three behavioural scripts. Each imports the module and prints `RESULT:`: `scripts/model-gate-failure-witness.mjs`, `scripts/model-load-gate-witness.mjs` and `scripts/singleplayer-model-gate-witness.mjs`. These three were checked directly at `d5e3860` with `git grep -lwF` and a `RESULT` check, not accepted from a peer. The importer-only hit at FEATURESET.md:568, in the stream 33 modelLoadErrors entry, cites `modelLoadGate.js` as an importer of `src/shared/modelLoadErrors.js`. That hit is NOT coverage for `modelLoadGate`.
+- `client/core/TileExtent.js:4` (`export function commitTileExtent(where, heightFn, sampleXZ, bounds, minY, maxY, padM) {`): 15 lines, 1 export. Imported by `client/core/Grass.js`, `client/core/Rocks.js` and `client/core/Vegetation.js`. No tracked witness script at `d5e3860`.
+- `client/core/drawBands.js:1` (`export const WATER_TRANSPARENT_DRAW_BAND = -1`): 9 lines, 9 exports. Imported by `client/core/Weather.js`. No tracked witness script at `d5e3860`.
+
+No tracked witness script at `d5e3860`: five of the six modules. `modelLoadGate` has three behavioural witnesses. The `git grep -lwF` hit for `macrotaskYield` is the claim string above, and that file is not a witness for it.
+
+## Stream 47: client/core touch and keybinding input modules with no savi mention (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the first export at `d5e3860`. The four modules total 497 lines by `wc -l`: 286, 35, 46 and 130. Savi's docs, gaps and scripts have zero word-bounded hits for `TouchDraft`, `TouchSurfaceSpec` and `keybindings`. `MobileControls` has one savi hit, an importer-only citation in the stream 27 section at FEATURESET.md:410, and that hit is NOT coverage for `MobileControls`.
+
+- `client/core/MobileControls.js:7` (`export class MobileControls {`): 286 lines, 2 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/TouchDraft.js:4` (`export function touchDraftFromBindings(bindings, layout, responsive) {`): 35 lines, 1 export. Imported by `client/core/MobileControls.js`. No tracked witness script at `d5e3860`.
+- `client/core/TouchSurfaceSpec.js:1` (`export class TouchSurfaceSpecError extends Error {`): 46 lines, 4 exports. No importer in `src`, `client`, `apps`, `packages`, `scripts`, `bin` or `edge` at `d5e3860`. No tracked witness script at `d5e3860`.
+- `client/core/keybindings.js:1` (`export const DEFAULT_KEY_BINDINGS = Object.freeze({`): 130 lines, 5 exports. No importer at `d5e3860`. No tracked witness script at `d5e3860`.
+
+No tracked witness script at `d5e3860`: all four.
+
+## Stream 48: client boot, connection and loading state modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The four modules total 423 lines by `wc -l`: 158, 148, 94 and 23. Savi's docs, gaps and scripts have zero word-bounded hits for `ClientMachine`, `ConnectionStatus`, `LoadingMachine` and `PreviewReload`.
+
+- `client/core/ClientMachine.js:4` (`export const clientMachine = createMachine({`): 158 lines, 2 exports. Imported by `client/app.js`. No witness import. `scripts/lib/verify-doc-claims.mjs` names it inside a claim string at line 489, which says `TOGGLE_EDITOR` is sent in `client/app.js`. That is docs-claim text, not an import or a witness, and it is NOT coverage.
+- `client/core/ConnectionStatus.js:56` (`export function createConnectionStatus() {`): 148 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+- `client/core/LoadingMachine.js:7` (`export const notModelFailure = ({ context }) => context.modelFailure !== true`): 94 lines, 8 exports. Imported by `client/app.js`. Witnessed by two behavioural scripts, each of which imports it and prints `RESULT:`: `scripts/force-ready-model-failure-witness.mjs` and `scripts/loading-machine-model-failure-witness.mjs`. These two were checked directly at `d5e3860` with an import regex and a `RESULT` check.
+- `client/core/PreviewReload.js:4` (`export function startPreviewReload({`): 23 lines, 1 export. Imported by `client/app.js`. No tracked witness script at `d5e3860`.
+
+Witnessed: `LoadingMachine` only. The other three are witness-less.
+
+## Stream 49: client/core relocation, transform lerp and floating origin modules with no savi mention (spoint, read-only at `d5e3860`)
+
+The three relocation and lerp modules total 301 lines by `wc -l`: 100, 85 and 116. Savi's docs, gaps and scripts have zero word-bounded hits for `RelocationSearch`, `RelocationSettle` and `TransformLerp`. The relocation family appears in savi only at FEATURESET.md:562, in the stream 33 bookmarks entry, which names `client/core/Relocation.js` as an importer of `src/shared/bookmarks.js`. That line does not name these two modules and is NOT coverage for them.
+
+- `client/core/RelocationSearch.js:90` (`export async function searchBookmark(kind, ctx) {`): 100 lines, 1 export. Imported by `client/core/Relocation.js`. No tracked witness script at `d5e3860`.
+- `client/core/RelocationSettle.js:45` (`export async function whenSettled({ idleFrames,`): 85 lines, 1 export. Imported by `client/core/Relocation.js`. No tracked witness script at `d5e3860`.
+- `client/core/TransformLerp.js:3` (`export const STRIDE = 17`): 116 lines, 5 exports. Imported by `client/core/SceneGraph.js`. No tracked witness script at `d5e3860`.
+- `client/core/FloatingOrigin.js:3` (`export const REBASE_THRESHOLD_M = 8000`): 61 lines, 2 exports. Imported by `client/app.js`. No tracked witness script at `d5e3860`. This is the explicit per-file mention that releases the hold on `FloatingOrigin.js`. The concept-level phrase "floating origin" in `docs/JAYZEE-GAPS.md` row 39 (line 72) is prose and is NOT the coverage; this entry is. `scripts/lib/verify-doc-claims.mjs` names the rebase claim at line 462, but it imports nothing from the module, so it is not a witness.
+
+No tracked witness script at `d5e3860`: `RelocationSearch`, `RelocationSettle`, `TransformLerp` and `FloatingOrigin`.
 
 ## Improvement opportunities (not behaviour to match)
 
@@ -814,6 +860,30 @@ The items below come from stream 45. They are GREP-BASED CANDIDATES, not verifie
 - `client/core/ColliderDebug.js:49` (`const extent = Number.isFinite(phys.extent) && phys.extent > 0 ? phys.extent : 256`): a literal default for an invalid extent, the same shape as the `colliderLattice.js` candidate in stream 33. The `resolution` line uses the same literal form.
 - `client/core/ColliderDebug.js:75` (`if (!Number.isFinite(h)) h = -1000`): a magic `-1000` stands in for an absent height.
 - `client/core/MeshDebug.js:51` and `:94` (`?? '-'` and `?? null`): display-only absence sentinels, listed for completeness.
+
+The items below come from stream 46. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/StreamingScheduler.js:5` (`const distance = Number.isFinite(features.distance) && features.distance >= 0 ? features.distance : Infinity`): a non-finite or negative distance silently becomes Infinity, so the request ranks as the farthest rather than being refused.
+- `client/core/StreamingScheduler.js:6` (`const screenSize = Number.isFinite(features.screenSize) && features.screenSize > 0 ? features.screenSize : 1`): an invalid screen size takes a literal 1.
+- `client/core/StreamingScheduler.js:8` (`const gameplayBoost = Number.isFinite(features.gameplayBoost) ? Math.min(1, Math.max(0, features.gameplayBoost)) : 0`): an invalid boost becomes 0.
+- `client/core/StreamingScheduler.js:134` (`try { rec.run() } catch (e) { }`): an empty catch. NEEDING A CHECK, not a defect verdict.
+
+`client/core/modelLoadGate.js` is a conforming example, not a defect. It refuses bad input with coded refusals at lines 11, 22 and 23: `model-prefetch-url-invalid`, `model-gate-hooks-invalid` and `model-gate-failure-hook-invalid`.
+
+The items below come from streams 48 and 49. They are GREP-BASED CANDIDATES, not verified defects, and they are not behaviours jayzee must reproduce.
+
+- `client/core/ClientMachine.js:138` (`return (m && typeof m === 'object' && m.spectator) ? m.spectator : null`): an absent spectator returns null, a null sentinel for absence.
+- `client/core/ConnectionStatus.js:135` (`const rttOk = Number.isFinite(rtt)`): a non-finite RTT takes the not-ok branch silently. This needs a check against the RTT display.
+- `client/core/LoadingMachine.js:33` (`event.reasonCode || 'model load failed'`): a missing reason code becomes a prose label, so the failure is reported but its cause is lost.
+- `client/core/LoadingMachine.js:39` (`entityPending: ({ event }) => event.count ?? 0`): a missing count is read as zero pending entities. NEEDING A CHECK.
+- `client/core/PreviewReload.js:14` (`if (seen === null) seen = build`): null is the first-build sentinel.
+- `client/core/RelocationSearch.js:28` (`return Number.isFinite(y) ? elevationAtLocal(frame, x, y, z) : NaN`): NaN is the absence value for a non-finite `y`. NEEDING A CHECK against AGENTS.md's "no NaN for absence" rule, not a defect.
+- `client/core/RelocationSettle.js:21` (`const pending = (poolStats?.inFlight || 0) + (deferred?.queued ?? deferred?.pending ?? 0) + (scheduler?.queued || 0) + hpfPending`): an absent count becomes 0, and the two deferred field names fall back silently.
+- `client/core/RelocationSettle.js:48` (`throw new Error('whenSettled: no connected client')`): a refusal with no code. AGENTS.md asks for codes at refusal boundaries.
+- `client/core/RelocationSettle.js:61` (`patchExact = Number.isFinite(frame._patchHeightOrNull(p[0], p[2]))`): a non-finite height turns into false silently.
+- `client/core/TransformLerp.js:19` (`if (!(Number.isFinite(target.rx) && Number.isFinite(target.ry) && Number.isFinite(target.rz) && Number.isFinite(target.rw))) return`): a non-finite target rotation drops the update with no report.
+
+Observation, not a finding, scoped to the tracked tree at `d5e3860`: `.gm/pool/pool.log` line 1625 records an honest PASS 38/38 for ClientCorePlayerVATBake, and no tracked script names PlayerVATBake at `d5e3860`. The same log names `scripts/decal-system-witness.mjs`, `scripts/SculptOverlay-witness.mjs` and `scripts/DebugLog-witness.mjs`, and none of the three is tracked at `d5e3860`. The log records provenance and is not a witness, so this discrepancy stays OPEN and is not resolved here.
 
 ## Stream 21: session store, stage loader and stage (spoint, read-only at `d5e3860`)
 
