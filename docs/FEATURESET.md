@@ -79,7 +79,7 @@ Verified read-only at `d5e3860`, with spoint's own confirmation of the first fou
 - Sharding: `Cluster*`, `Region*`, `ClusterHandoff`, `ShardingRefusal`.
 - SDK and server: `ServerAPI`, `AgentAuthoringAPI`, `StaticHandler`, `DevHmr`, `RoomOrchestratorHttp`, `RoomDirectory/Pick/Routing/Health/Log`, `ServerPresence/Identity`, `NostrAuthServer`, `cronSchedule`, `llmJobs`, `UploadHandler`, `MinimapBake`, `WorldPersistence`, `PrefabLibrary/Spawner`, `SceneImport/TiledImport`, `WorldLocator`.
 - Physics: Jolt World wrapper, `CharacterManager`, `ShapeBuilder`, `StaticTileIndex`, `FlightModel`, `VehiclePhysics`, Draco and Meshopt decompressors.
-- Terrain: 21+ files including `PlanetFrame`, `ChartReanchor*`, `CaveSDF/CavePatches/CaveMeshes`, `GrassPlacementLod`, `BiomeOverride`, `ClimateCache`.
+- Terrain: 21+ files including `PlanetFrame`, `ChartReanchor*`, `CaveSDF/CavePatches/client/core/CaveMeshes`, `GrassPlacementLod`, `BiomeOverride`, `ClimateCache`.
 - Packages: `mapspinner/` (planet and terrain renderer), `streaming-gltf/` (EP_progressive_lod schemas), `ecs/`, `spoint-core/` (Rust scaffold).
 - Game systems: `AbilityTree/QuestSystem/ProgressionSystem/StatsSystem/EventChainManager`; `src/animation/`; `src/pathfinding/` (`NavmeshQuery`, `ChartNavmeshQuery`, `RecastIntegration`).
 - Client surfaces: `client/editor/`, `client/hud/`, `client/xr/`, `client/core/` (WebGPU and WebGL postFX, shadow, cascade and quality governors), `client/landing/`.
@@ -240,6 +240,78 @@ Self-produced from `/workspace/spoint` at `d5e3860` (clean tree), not from a pee
 - Registry: `src/protocol/MessageTypes.js:146` (`export function isRegisteredMessage(id)`), `src/protocol/MessageTypes.js:154` (`export let UNRELIABLE_MSGS = new Set([`). Consumers outside the module: `scripts/src-batch1-rules-witness.mjs:15` (`assert.equal(isRegisteredMessage(unreliableId), true)`) and `scripts/chart-reanchor-wire-harness.mjs:120`.
 - Input codec: `src/protocol/InputCodec.js:5` (`export const MAX_INPUT_BUTTONS = 32`), `src/protocol/InputCodec.js:6` (`export const MAX_INPUTS_PER_PACKET = 8`), `src/protocol/InputCodec.js:18` (`const FLAG_EPOCH_TAGGED = 0x80`), `src/protocol/InputCodec.js:242` (`export function tryEncodeInputPacket(schema, entries, chartEpoch = 0)`). Consumer: `src/client/BaseClient.js:191` (`const packet = tryEncodeInputPacket(schema, entries, this._chart.epoch ?? 0)`).
 
+## Stream 19: terrain and chart reanchor (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 24 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. Two of spoint's own locations were corrected here: `CaveMeshes` is `client/core/CaveMeshes.js`, not under `src/terrain`, and the `ChartReanchor*` modules are in `src/terrain/`, not `src/sdk/chartState/`.
+
+Planet frame and surface solve:
+- `src/terrain/PlanetFrame.js:3` (`export let SURFACE_SOLVE_TOLERANCE_M = 1e-4`).
+- `src/terrain/PlanetFrame.js:9` (`const GROUND_MEMO_SLOTS = 4096`).
+- `src/terrain/PlanetFrame.js:27` (`export class SurfaceSolveError extends RangeError {`).
+- `src/terrain/PlanetFrame.js:286` (`function groundHeightLocal(x, z, yGuess) {`).
+- The memo slot is a mask over the slot count: `src/terrain/PlanetFrame.js:291` (`& (GROUND_MEMO_SLOTS - 1)`).
+
+Chart anchors and reanchor:
+- `src/shared/chartAnchor.js:9` (`export const CHART_ANCHORS_PER_FACE = 32`).
+- `src/shared/chartAnchor.js:10` (`export const CHART_REANCHOR_ANGLE_DEG = 28`).
+- `src/sdk/chartState/index.js:21` (`export function attachServerChartMigrators(ctx, service) {`). It has two callers: `src/sdk/WorkerEntry.js:117` (`if (s?.chartReanchor) attachServerChartMigrators(ctx, s.chartReanchor)`) and `src/sdk/ServerAPI.js:96` (`if (ctx._terrainStreamer?.chartReanchor) attachServerChartMigrators(ctx, ctx._terrainStreamer.chartReanchor)`).
+- The `chartEpoch` occurrences by file, counted with `grep -c`: `src/terrain/ChartReanchorService.js` 4, `src/terrain/ChartReanchorTerrain.js` 4, `src/terrain/ColliderStreamer.js` 1, `src/terrain/FieldLattice.js` 1.
+
+Caves, grass and biomes:
+- `src/terrain/TerrainPhysics.js:8` (`import { loadCaveCarveLayer } from './CaveSDF.js'`).
+- `client/core/CaveMeshes.js:2` (`import { polygonizeCaveVolume, loadCaveCarveLayer } from '/src/terrain/CaveSDF.js'`). `CaveSDF` has these two importers and no others.
+- `src/terrain/GrassPlacementLod.js:15` (`export function grassBladeReachM(q, law) {`) and `src/terrain/GrassPlacementLod.js:19` (`export function createGrassChunkLod(key, frame, anchorField, worldSeed, law, now, abandoned) {`). Its only importer is `client/core/Grass.js:9` (`import { createGrassChunkLod } from '/src/terrain/GrassPlacementLod.js'`).
+- `src/terrain/BiomeOverride.js:4` (`export let CELL_M = 8`), `src/terrain/BiomeOverride.js:24` (`export function createBiomeOverride(strokes) {`) and `src/terrain/BiomeOverride.js:108` (`export function loadBiomeOverride(json) {`). Its importers were not checked, so no claim is made about them.
+- `src/terrain/CavePatches.js:22` (`export function sdfSphere(wx, wy, wz, cx, cy, cz, r) {`) and `src/terrain/CavePatches.js:187` (`export function createSphericalCave(heights, width, spacing, cornerX, cornerZ, cx, cy, cz, radius, opts = {}) {`).
+
+Static tile index:
+- `src/physics/StaticTileIndex.js:3` (`export const STATIC_TILE_M = 16`) and `src/physics/StaticTileIndex.js:4` (`export const STATIC_TILE_MARGIN_M = 3`).
+- Its importer is `src/physics/World.js:5` (`import { createStaticTileIndex } from './StaticTileIndex.js'`), and it is constructed at `src/physics/World.js:222` (`this._staticTiles = createStaticTileIndex(this, tileM)`).
+
+Negatives (`git grep` or a path check at `d5e3860`):
+- `src/terrain/CaveMeshes.js` does not exist at `d5e3860`.
+- `CavePatches` has no importer. `git grep -l CavePatches d5e3860 -- src client apps packages edge scripts` lists 0 files. Its only other mention in the tree is `.gm/pool/pool.log`, which is outside those paths. So the `CavePatches` exports above have no importer.
+- In `scripts`, `CavePatches`, `CaveSDF`, `GrassPlacementLod` and `StaticTileIndex` each match 0 files. `PlanetFrame` matches 10, `ChartReanchor` 3 and `ClimateCache` 3.
+- `git grep -l -E 'ChartReanchorService|ChartReanchorTerrain' d5e3860 -- src/sdk/chartState` lists 0 files. The chartState directory does mention `onChartReanchor` in `src/sdk/chartState/migrateEntities.js` and `ctx.lastChartReanchor` in `src/sdk/chartState/index.js`, which are app hooks, not the service modules.
+
+These facts are about spoint. Terrain runtime behaviour is not claimed here, and any runtime question goes to the owner.
+
+## Stream 20: client render, editor and HUD, XR, and packages (spoint, read-only at `d5e3860`)
+
+Each line gives `path:line` and the snippet at `d5e3860`. The 31 citations were re-read from `git -C /workspace/spoint show d5e3860:<path>` before this section was written, and nothing was written into spoint. Savi's listing of these packages (PARITY-INPUTS, FEATURESET and JAYZEE-GAPS row 55) names the packages and the `EP_progressive_lod` schemas only. None of the lines below appear in those listings.
+
+Shadows and occlusion:
+- Cascade 0 never renders when the sun does not cast shadows: `client/core/ShadowPipeline.js:19` (`const cascade0NeverRenders = sun.castShadow === false`), and the cascade count follows from it at `client/core/ShadowPipeline.js:20` (`cascadeCount = cascade0NeverRenders ? 1 : Math.max(1, Math.min(MAX_CASCADES`). The forced update is at `client/core/ShadowPipeline.js:152` (`forceUpdate`).
+- The shadow cost probe reports a per-light-pass backend with split support off: `client/core/ShadowCostProbe.js:139` (`return { attached: true, backend: ARM_PER_LIGHT_PASS, splitSupported: false, reason: null }`), and its public entry is `client/core/ShadowCostProbe.js:195` (`installShadowCostProbe`).
+- Scene occlusion imports the WebGPU Hi-Z tier from the package: `client/core/SceneOcclusion.js:3` (`import { WebGpuHizTier } from 'streaming-gltf/webgpu-hiz-tier'`). It selects that tier only on a WebGPU renderer: `client/core/SceneOcclusion.js:10` (`if (renderer && renderer.isWebGPURenderer) return new WebGpuHizTier(renderer, opts)`). Its tested-count line is `client/core/SceneOcclusion.js:182` (`queriedThisFrame: (tier.stats.entityTested || 0) + (tier.stats.queried || 0)`).
+- The package export is `packages/streaming-gltf/package.json:16` (`"./webgpu-hiz-tier": "./src/webgpu-hiz-tier.js"`), and the class is `packages/streaming-gltf/src/webgpu-hiz-tier.js:64` (`class WebGpuHizTier`).
+- Cull freeze switches instanced and batched meshes to manual cull: `client/core/CullFreeze.js:4` (`setInstancedCullAuto`), `client/core/CullFreeze.js:11` (`setBatchedMeshCullAuto`), and it marks visibility changed at `client/core/CullFreeze.js:14` (`mesh._visibilityChanged = true`).
+- A cluster LOD mesh renders at most once per frame: `packages/streaming-gltf/src/cluster-lod-mesh.js:213` (`const alreadyRenderedThisFrame = this._lastRenderFrame === frame`), `packages/streaming-gltf/src/cluster-lod-mesh.js:214` (`if (alreadyRenderedThisFrame) return`) and `packages/streaming-gltf/src/cluster-lod-mesh.js:215` (`this._lastRenderFrame = frame`).
+- The progressive LOD reader accepts the extension or the local extras key: `packages/streaming-gltf/src/model-pool.js:191` (`json?.extensions?.EP_progressive_lod ?? json?.extras?.LOCAL_progressive`).
+
+XR and editor and HUD:
+- Teleport arc bounds use a BVH only above a triangle threshold: `client/xr/XRWidgets.js:11` (`const ARC_BOUNDS_TREE_MIN_TRIANGLES = 2000`) and `client/xr/XRWidgets.js:141` (`if (triangles >= ARC_BOUNDS_TREE_MIN_TRIANGLES) geometry.computeBoundsTree()`).
+- XR pointers are excluded through a user-data flag: `client/xr/XRSystem.js:52` (`object.userData.xrPointer = true`).
+- Editor and HUD exports: `client/editor/EditorShell.js:21` (`export function createEditPanel({`), `client/hud/PeerHostUI.js:27` (`export function createRoomCodeUI(uiRoot, code, joinLink)`) and `client/hud/PeerHostUI.js:43` (`export function createPeerHostUI(uiRoot, getClient, iceServers)`).
+
+Quality governor and tiers:
+- The frame budget is 16.67 ms: `client/core/QualityGovernor.js:3` (`export const FRAME_BUDGET_MS = 16.67`).
+- The tier choice is resolved against the creator's maximum: `client/core/QualityTierChoice.js:10` (`export function resolveQualityTier(requested, creatorMaxTier)`).
+- The presets object: `client/core/QualityPresets.js:153` (`export const QualityPresets = {`).
+
+Packages:
+- The ECS package re-exports `createWorld` at `packages/ecs/src/index.js:1` (`createWorld`) and `createQuery` at `packages/ecs/src/index.js:2` (`createQuery`).
+- The mapspinner package exports `createRenderer` at `packages/mapspinner/src/index.js:10` (`export async function createRenderer(gl, config = {})`) and `createPlanet` at `packages/mapspinner/src/index.js:15` (`export async function createPlanet(gl, config = {})`).
+- The Rust crate is named `spoint-core`: `packages/spoint-core/Cargo.toml:2` (`name = "spoint-core"`).
+
+Negatives (`git grep`, `git cat-file` or `git ls-tree` at `d5e3860`):
+- `client/core/WebGpuHizTier.js` does not exist. The class is in `packages/streaming-gltf/src/webgpu-hiz-tier.js:64`, and a second copy is in `packages/streaming-gltf/examples/local-progressive/webgpu-hiz-tier.js:10` (`export class WebGpuHizTier {`), which client code does not import.
+- Witness scripts that name these modules: `ShadowCostProbe`, `QualityGovernor`, `SceneOcclusion`, `EditorShell` and `PeerHostUI` each match 0 files under `scripts`. `ShadowPipeline`, `CullFreeze`, `XRWidgets` and `cluster-lod-mesh` each match 1 file, 1 file, 5 files and 1 file.
+- `packages/spoint-core` has 0 `.js` files. It contains `Cargo.toml`, `Cargo.lock` and `src/lib.rs`.
+- The name `EP_progressive_lod` is read in one file only, `packages/streaming-gltf/src/model-pool.js`, across `src`, `client`, `packages/streaming-gltf/src` and `scripts`.
+
+These are static facts about spoint. The GPU and XR runtime behaviour is not exercised here, and any runtime question goes to the owner.
+
 ## Stream 18: SDK server HTTP, static serving and server surface (spoint, read-only at `d5e3860`)
 
 Each line gives `path:line` and the exact source line at `d5e3860`. A self-check re-read all 25 snippets from `git -C /workspace/spoint show d5e3860:<path>` and matched 25 of 25 before this section was written. Nothing was written into spoint.
@@ -291,13 +363,13 @@ Four denominators, kept separate:
 
 Scoped results, decoded-frame scope only, re-derived:
 - Frames 229921, gzip frames 1, decode failures 0.
-- Key occurrences 12259 (the sum of `keyCount` over the 2580 rows). Those occurrences and the 12186 `keys.txt` lines differ by 73. The gap is not reconciled.
+- Key occurrences 12259 (the sum of `keyCount` over the 2580 rows). They exceed the per-manifest unique sum 12186 by 73, a gap closed below.
 - Unique keys 11987: 11679 are `~2fcdn~2fvalue.<sha>` and 308 are `~2fcdn~2f<name>` with no sha.
-- `~2f` occurs 23974 times across the unique keys and 24518 times in frame-level tilde tokens.
+- Three `~2f` scopes, never merged (spawn-reported, each 2 × its key denominator): 24518 = 2 × 12259 raw decoded-frame key occurrences; 24372 = 2 × 12186 per-manifest unique key lines; 23974 = 2 × 11987 unique keys across the 2580 scope. Each key carries exactly two `~2f`.
 - `~3a` 0 and `~7e` 0 across the unique keys, with no key containing `spawnfile`, `https~3a` or a bare tilde. Bucket `3d` holds 22 keys, all `/cdn/` keys.
 - `spawnfile` occurs 0 times across the decoded frames.
 
-These negatives hold only in the decoded-frame scope of the 2580 manifests reached. They are not a universal absence. The spawnfile key path stays ELIDED, the bucket rule stays UNDETERMINED, and the 2 non-CDN refs and the 2 404 keys stay scoped observations. The 73-line gap between the occurrence total and the `keys.txt` lines is open until spawn explains it.
+These negatives hold only in the decoded-frame scope of the 2580 manifests reached. They are not a universal absence. The spawnfile key path stays ELIDED, the bucket rule stays UNDETERMINED, and the 2 non-CDN refs and the 2 404 keys stay scoped observations. The 73-line gap is CLOSED as a witnessed resolution. Spawn's `reconcile-gap.mjs` over `kw/key-world.jsonl` (spawn-reported) gives dtRawKeyCountSum 12259, kwPerManifestUniqueSum 12186, withinManifestRepeatSum 73, manifestsWithRepeats 61, negativeDiffs 0, kwUniqueAcrossAll 11987 and missing 0. Savi re-derived the arithmetic from `kw/key-world.jsonl` and spawn's `dt/results.jsonl`: 61 manifests differ between the two counts, the differences sum to 73, and `kw/key-world.jsonl` has no key repeated within any manifest. The mechanism, repeats within one manifest in the raw scan, is spawn's and is not re-derived here. The 199 cross-manifest duplicate lines (12186 − 11987) are a separate figure, not part of the 73.
 
 ## Scoped spawn body witnesses
 

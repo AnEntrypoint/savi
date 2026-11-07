@@ -35,7 +35,7 @@ Source paths: `/workspace/spoint/AGENTS.md`, `/workspace/spoint/DESIGN.md`, `/wo
 - Sharding: `Cluster*`, `Region*`, `ClusterHandoff`, `ShardingRefusal`.
 - SDK/server: `ServerAPI`, `AgentAuthoringAPI`, `StaticHandler`, `DevHmr`, `RoomOrchestratorHttp`, `RoomDirectory/Pick/Routing/Health/Log`, `ServerPresence/Identity`, `NostrAuthServer`, `cronSchedule`, `llmJobs`, `UploadHandler`, `MinimapBake`, `WorldPersistence`, `PrefabLibrary/Spawner`, `SceneImport/TiledImport`, `WorldLocator`.
 - Physics: Jolt World wrapper, `CharacterManager`, `ShapeBuilder`, `StaticTileIndex`, `FlightModel`, `VehiclePhysics`, Draco/Meshopt decompressors.
-- Terrain: 21+ files including `PlanetFrame`, `ChartReanchor*`, `CaveSDF/CavePatches/CaveMeshes`, `GrassPlacementLod`, `BiomeOverride`, `ClimateCache`.
+- Terrain: 21+ files including `PlanetFrame`, `ChartReanchor*`, `CaveSDF/CavePatches/client/core/CaveMeshes`, `GrassPlacementLod`, `BiomeOverride`, `ClimateCache`.
 - Apps: `src/stdlib-apps/` 31 built-in placed apps; `apps/world/` 13 `.js` files including `index.js`, so 12 world definitions; ~40 app demos.
 - Packages: `mapspinner/` (planet/terrain renderer), `streaming-gltf/` (EP_progressive_lod schemas), `ecs/`, `spoint-core/` (Rust scaffold).
 - Game systems: `AbilityTree/QuestSystem/ProgressionSystem/StatsSystem/EventChainManager`; `src/animation/`; `src/pathfinding/` (`NavmeshQuery`, `ChartNavmeshQuery`, `RecastIntegration`).

@@ -221,6 +221,56 @@ const spointRoot = "/workspace/spoint"
 const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
+const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
+for (const [number, expected] of [[19, 24], [20, 32]]) {
+  const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
+  const cites = [...section.matchAll(streamCitePattern)]
+  let verified = 0
+  for (const [, path, lineNumber, snippet] of cites) {
+    claimsChecked++
+    let source = null
+    try { source = execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:${path}`], { encoding: "utf8" }).split("\n") } catch { source = null }
+    if (source === null) { errors.push(`FEATURESET.md stream ${number}: ${path} is not in spoint at ${spointPin}`); continue }
+    if ((source[Number(lineNumber) - 1] ?? "").includes(snippet)) verified++
+    else errors.push(`FEATURESET.md stream ${number}: ${path}:${lineNumber} does not contain the cited text: ${snippet}`)
+  }
+  if (cites.length !== expected) errors.push(`FEATURESET.md stream ${number}: expected ${expected} citations, found ${cites.length}`)
+  counts[`stream${number}`] = { citations: cites.length, verified }
+  console.log(`STREAM ${number} CITATIONS VERIFIED AGAINST spoint ${spointPin}: ${verified} of ${cites.length}`)
+}
+const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
+if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
+const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
+if (cavePatchesImporters !== 0) errors.push(`spoint: CavePatches has ${cavePatchesImporters} files outside .gm, expected 0`)
+for (const file of ["FEATURESET.md", "JAYZEE-GAPS.md", "PARITY-INPUTS.md"]) {
+  const body = readFileSync(join(docs, file), "utf8")
+  if (body.includes("CavePatches/CaveMeshes") || body.includes("CavePatches, CaveMeshes")) errors.push(`${file}: CaveMeshes is still listed under src/terrain`)
+  if (!body.includes("client/core/CaveMeshes")) errors.push(`${file}: the CaveMeshes correction is missing`)
+}
+const denominatorSection = texts["FEATURESET.md"].split("\n## Scoped spawn decoded-frame token scan")[1]?.split("\n## ")[0] ?? ""
+const denominatorPatterns = {
+  textVisibleKeys: /(\d+) text-visible keys/,
+  uniqueDecodedKeys: /(\d+) unique decoded-frame `world\.assets` keys/,
+  manifestsReached: /(\d+) manifests reached/,
+  worldsWithCdnGlb: /(\d+) worlds with `\/cdn\/` GLB references/,
+}
+const readDenominators = (text) => Object.fromEntries(Object.entries(denominatorPatterns).map(([name, pattern]) => [name, Number((text.match(pattern) ?? [])[1])]))
+const hasMergedDenominators = (values) => new Set(Object.values(values)).size !== Object.values(values).length
+const denominators = readDenominators(denominatorSection)
+if (Object.values(denominators).some((value) => !(value > 0))) errors.push(`FEATURESET.md: a denominator is missing from the decoded-frame section: ${JSON.stringify(denominators)}`)
+if (hasMergedDenominators(denominators)) errors.push(`FEATURESET.md: denominators are merged: ${JSON.stringify(denominators)}`)
+const mergedWitness = readDenominators(denominatorSection.replace("307 text-visible keys", "11987 text-visible keys"))
+if (!hasMergedDenominators(mergedWitness)) errors.push("negative witness failed: merging two denominators was not refused")
+console.log(`FOUR DENOMINATORS DISTINCT: ${Object.values(denominators).join(", ")}; merge negative refused: ${hasMergedDenominators(mergedWitness)}`)
+for (const [frame, base] of [[24518, 12259], [24372, 12186], [23974, 11987]]) {
+  if (2 * base !== frame) errors.push(`arithmetic: 2 × ${base} is not ${frame}`)
+  if (!denominatorSection.includes(`${frame} = 2 × ${base}`)) errors.push(`FEATURESET.md: the ~2f scope ${frame} = 2 × ${base} is not stated`)
+}
+if (12259 - 12186 !== 73 || 12186 - 11987 !== 199) errors.push("arithmetic: the 73 and 199 gaps do not hold")
+for (const phrase of ["withinManifestRepeatSum 73", "manifestsWithRepeats 61", "negativeDiffs 0", "199 cross-manifest"]) {
+  if (!denominatorSection.includes(phrase)) errors.push(`FEATURESET.md: the 73-gap resolution is missing "${phrase}"`)
+}
+console.log("THREE ~2f SCOPES AND 73-GAP RESOLUTION CHECKED")
 const stream17 = texts["FEATURESET.md"].split("\n## Stream 17")[1]?.split("\n## ")[0] ?? ""
 const stream17Cites = [...stream17.matchAll(/`((?:src|client|apps|scripts)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g)]
 let stream17Verified = 0
