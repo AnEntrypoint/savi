@@ -84,14 +84,14 @@ Witness: command output `head404=256 old259=259 head-present-manifest404=3 subse
 Tag: required-in-jayzee
 
 ### OPEN-012
-Claim: head status 0 x1 for world 9f7b1a067caa46e2b2c1c7dceb48bc2b is transient with re-check HEAD 200, and manifest 404 x3 had head.json 200 on re-check.
+Claim: head status 0 x1 for world 9f7b1a067caa46e2b2c1c7dceb48bc2b is transient with re-check HEAD 200. The three head-present worlds return head 200 with `"manifest":null` and `"seq":0` (witnessed 2026-11-07), so the earlier manifest 404 x3 is not reproduced; the head names no manifest to fetch for them.
 Status: BEHAVIOUR
 Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/spawn/maps/head-present-manifest404-worlds.txt`
 Witness: command output "223:Stage failures: head 404 x256 (all head_not_found), head status 0 x1 (world 9f7b1a067caa46e2b2c1c7dceb48bc2b, not in the 259 list, HEAD 200 on re-check), manifest 404 x3 (head present, see below)."
 Tag: required-in-jayzee
 
 ### OPEN-013
-Claim: 2 open non-CDN refs remain in unverified-noncdn-refs.tsv: one ttf 401 credentialed and one mp4 connection timeout. Reconciled counts are 83 first-seen status-0 refs, 81 resolved HEAD 200 on retry, 2 open and 83 TSV data rows; the earlier 84 counted the header line and 82 was an arithmetic error.
+Claim: 2 non-CDN refs were open at the first pass in unverified-noncdn-refs.tsv: one ttf 401 credentialed, which remains open, and one mp4 connection timeout, which is CONFIRMED for one object by the full-body fetch in Detail. Only the ttf 401 remains open. Reconciled counts are 83 first-seen status-0 refs, 81 resolved HEAD 200 on retry, 2 open and 83 TSV data rows; the earlier 84 counted the header line and 82 was an arithmetic error.
 Status: OPEN
 Detail: the mp4 retry, one GET with `curl -sS -m 60`, returned 200 video/mp4 with 2350318 of 46469835 bytes before the 60 s limit and first bytes `ftyp isom`; the earlier connect timeout did not recur. A later full-body fetch of this one object (spawn-reported, record section 8, CONFIRMED for this single fetch only) read all 12 chunks at plan sizes, totalling 46469835 bytes, with sha256 matching the claimed sha in the Witness line below and first bytes `ftyp isom`. That confirmation does not extend to other objects, and the earlier 2350318-byte partial is superseded. The ttf 401 is a credentialed-looking refusal and is not bypassed, and it is not resolved.
 Source paths: `/workspace/spawn/maps/unverified-noncdn-refs.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
@@ -205,6 +205,20 @@ Claim: owner directive requires 93 savi endpoints, 23 served skills, 68 Tome hea
 Status: UNVERIFIED
 Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/.spawn/reference/COVERAGE.md`, `/workspace/savi/.spawn/reference/engine-deep/api-b.md`, `/workspace/savi/.spawn/reference/engine/api-reference.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `reference-counts tome-headings=68 served-skills=23 builtin-module-names=21 owner-directive-builtin-modules=23`; `ls tome/sections | grep -c '^builtin-'` = 21 and `grep -c '| builtin/' engine-deep/api-b.md` = 21, the two sets match exactly; block-shape appears in 4 reference files but has no section or table row, so it is not a module and counting it gives 22; local count stays 21, owner 23 not reproducible locally.
+Tag: required-in-jayzee
+
+### OPEN-029
+Claim: `value_not_found` is reproduced for two absent 64-hex hashes. Values and manifests both return 404 for the all-zero and all-f hashes, a scoped observation of two absent hashes and not a rule.
+Status: OPEN
+Source paths: `/workspace/savi/docs/FEATURESET.md`, `/workspace/spawn/maps/spawn-learning-record.md`
+Witness: command output 2026-11-07: `GET https://play.spawn.co/world-store/values/<64 zeros>` and `<64 f>` each return 404 application/json 27 bytes `{"error":"value_not_found"}`; `GET .../manifests/<64 zeros>` and `<64 f>` each return 404 application/json 101 bytes `{"error":"value_not_found","hash":...}`. The present-hash 200 controls are spawn-reported in section 7 of its record and were not re-run here.
+Tag: required-in-jayzee
+
+### OPEN-030
+Claim: The drifted-head case for world `41cd4649…` stays OPEN. Its head.json names manifest `3fa9a434…`, which returns 200 today, so the earlier 404 `unknown_world_store_key` for that manifest is NOT reproduced. The key is reproduced here only for a misspelled resource name under the same valid world (`head.jsn`). The selecting condition for the drifted head is not characterised, because the saved bodies hold only error text and no URL.
+Status: OPEN
+Source paths: `/workspace/savi/docs/FEATURESET.md`, `/workspace/spawn/maps/spawn-learning-record.md`
+Witness: command output 2026-11-07: `GET https://play.spawn.co/world-store/manifests/3fa9a4345a66f3a4ed34d6b4a0169750fa9ac4f5951ce29e5af9d008d3a5f75a` returns 200 application/octet-stream 513116 bytes; `GET .../git/41cd46499614484ca9261ce32e257e22/head.json` returns 200 1673 bytes naming that manifest; `GET .../git/41cd46499614484ca9261ce32e257e22/head.jsn` returns 404 application/json 35 bytes `{"error":"unknown_world_store_key"}`.
 Tag: required-in-jayzee
 
 ## Required feature support

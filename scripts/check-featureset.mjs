@@ -230,7 +230,7 @@ const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
 if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
-for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7]]) {
+for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
   const cites = [...section.matchAll(streamCitePattern)]
   let verified = 0
@@ -410,6 +410,74 @@ const effectsNamedInScripts = effectsModules.filter((m) => scriptJsTexts.some((t
 if (effectsNamedInScripts.length !== 0) errors.push(`savi scripts name effects modules: ${effectsNamedInScripts.join(", ")}`)
 counts.stream31 = { lines: effectsLines, exports: effectsExports, namedInDocs: effectsNamedInDocs.length, namedInScripts: effectsNamedInScripts.length }
 console.log(`STREAM 31 AT spoint ${spointPin}: ${effectsLines} lines, ${effectsExports} exports, fxProgram references ${fxProgramImporters.length}, witnesses ${effectsWitnesses.length}; savi docs name ${effectsNamedInDocs.length}; scripts name ${effectsNamedInScripts.length}`)
+const spointShow = (path) => execFileSync("git", ["-C", spointRoot, "show", `${spointPin}:${path}`], { encoding: "utf8" })
+const spointWitnessFiles = (name) => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-lwF", name, spointPin, "--", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).map((l) => l.replace(`${spointPin}:`, "")) } catch { return [] } }
+const spointLineCount = (path) => spointShow(path).split("\n").length - 1
+const spointExportCount = (path) => spointShow(path).split("\n").filter((l) => l.startsWith("export")).length
+const newStreamsSpan = texts["FEATURESET.md"].slice(texts["FEATURESET.md"].indexOf("\n## Stream 32"), texts["FEATURESET.md"].indexOf("\n## Stream 21"))
+const newStreamsOutsideText = [texts["FEATURESET.md"].replace(newStreamsSpan, ""), texts["JAYZEE-GAPS.md"], texts["OPEN-ITEMS.md"], readFileSync(join(docs, "PARITY-INPUTS.md"), "utf8"), ...scriptJsTexts]
+const saviNamesModule = (name) => newStreamsOutsideText.some((t) => new RegExp(`\\b${name}\\b`, "i").test(t))
+const s32 = ["DracoDecompressor", "GLBLoader", "GLBMath", "MeshoptDecompressor", "pivotTransform", "surfaceVelocity"]
+const s32Lines = s32.reduce((sum, m) => sum + spointLineCount(`src/physics/${m}.js`), 0)
+if (s32Lines !== 508) errors.push(`stream 32 at ${spointPin}: ${s32Lines} lines, expected 508`)
+const s32Exports = s32.reduce((sum, m) => sum + spointExportCount(`src/physics/${m}.js`), 0)
+if (s32Exports !== 20) errors.push(`stream 32 at ${spointPin}: ${s32Exports} exports, expected 20`)
+const s32NonBakeWitnessed = s32.filter((m) => spointWitnessFiles(m).some((f) => !f.includes("bake-")))
+if (s32NonBakeWitnessed.join() !== "pivotTransform,surfaceVelocity") errors.push(`stream 32 witnessed set is [${s32NonBakeWitnessed.join(", ")}], expected [pivotTransform, surfaceVelocity]`)
+const s32BakeOnly = s32.filter((m) => { const w = spointWitnessFiles(m); return w.length > 0 && w.every((f) => f.includes("bake-")) })
+if (s32BakeOnly.join() !== "GLBLoader,GLBMath") errors.push(`stream 32 bake-only names are [${s32BakeOnly.join(", ")}], expected [GLBLoader, GLBMath]`)
+const s32Named = s32.filter(saviNamesModule)
+if (s32Named.length !== 0) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 32 modules: ${s32Named.join(", ")}`)
+const s32NegativeWitnessRefused = spointWitnessFiles("NoSuchPhysicsModuleForNegativeWitness").length === 0
+if (!s32NegativeWitnessRefused) errors.push("stream 32 negative witness was not refused")
+counts.stream32Physics = { lines: s32Lines, exports: s32Exports, nonBakeWitnessed: s32NonBakeWitnessed.length, bakeOnly: s32BakeOnly.join("+") }
+console.log(`STREAM 32 AT spoint ${spointPin}: ${s32Lines} lines, ${s32Exports} exports, non-bake witnessed ${s32NonBakeWitnessed.join("+")}, bake-only ${s32BakeOnly.join("+")}, negative witness refused: ${s32NegativeWitnessRefused}`)
+const s33 = ["MinimapBiome", "SpawnSurface", "ballistics", "bookmarks", "canonicalJSON", "clusterAssignment", "colliderLattice", "equipment", "materialSlots", "modelLoadErrors", "relevanceRadius", "vec3", "worldPresets", "worldResolve"]
+const s33Lines = s33.reduce((sum, m) => sum + spointLineCount(`src/shared/${m}.js`), 0)
+if (s33Lines !== 1074) errors.push(`stream 33 at ${spointPin}: ${s33Lines} lines, expected 1074`)
+const s33Named = s33.filter(saviNamesModule)
+if (s33Named.length !== 0) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 33 modules: ${s33Named.join(", ")}`)
+const s33WitnessLess = s33.filter((m) => spointWitnessFiles(m).length === 0)
+if (s33WitnessLess.join() !== "SpawnSurface,bookmarks,canonicalJSON,clusterAssignment,materialSlots") errors.push(`stream 33 witness-less set is [${s33WitnessLess.join(", ")}], expected five`)
+console.log(`STREAM 33 AT spoint ${spointPin}: ${s33Lines} lines, 14 modules, savi names ${s33Named.length}, witness-less ${s33WitnessLess.length}`)
+const s34 = ["create-app", "create-project", "marketplace-install", "marketplace-registry", "room-orchestrator-boot", "room-worker-boot", "router-boot", "templates"]
+const s34Lines = s34.reduce((sum, m) => sum + spointLineCount(`bin/${m}.js`), 0)
+if (s34Lines !== 1313) errors.push(`stream 34 at ${spointPin}: ${s34Lines} lines, expected 1313`)
+const s34Named = ["create-app", "create-project", "room-orchestrator-boot", "room-worker-boot"].filter(saviNamesModule)
+if (s34Named.length !== 0) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 34 boot scripts: ${s34Named.join(", ")}`)
+const s34NoScriptWitness = ["marketplace-install", "marketplace-registry", "room-worker-boot"].filter((m) => spointWitnessFiles(m).length === 0)
+if (s34NoScriptWitness.length !== 3) errors.push(`stream 34 no-script-witness set is [${s34NoScriptWitness.join(", ")}], expected three`)
+console.log(`STREAM 34 AT spoint ${spointPin}: ${s34Lines} lines, 8 files, savi names ${s34Named.length}`)
+const s35 = ["GrassClump", "GrassMaterial", "GrassTSL", "GrassWindField"]
+const s35Lines = s35.reduce((sum, m) => sum + spointLineCount(`client/core/${m}.js`), 0)
+if (s35Lines !== 832) errors.push(`stream 35 at ${spointPin}: ${s35Lines} lines, expected 832`)
+const s35Witnessed = s35.filter((m) => spointWitnessFiles(m).length > 0)
+if (s35Witnessed.join() !== "GrassWindField") errors.push(`stream 35 witnessed set is [${s35Witnessed.join(", ")}], expected [GrassWindField]`)
+const s35Named = s35.filter(saviNamesModule)
+if (s35Named.length !== 0) errors.push(`savi docs or scripts outside streams 32 to 35 name stream 35 modules: ${s35Named.join(", ")}`)
+console.log(`STREAM 35 AT spoint ${spointPin}: ${s35Lines} lines, witnessed ${s35Witnessed.join("+")}, savi names ${s35Named.length}`)
+const improvementCandidates = [
+  ["src/shared/SpawnSurface.js", 68, "Number.isFinite(terrainY) ? Math.max(pose[1], terrainY) : pose[1]"],
+  ["src/shared/colliderLattice.js", 10, "return typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : null"],
+  ["src/shared/colliderLattice.js", 19, "const extent = positiveFinite('physics.extent', tphys.extent) ?? COLLIDER_DEFAULT_EXTENT_M"],
+  ["src/shared/MinimapBiome.js", 38, "if (!Number.isFinite(h)) { out[0] = 0; out[1] = 0; out[2] = 0; out[3] = 0; return null }"],
+  ["bin/room-orchestrator-boot.js", 14, "const workerCount = parseInt(process.env.ROOM_WORKER_COUNT || '2', 10)"],
+  ["bin/room-worker-boot.js", 59, "const workerCommandPort = parseInt(process.env.WORKER_COMMAND_PORT || '0', 10)"],
+  ["bin/router-boot.js", 25, "const cellSize = parseInt(process.env.SHARD_CELL_SIZE || String(shardCfg.cellSize ?? 0), 10) || undefined"],
+  ["bin/marketplace-registry.js", 7, "const PORT = parseInt(process.env.PORT || '3100', 10)"],
+  ["bin/marketplace-install.js", 17, "let registryUrl = process.env.MARKETPLACE_REGISTRY || 'http://localhost:3100'"],
+  ["client/core/GrassTSL.js", 33, "const d = density || GRASS_DENSITY"],
+  ["client/core/GrassMaterial.js", 152, "const d = density || GRASS_DENSITY"],
+  ["client/core/GrassMaterial.js", 117, "return Number.isFinite(v) ? v : fallback"],
+  ["client/core/GrassClump.js", 73, "const N = Number.isFinite(segments) && segments >= 1 ? segments | 0 : 3"],
+  ["client/core/GrassClump.js", 74, "const C = Number.isFinite(cards) && cards >= 1 ? cards | 0 : 3"],
+  ["client/core/GrassWindField.js", 137, "const r = Number.isFinite(reach) && reach > 0 ? reach : GRASS_WIND_FIELD_REACH_M"],
+]
+const candidateMismatch = improvementCandidates.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
+if (candidateMismatch.length !== 0) errors.push(`improvement candidates not at their cited lines at ${spointPin}: ${candidateMismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
+const candidateShiftRefused = improvementCandidates.filter(([p, n, s]) => spointShow(p).split("\n")[n]?.includes(s)).length === 0
+if (!candidateShiftRefused) errors.push("improvement candidate line-shift negative was not refused")
+console.log(`IMPROVEMENT CANDIDATES AT spoint ${spointPin}: ${improvementCandidates.length} located, line-shift negative refused: ${candidateShiftRefused}`)
 const cavePresentAtPin = (() => { try { execFileSync("git", ["-C", spointRoot, "cat-file", "-e", `${spointPin}:src/terrain/CaveMeshes.js`]); return true } catch { return false } })()
 if (cavePresentAtPin) errors.push("spoint: src/terrain/CaveMeshes.js exists at the pin, so the CaveMeshes correction is wrong")
 const cavePatchesImporters = (() => { try { return execFileSync("git", ["-C", spointRoot, "grep", "-l", "CavePatches", spointPin, "--", "src", "client", "apps", "packages", "edge", "scripts"], { encoding: "utf8" }).split("\n").filter(Boolean).length } catch { return 0 } })()
