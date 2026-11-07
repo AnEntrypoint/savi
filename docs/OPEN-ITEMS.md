@@ -127,6 +127,7 @@ Claim: site/manifest.json was generated at 501c76e while HEAD is 6c39a16, and en
 Status: OPEN
 Source paths: `/workspace/savi/site/manifest.json`, `/workspace/savi/.spawn/reference/engine-deep/README.md`
 Witness: command output `site commit=501c76e HEAD=6c39a16 branch=main origin=AnEntrypoint/savi`
+Resolution: `c398faf` corrects the engine-deep README to say savi is a git repository on main with origin AnEntrypoint/savi, and `npm run build` regenerated `site/` at that commit. `npm run check` at c398faf gave `{"ok":true,"sources":626,"text":620,"binary":6,"pages":628,"linksChecked":2513,"failures":[],"failureCount":0,"commit":"c398faf7f44fc3513f509f243f607c520f6bfbe4"}`, exit 0. Status is unchanged.
 
 ### OPEN-019
 Claim: CHARTEST-est-s1-3 is a confirmed REAL gap at PlanetFrame.js installGroundSource line 348, where a placement-only prototype-linked install changes the shared base frame's groundSource.
