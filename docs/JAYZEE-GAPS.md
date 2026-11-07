@@ -101,6 +101,6 @@ These are savi-side facts from FEATURESET.md that have no jayzee row. Each is ma
 - Builtin modules, 21 local against the owner's 23: UNVERIFIED on the owner count (OPEN-028). Witness: `ls .spawn/reference/tome/sections | grep -c '^builtin-'` = 21.
 - Reference index total of 208: UNVERIFIED (207 or 209 depending on the tome rule). This is a savi documentation count, not a jayzee requirement.
 - Site completeness contract (`scripts/build-manual.mjs`, `scripts/check-manual.mjs`): savi-owned tooling, not a jayzee requirement.
-- Spawn manifest frames after the sheet: row 1 is partial. The scoped body witnesses cover 3 manifests and do not close the row (ordered frame-to-hash mapping UNCHECKED). Witness: `/workspace/spawn/maps/witness/` (spawn copy).
+- Spawn manifest frames after the sheet: row 1 is partial. The scoped body witnesses cover 3 manifests and do not close the row. For those 3, the ordered frame-to-hash mapping matches (69/69, 80/80, 274/274). A 40-manifest sample (about 1.7%) also matched, 43 of 43 in total. That is a sample, not a corpus rule, and the rest of the manifests are UNCHECKED. Witness: `/workspace/spawn/maps/witness/` (spawn copy).
 - Spawnfile-keyed ledger family: row 1 is partial. OPEN-010 remains OPEN, because the full key is elided in savi's FAULTS.md.
 - Netcode owner improvements (OPEN-024) and spoint HELD-OWNER decisions (OPEN-025, OPEN-026, OPEN-027): HELD-OWNER. No jayzee action until the owner decides.
