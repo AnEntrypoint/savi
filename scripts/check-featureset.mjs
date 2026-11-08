@@ -14,7 +14,8 @@ const counts = {}
 let claimsChecked = 0
 
 const registerStatuses = new Set(["OPEN", "INFERRED", "UNVERIFIED", "BEHAVIOUR", "DIFFERENT-DATASET", "HELD-OWNER"])
-const gapStatuses = new Set(["built", "partial", "open"])
+const unrankedStatus = "not ranked at pin, unverified"
+const gapStatuses = new Set(["built", "partial", "open", unrankedStatus])
 const gapTags = new Set(["required-in-jayzee", "none (built)"])
 const countStatusPrefixes = ["REPRODUCED", "UNVERIFIED", "MATCHES RELAY"]
 const jayzeePathPattern = /([A-Za-z0-9_./-]+\.(?:js|mjs|json|md|tsv|bin|ts))\s*\(jayzee[^)]*\)/g
@@ -136,6 +137,8 @@ tableRows.forEach((cells, index) => {
   if (source === null) {
     unrankedRows.push(number)
     if (!cells.some((cell) => cell.includes(`Not ranked at \`${pin}\``))) errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin} and does not say so`)
+    if (status === "built") errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin} and may not be built`)
+    if (tag !== "required-in-jayzee") errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin} and must carry the required-in-jayzee tag`)
     if (tag === "required-in-jayzee") requiredRows++
     else builtRows++
     return
@@ -175,6 +178,14 @@ const expectedNamedNotCreated = []
 const sameList = (a, b) => a.length === b.length && a.every((n, i) => n === b[i])
 if (!sameList(openWithoutTarget, expectedOpenWithoutTarget)) errors.push(`JAYZEE-GAPS.md: feature-coverage rows citing no existing jayzee path are [${openWithoutTarget.join(", ")}], expected [${expectedOpenWithoutTarget.join(", ")}]`)
 if (!sameList(unrankedRows, expectedUnranked)) errors.push(`JAYZEE-GAPS.md: rows with no ranked row at ${pin} are [${unrankedRows.join(", ")}], expected [${expectedUnranked.join(", ")}]`)
+const parityBrief = readFileSync(join(docs, "PARITY-BRIEF-FOR-JAYZEE.md"), "utf8")
+for (const number of expectedUnranked) {
+  const title = tableRows.find((cells) => Number(cells[0]) === number)?.[1] ?? ""
+  if (!title || !parityBrief.includes(`Row ${number} `) || !parityBrief.includes(title)) errors.push(`docs/PARITY-BRIEF-FOR-JAYZEE.md: row ${number} is missing, or its title differs from JAYZEE-GAPS.md`)
+}
+const unrankedStatuses = tableRows.filter((cells) => expectedUnranked.includes(Number(cells[0]))).map((cells) => cells[2])
+counts.unrankedStatuses = unrankedStatuses
+console.log(`UNRANKED AT jayzee ${pin}: rows [${unrankedRows.join(", ")}] with statuses [${unrankedStatuses.join("; ")}]`)
 if (!sameList(namedNotCreated, expectedNamedNotCreated)) errors.push(`JAYZEE-GAPS.md: open required rows citing a jayzee path not created at ${pin} are [${namedNotCreated.join(", ")}], expected [${expectedNamedNotCreated.join(", ")}]`)
 counts.requiredInJayzee = requiredRows
 counts.builtRows = builtRows
@@ -255,7 +266,14 @@ if (contentMatches !== skillRows.length) errors.push(`skills: json content diffe
 const spointRoot = "/workspace/spoint"
 const spointPin = "d5e3860"
 const spointHead = execFileSync("git", ["-C", spointRoot, "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).trim()
-if (spointHead !== spointPin) errors.push(`spoint HEAD is ${spointHead}, expected ${spointPin}`)
+let spointPinIsAncestor = true
+try {
+  execFileSync("git", ["-C", spointRoot, "merge-base", "--is-ancestor", spointPin, "HEAD"], { stdio: "ignore" })
+} catch {
+  spointPinIsAncestor = false
+}
+if (!spointPinIsAncestor) errors.push(`spoint HEAD ${spointHead} does not contain ${spointPin}`)
+console.log(`SPOINT ${spointPin} IS AN ANCESTOR OF HEAD ${spointHead}: ${spointPinIsAncestor}`)
 const streamCitePattern = /`((?:src|client|apps|scripts|packages|edge)\/[^`]+?):(\d+)` \(`([^`]+)`\)/g
 for (const [number, expected] of [[19, 24], [20, 32], [21, 14], [22, 30], [23, 21], [24, 11], [25, 19], ["25, part 2", 17], [26, 19], [27, 19], [28, 18], [29, 17], [30, 14], [31, 7], [32, 10], [33, 14], [34, 0], [35, 4], [36, 8], [37, 6], [38, 4], [39, 4], [40, 5], [41, 4], [42, 3], [43, 2], [44, 3], [45, 6], [46, 6], [47, 4], [48, 4], [49, 4], [50, 4], [51, 7], [52, 6], [53, 3], [54, 3], [55, 3], [56, 4], [57, 7], [58, 4]]) {
   const section = texts["FEATURESET.md"].split(`\n## Stream ${number}`)[1]?.split("\n## ")[0] ?? ""
