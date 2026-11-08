@@ -115,6 +115,10 @@ const registerParitySource = (number) => {
   return number < 41 ? number - 1 : number - 2
 }
 const usedRanked = new Set()
+const saviTitleCorrections = {
+  52: (t) => t.replace("CavePatches, CaveMeshes", "CavePatches, client/core/CaveMeshes"),
+  60: (t) => t.replace("bin/create-app.js (spoint), ", ""),
+}
 
 const gapLines = texts["JAYZEE-GAPS.md"].split("\n")
 const tableRows = gapLines
@@ -126,7 +130,7 @@ let builtRows = 0
 const openWithoutTarget = []
 const namedNotCreated = []
 tableRows.forEach((cells, index) => {
-  const [numberText, , status, , jzCount, tag] = cells
+  const [numberText, title, status, , jzCount, tag] = cells
   const number = Number(numberText)
   if (number !== index + 1) errors.push(`JAYZEE-GAPS.md: row ${numberText} is not sequential at position ${index + 1}`)
   if (!gapStatuses.has(status)) errors.push(`JAYZEE-GAPS.md: row ${number} status outside the allowed set: ${status}`)
@@ -139,6 +143,8 @@ tableRows.forEach((cells, index) => {
     return
   }
   if (typeof source === "number") usedRanked.add(source)
+  const expectedTitle = (saviTitleCorrections[number] ?? ((t) => t))(parity.title)
+  if (expectedTitle !== title) errors.push(`JAYZEE-GAPS.md: row ${number} title differs from ${source} at ${pin}: "${title}" against "${expectedTitle}"`)
   if (parity.status !== status) errors.push(`JAYZEE-GAPS.md: row ${number} status ${status} differs from ${pin} (${parity.status})`)
   const existing = parity.paths.filter((path) => jayzeeTree.has(path)).length
   if (jzCount !== `${existing}/${parity.paths.length}`) errors.push(`JAYZEE-GAPS.md: row ${number} path count ${jzCount} differs from ${pin} (${existing}/${parity.paths.length})`)

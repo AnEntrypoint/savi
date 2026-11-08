@@ -8,7 +8,7 @@ Jayzee re-ranked the six rows of the earlier brief at `5fd6628c09384c1059af68839
 | 62 | 61 | built | HTTP door catalog: 70 doors, 17 exercised and 53 documented |
 | 63 | 62 | built | Tome API reference index: 68 distinct headings over 69 index rows, 69 section files, and 21 builtin sections |
 | 64 | 63 | open | Served skills: 23 served, and 47 directory entries |
-| 65 | 64 | open | Builtin modules: 21 local, against the owner's 23 (UNVERIFIED, OPEN-028) |
+| 65 | 64 | open | Builtin modules: 21 served by name, against the owner count of 23 (UNVERIFIED, OPEN-028) |
 | 66 | 65 | open | Reference total: 563 tracked files under .spawn/reference, against the README's 208 indexed files |
 
 Rows 61 and 62 are built, and the register cites their witnesses: scripts/check-upstream-doors.mjs and scripts/check-upstream-door-dispatch.mjs for row 61, and scripts/check-upstream-tome.mjs and scripts/check-upstream-tome-lookup.mjs for row 62. Row 60 and rows 63 to 65 stay as jayzee reports them. The owner counts of 23 builtins and 208 indexed files remain UNVERIFIED.
