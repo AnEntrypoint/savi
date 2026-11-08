@@ -169,10 +169,11 @@ Detail: Terrain mark vocabulary and world-def wiring; named terrain field paint 
 Tag: required-in-jayzee
 
 ### OPEN-023
-Claim: COVERAGE.md records 26 verbatim job gaps and 5 open items, including the docs-door contradiction, tome INDEX Gaps: 0 scope, shallow CLI reference, API-type update, and guide-job engine clone omission.
+Claim: Of the five open items in COVERAGE.md, three are answered: the docs-door contradiction (owner confirmed worldId 26f64424-cc19-43af-a9c3-666e4559bb05 is @lanmower/the-savi-gallery), the tome INDEX Gaps: 0 scope (section=all fetch, 69 section files), and the API-type update (305 type files match the 305-name index). Two stay open. Shallow CLI reference: owner decides whether the shared help text is the reference for client and mod verbs, or whether per-verb help is re-fetched from a live spawn run. Engine clone omission: owner decides which api-reference.md is canonical and which engine.yaml sha256 is recorded, because the reference copy is stale against the clone and the recorded hash matches neither the file nor its own sha256 field.
 Status: OPEN
 Source paths: `/workspace/savi/.spawn/reference/COVERAGE.md`
-Witness: command output `coverage gaps=26 open-items=5 owner-improvements=5`
+Witness: `coverage gaps=26 open-items=5 owner-improvements=5`; cli/types 305 type files equal the 305 names in cli/types/_names.txt, with 308 .txt total (plus _list.txt and _missing.txt, which are undocumented); cli/client-*.txt 11 of 12 byte-identical to client.txt (client-exec.txt distinct), cli/mod-*.txt 4 of 4 identical to mod.txt; reference/engine/api-reference.md 119,585 bytes against .spawn/engine/api-reference.md 120,797 bytes; engine INDEX records sha256 31a39ac2…, the engine.yaml sha256 field reads b5d10e37…, and sha256sum gives 08ce22c2….
+Resolution: items 1, 2 and 4 answered against `4231625`; items 3 and 5 restated above
 
 ### OPEN-024
 Claim: five netcode owner improvements await an owner decision: document 24 undocumented src/netcode modules, size the lag ring from window or clamp to 255 ticks, document WIRE_UNITS_PER_METER, put wire layouts in docs/code, and document gm maxInflight: 8.
