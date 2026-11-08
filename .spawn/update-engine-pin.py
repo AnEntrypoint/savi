@@ -10,12 +10,15 @@ def git(args):
     return subprocess.run(['git', '-C', CLONE] + args, capture_output=True, text=True).stdout.strip()
 
 
-head = git(['rev-parse', '--short', 'HEAD'])
 sha = ''
 for line in open(CLONE + 'engine.yaml', encoding='utf-8'):
-    if line.startswith('sha256:'):
-        sha = line.split(':', 1)[1].strip()
-assert head and len(sha) == 64, (head, sha)
+    key, _, value = line.partition(':')
+    if key.strip() == 'sha256':
+        sha = value.strip()
+assert len(sha) == 64, sha
+head = git(['rev-parse', '--short', 'HEAD'])
+toplevel = git(['rev-parse', '--show-toplevel'])
+assert toplevel == CLONE.rstrip('/') and head, ('engine clone is not its own git repository', toplevel, sha, head)
 kernel = sha[:12]
 recent = git(['log', '--oneline', '-8']).splitlines()
 

@@ -1,6 +1,6 @@
 # Engine 6.0.0 reference index
 
-Source: https://git.spawn.co/engine/6.0.0.git (shallow clone at /workspace/savi/.spawn/engine, pin semver 6.0.0, canonical api-reference.md sha256 a7d8fa98dddf13acbda7cb6bcff978c6cfa2fcd4daa827ca012b918347a004ed).
+Source: https://git.spawn.co/engine/6.0.0.git (shallow clone at /workspace/savi/.spawn/engine, pin semver 6.0.0, engine.yaml sha256 b5d10e377d047b1f2d5d303009fe45757aad4abb66fa9ab2a32951676d93b630 (release pin), api_reference_sha256 a7d8fa98dddf13acbda7cb6bcff978c6cfa2fcd4daa827ca012b918347a004ed).
 Sizes are bytes as reported by ls -la on the copied files. Headings are every markdown heading in each file, in order; `#` is level 1, `##` level 2, `###` level 3.
 
 Copied from the clone (not symlinked): api-reference.md, README.md, skills.md (repo root), and skills/*.md (23 guide files). Not copied: keys.py (615 B code file at repo root, not a doc) and engine.yaml (pin, read directly).
