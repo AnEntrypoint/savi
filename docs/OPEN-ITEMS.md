@@ -100,6 +100,7 @@ Status: OPEN
 Detail: the mp4 retry, one GET with `curl -sS -m 60`, returned 200 video/mp4 with 2350318 of 46469835 bytes before the 60 s limit and first bytes `ftyp isom`; the earlier connect timeout did not recur. A later full-body fetch of this one object (spawn-reported, record section 8, CONFIRMED for this single fetch only) read all 12 chunks at plan sizes, totalling 46469835 bytes, with sha256 matching the claimed sha in the Witness line below and first bytes `ftyp isom`. That confirmation does not extend to other objects, and the earlier 2350318-byte partial is superseded. The ttf 401 is a credentialed-looking refusal and is not bypassed, and it is not resolved.
 Source paths: `/workspace/spawn/maps/unverified-noncdn-refs.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
 Witness: command output `noncdn first0=83 retry200=81 open=2 tsvDataRows=83 linesIncludingHeader=84 ttf401=d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed mp4timeout=537d6321e14ca1fec788632ca4dcce598c8c901bdf123681d0119caab7815a2c`
+Live re-run 2026-11-08 of the 83 non-CDN rows by HEAD: 82 return 200, and the credentialed ttf d5558cd4… returns 401 application/json. The mp4 537d6321… connection timeout does not reproduce; it returns 200 on HEAD.
 Tag: required-in-jayzee
 
 ### OPEN-014
