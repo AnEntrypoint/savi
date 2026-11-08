@@ -91,6 +91,7 @@ Claim: head status 0 x1 for world 9f7b1a067caa46e2b2c1c7dceb48bc2b is transient 
 Status: BEHAVIOUR
 Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/spawn/maps/head-present-manifest404-worlds.txt`
 Witness: command output "223:Stage failures: head 404 x256 (all head_not_found), head status 0 x1 (world 9f7b1a067caa46e2b2c1c7dceb48bc2b, not in the 259 list, HEAD 200 on re-check), manifest 404 x3 (head present, see below)."
+Live re-run 2026-11-08: world 9f7b1a067caa46e2b2c1c7dceb48bc2b returns head 200 and manifest 200 (manifest 177f7a05728fcaddd3884ba21a12b156a7a87dd11067b53270f4edb135a18063), and no world in the 3567 sweep returned head status 0. The first-pass status 0 was transient.
 Tag: required-in-jayzee
 
 ### OPEN-013
