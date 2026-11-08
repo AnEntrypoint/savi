@@ -4,7 +4,7 @@ import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 const docPath = resolve(dirname(fileURLToPath(import.meta.url)), "..", "docs", "OPEN-ITEMS.md")
-const allowedStatuses = new Set(["OPEN", "INFERRED", "UNVERIFIED", "BEHAVIOUR", "DIFFERENT-DATASET", "HELD-OWNER"])
+const allowedStatuses = new Set(["OPEN", "RESOLVED", "INFERRED", "UNVERIFIED", "BEHAVIOUR", "DIFFERENT-DATASET", "HELD-OWNER"])
 const errors = []
 let text = ""
 
