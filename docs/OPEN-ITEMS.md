@@ -79,6 +79,7 @@ Claim: the full spawnfile key path is ELIDED; FAULTS F3 shows world.assets/3d/ht
 Status: OPEN
 Source paths: `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output "24:- The same line for world.assets/3d/https~3a~2f~2fspawnfile.io~2fprod~2fcharacter-assets~2f...-savi-reduced-fitted.glb.yaml."
+Local re-run 2026-11-08: spawn-engine FAULTS.md line 24 still shows the key path elided with "...", so the claim holds as written. Not a live re-run.
 Observation (spawn-reported, bounded probe of the FAULTS F3 path prefix only, no leaf): HEAD `https://spawnfile.io/` returns 200 text/html with length 0; HEAD `/prod/` returns 404 text/plain; HEAD `/prod/character-assets/` returns 404 text/plain; GET `/prod/character-assets/` returns 404 text/plain with body `Not Found`. A later GET of `https://spawnfile.io/prod/character-assets` with no trailing slash returns 404 text/plain with a 10-byte body `Not Found`. No model bytes and no model content type were reached, the `<unix-ms>-savi-reduced-fitted.glb` leaf was not guessed, and no credential or auth header was used. The spawnfile.io bytes stay UNCONFIRMED and the key path stays ELIDED.
 Tag: required-in-jayzee
 
