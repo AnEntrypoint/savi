@@ -43,11 +43,11 @@ Each row was run in `/workspace/savi` on HEAD `992b328`.
 | Assets 395 | `grep` for `395` in PROJECT_ASSETS.md | the figure appears in the text | UNVERIFIED for the URL count and the 4 families. The text says it, but the URL walk is not re-run here. |
 | me.doors 60 keys | `cd .spawn/reference && node -e 'console.log(Object.keys(JSON.parse(require("fs").readFileSync("http/raw/agent-v1-me.bearer.body","utf8")).doors).length)'` | 42 keys in `doors` | UNVERIFIED as 60. The local Bearer body holds 42 keys, and the CATALOG header's 60 is not reproduced from it. The capture time of the 60 is not recorded. |
 | Reference README "208 files" as a tree count | `find .spawn/reference -type f -not -path '*/raw/*' \| wc -l` | 563 files, of which 180 are `.md` | UNVERIFIED as a tree count. 208 is the index total, not a tree count. |
-| ENDPOINTS header "62 paths" vs sections summing to 63 | none | none | UNVERIFIED here. This is OPEN-001 and stays OPEN. |
+| ENDPOINTS header "62 paths" vs sections summing to 63 | none | none | UNVERIFIED here. Not a contradiction: 62 is the spec path count and 63 sums named-endpoint buckets. This is OPEN-001, which stays OPEN for the owner. |
 
 ### Other savi facts
 
-- Endpoints: `ENDPOINTS.md` names 93 endpoints from an OpenAPI 3.1.0 spec. The 93 total reconciles (REPRODUCED). The header vs section discrepancy is OPEN-001.
+- Endpoints: `ENDPOINTS.md` names 93 endpoints from an OpenAPI 3.1.0 spec. The 93 total reconciles (REPRODUCED). The header and section counts measure different things (spec paths against named endpoints), so they do not contradict; this is recorded as OPEN-001.
 - Completeness contract: `build-manual.mjs` generates `site/`. `check-manual.mjs` proves raw sha equality, displayed-text equality, link resolution, `.nojekyll`, seven workflow markers, manifest counts and manifest commit equal to HEAD. `publish.yml` builds and checks on every push to main, then deploys to Pages. Withheld from publication: `.spawn/reference/http/raw/`, `sources/`, `runs/`, `.playwriter/`, `site/`.
 - Site: `site/` is gitignored (`.gitignore` line 2 `site/`), and `git ls-files site` = 0 (REPRODUCED).
 - Netcode gaps: `gaps/netcode-optimization-gaps.md` documents 24 undocumented `src/netcode/` modules, a verified silent ring-overflow bug, the wire scale and five owner improvements (OPEN-024, HELD-OWNER). `gaps/morluto-rea-pr-9234-ci-findings.md` records PR 9234 CI findings.

@@ -5,10 +5,10 @@ Status values: OPEN, INFERRED, UNVERIFIED, BEHAVIOUR, DIFFERENT-DATASET, HELD-OW
 ## Register
 
 ### OPEN-001
-Claim: ENDPOINTS.md says 62 openapi paths while its three listed sections sum to 63; 93 total and four headings reconcile, so this is a doc contradiction, not a feature.
+Claim: the 62 in the ENDPOINTS.md header is the openapi spec path count, and the 63 is a sum of named-endpoint buckets (39 listed, 21 per-game, 3 partial), so the header and sections measure different things and do not contradict. The header already matches what `npm run endpoints` writes, and the regenerated file is byte-identical to the committed one. Only 42 of the 62 spec paths are named verbatim in the manual. The status stays OPEN because the status vocabulary has no resolved value, and the owner decides whether to add one.
 Status: OPEN
-Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/scripts/openapi.json`
-Witness: command output `openapi=62 listed=63 total=93 headings=4 39/21/3/30`
+Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/scripts/openapi.json`, `/workspace/savi/scripts/endpoints.mjs`
+Witness: command output `spec paths 62; ENDPOINTS.md header 62 paths, 93 named; buckets listed=39 per-game=21 partial=3 absent=30 (sum 93); spec paths named verbatim 42 of 62; npm run endpoints leaves git status clean`
 
 ### OPEN-002
 Claim: 305 API type names in api-types.md and 308 in ASSET_SHAPES.md come from different fetches and scopes, not an error.

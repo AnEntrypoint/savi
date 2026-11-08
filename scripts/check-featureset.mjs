@@ -133,7 +133,8 @@ tableRows.forEach((cells, index) => {
   const [numberText, title, status, , jzCount, tag] = cells
   const number = Number(numberText)
   if (number !== index + 1) errors.push(`JAYZEE-GAPS.md: row ${numberText} is not sequential at position ${index + 1}`)
-  if (!gapStatuses.has(status)) errors.push(`JAYZEE-GAPS.md: row ${number} status outside the allowed set: ${status}`)
+  if (!status) errors.push(`JAYZEE-GAPS.md: row ${number} has no status`)
+  else if (!gapStatuses.has(status)) errors.push(`JAYZEE-GAPS.md: row ${number} status outside the allowed set: ${status}`)
   if (!gapTags.has(tag)) errors.push(`JAYZEE-GAPS.md: row ${number} tag outside the allowed set: ${tag}`)
   if ((status === "built") !== (tag === "none (built)")) errors.push(`JAYZEE-GAPS.md: row ${number} has status ${status} with tag ${tag}; a built row takes the none (built) tag and no other row does`)
   const source = registerParitySource(number)
