@@ -83,6 +83,7 @@ Claim: MISSING-HEAD CORRECTION is 256; the older 259 list over-counts by 3 head-
 Status: BEHAVIOUR
 Source paths: `/workspace/spawn/maps/head404-confirmed-worlds.txt`, `/workspace/spawn/maps/head-present-manifest404-worlds.txt`, `/workspace/spawn/maps/open-missing-head-worlds.txt`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
 Witness: command output `head404=256 old259=259 head-present-manifest404=3 subset=256/256 extra=3 head-present-match=3/3 ids=5db79de6dae84ceca2ddb9b9a0e216d9,fd80e9d941624c2fbc48fc89193a7417,ffb0a8fbdca948a5933be7bd62fb44b5`
+Live re-run 2026-11-08 over the 3567 current feed worlds: head.json is 404 for 555 worlds. All 256 recorded head-404 worlds still return 404 (256 of 256). The three head-present worlds recorded as manifest 404 now return head 200 with no manifest field, so the manifest 404 is not reproduced. The other 299 head-404 worlds were added to the feed after the 2848-world scan.
 Tag: required-in-jayzee
 
 ### OPEN-012
