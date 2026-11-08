@@ -52,6 +52,7 @@ Claim: spawnfile-family scan covered 16/16 shards and 2848 worlds with 0 refs, 0
 Status: INFERRED
 Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `spawnfile shards=16 worlds=2848 refs=0 worldsWithRefs=0 urls=0`
+Live re-run 2026-11-08 not performed; it depends on the same value walk as OPEN-006. Stays INFERRED.
 Tag: required-in-jayzee
 
 ### OPEN-008
