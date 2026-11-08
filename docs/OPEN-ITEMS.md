@@ -234,7 +234,7 @@ Live re-run 2026-11-08: values/ with 64 zeros and with 64 f's each return 404 ap
 Tag: required-in-jayzee
 
 ### OPEN-030
-Claim: The drifted-head case for world `41cd4649…` stays OPEN. Its head.json names manifest `3fa9a434…`, which returns 200 today, so the earlier 404 `unknown_world_store_key` for that manifest is NOT reproduced. The key is reproduced here only for a misspelled resource name under the same valid world (`head.jsn`). The selecting condition for the drifted head is not characterised, because the saved bodies hold only error text and no URL.
+Claim: The drifted-head case for world `41cd4649…` stays OPEN. Its head.json named manifest `3fa9a434…` on 2026-11-07, and on 2026-11-08 it names `d49dac2b…` with `3fa9a434…` as its sheet field; `3fa9a434…` returns 200 today, so the earlier 404 `unknown_world_store_key` for that manifest is NOT reproduced. The key is reproduced here only for a misspelled resource name under the same valid world (`head.jsn`). The selecting condition for the drifted head is not characterised, because the saved bodies hold only error text and no URL.
 Status: OPEN
 Source paths: `/workspace/savi/docs/FEATURESET.md`, `/workspace/spawn/maps/spawn-learning-record.md`
 Witness: command output 2026-11-07: `GET https://play.spawn.co/world-store/manifests/3fa9a4345a66f3a4ed34d6b4a0169750fa9ac4f5951ce29e5af9d008d3a5f75a` returns 200 application/octet-stream 513116 bytes; `GET .../git/41cd46499614484ca9261ce32e257e22/head.json` returns 200 1673 bytes naming that manifest; `GET .../git/41cd46499614484ca9261ce32e257e22/head.jsn` returns 404 application/json 35 bytes `{"error":"unknown_world_store_key"}`.
