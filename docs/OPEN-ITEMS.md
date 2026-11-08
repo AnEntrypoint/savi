@@ -120,6 +120,7 @@ Claim: world.assets/<xx>/ bucket rule is UNDETERMINED after 74 tested pairs and 
 Status: UNVERIFIED
 Source paths: `/workspace/jayzee/docs/PARITY.md`, `/workspace/savi/spawn-engine/ASSETS.md`, `/workspace/savi/spawn-engine/FAULTS.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
 Witness: command output `bucket-rule owner=74-tested-pairs status=UNDETERMINED hypothesis=none-promoted`
+Local re-run 2026-11-08 of spawn encoder-bucket/bucket-test.mjs: 11679 pairs over 1265 files; the best hypothesis matches 54 pairs, and none is promoted. Not a live re-run.
 Tag: required-in-jayzee
 
 ### OPEN-016
