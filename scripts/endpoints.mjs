@@ -2,7 +2,6 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const SPEC_URL = 'https://www.spawn.co/openapi.json'
 const here = path.dirname(fileURLToPath(import.meta.url))
 const specFile = path.join(here, 'openapi.json')
 const skipDirs = new Set(['.git', '.playwriter', 'runs', 'site', 'node_modules', 'sources', 'scripts', 'spawn-evidence'])
@@ -88,22 +87,9 @@ export function buildEndpointsPage(root) {
   return lines.join('\n')
 }
 
-export async function syncSpec() {
-  const response = await fetch(SPEC_URL)
-  if (!response.ok) throw new Error('spec fetch failed: ' + response.status)
-  const body = await response.text()
-  JSON.parse(body)
-  writeFileSync(specFile, body, 'utf8')
-  return body.length
-}
-
 const invoked = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 if (invoked) {
-  if (process.argv[2] === '--sync') {
-    console.log(JSON.stringify({ synced: await syncSpec() }))
-  } else {
-    const root = path.resolve(process.argv[2] || '.')
-    writeFileSync(path.join(root, 'ENDPOINTS.md'), buildEndpointsPage(root), 'utf8')
-    console.log(JSON.stringify({ named: namedEndpoints(root).length, written: 'ENDPOINTS.md' }))
-  }
+  const root = path.resolve(process.argv[2] || '.')
+  writeFileSync(path.join(root, 'ENDPOINTS.md'), buildEndpointsPage(root), 'utf8')
+  console.log(JSON.stringify({ named: namedEndpoints(root).length, written: 'ENDPOINTS.md' }))
 }

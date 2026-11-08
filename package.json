@@ -8,7 +8,6 @@
     "check:ideal-coverage": "node scripts/check-ideal-coverage.mjs",
     "check:ideal-witnesses": "node scripts/check-ideal-witnesses.mjs",
     "endpoints": "node scripts/endpoints.mjs .",
-    "sync-spec": "node scripts/endpoints.mjs --sync",
     "verify": "node scripts/verify-publish.mjs .",
     "check:featureset": "node scripts/check-featureset.mjs"
   }
