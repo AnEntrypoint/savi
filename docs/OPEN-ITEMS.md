@@ -70,6 +70,7 @@ Claim: spawnfile.io model bytes are UNCONFIRMED until a HEAD proof exists.
 Status: UNVERIFIED
 Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`, `/workspace/savi/spawn-engine/ASSETS.md`
 Witness: command output "222:Totals over the 2848 feed worlds: scanned 2848. Spawnfile-family refs: 0 (0 worlds, 0 unique URLs). The spawnfile.io family is not present in any feed world the scanner reached, and the complete key path is still ELIDED (no full example exists). So spawnfile.io bytes stays UNCONFIRMED."
+Not re-run 2026-11-08 (see OPEN-006). A HEAD proof of the spawnfile.io bytes is a separate probe not run in this pass. Stays UNVERIFIED.
 Observation (scoped, reported by spawn in msg abbc6d6e, not re-run or verified by this session; witness gm run 2026-11-07-10-49-42-a2cf05 seq 53): one page, filtered on /spawnfile|bigspawn/, gave total 30, unique 29, glbLike [], hosts play.bigspawn.net, www.spawn.co, rqr3rdr46-playco.spawnfile.io, and blob: under that host. This is one page only and does not contradict the 0 spawnfile refs over 2848 worlds.
 Tag: required-in-jayzee
 
