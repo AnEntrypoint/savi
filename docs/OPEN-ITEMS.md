@@ -62,6 +62,7 @@ Observation (scoped to spawn's probe of 308 named `/cdn/` keys, not universal): 
 Observation (spawn-reported, bounded retry, scoped to the named keys): the 2 first-pass named-target timeouts now return 200 model/gltf-binary on HEAD and `glTF` body magic on a 4-byte range GET, and the 4 first-pass `/cdn/` timeouts retried 4 of 4, each returning 302 to a value-origin path that returns 200 model/gltf-binary on HEAD. Across all 308 named keys with `.yaml` stripped, every redirect target now returns 200 model/gltf-binary on HEAD, and a 4-byte range GET returns `glTF` magic with 206 for all 308 targets. The first pass had 2 range-GET TypeErrors that a sequential retry cleared, and that cause is not explained. Gone-410 probes: 41, none returned a body-level 410 (spawn-reported; probe 41 is a feed world absent from the root map, returning 200 found). This strengthens "named keys reach bytes at value-origin through a 302 from `/cdn/`" and does not confirm `/cdn/`-only, which stays INFERRED.
 Source paths: `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output "217:Model URL naming: the only witnessed rule is world.assets/<xx>/~2fcdn~2fvalue.<sha256>.glb.yaml in a file-map value, which maps to /cdn/value.<sha256>.glb. Inferred (not witnessed): that every GLB is served only under play.spawn.co/cdn/"
+Live re-run 2026-11-08 not performed; it depends on the same value walk as OPEN-006. Stays INFERRED.
 Tag: required-in-jayzee
 
 ### OPEN-009
