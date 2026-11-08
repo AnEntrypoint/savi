@@ -13,7 +13,7 @@ const errors = []
 const counts = {}
 let claimsChecked = 0
 
-const registerStatuses = new Set(["OPEN", "INFERRED", "UNVERIFIED", "BEHAVIOUR", "DIFFERENT-DATASET", "HELD-OWNER"])
+const registerStatuses = new Set(["OPEN", "RESOLVED", "INFERRED", "UNVERIFIED", "BEHAVIOUR", "DIFFERENT-DATASET", "HELD-OWNER"])
 const gapStatuses = new Set(["built", "partial", "open"])
 const gapTags = new Set(["required-in-jayzee", "none (built)"])
 const countStatusPrefixes = ["REPRODUCED", "UNVERIFIED", "MATCHES RELAY"]
