@@ -85,19 +85,36 @@ if (!pin) errors.push("JAYZEE-GAPS.md: no jayzee commit pin found in the header"
 const jayzeeTree = pin ? new Set(execFileSync("git", ["-C", jayzee, "ls-tree", "-r", "--name-only", pin], { encoding: "utf8" }).split("\n")) : new Set()
 const parityText = pin ? execFileSync("git", ["-C", jayzee, "show", `${pin}:docs/PARITY.md`], { encoding: "utf8" }) : ""
 const rankedSection = parityText.split("\n## Ranked rows")[1]?.split("\n## Split")[0] ?? ""
+const parityEntry = (row) => {
+  const normalised = row.replace(/\n+/g, " ").trim()
+  const paths = [...normalised.matchAll(jayzeePathPattern)].map((m) => m[1])
+  const status = (normalised.match(/Status: ([a-z]+)/) || [])[1] || null
+  return { paths, status }
+}
 const parityRows = new Map(
   rankedSection
     .split(/\n(?=\d+\. )/)
     .filter((row) => /^\d+\. /.test(row))
-    .map((row) => {
-      const normalised = row.replace(/\n+/g, " ").trim()
-      const number = Number(normalised.match(/^(\d+)\./)[1])
-      const paths = [...normalised.matchAll(jayzeePathPattern)].map((m) => m[1])
-      const status = (normalised.match(/Status: ([a-z]+)/) || [])[1] || null
-      return [number, { paths, status }]
-    }),
+    .map((row) => [Number(row.match(/^(\d+)\./)[1]), parityEntry(row)]),
+)
+const notInSpointSection = parityText.split("\n## Not in spoint")[1]?.split("\n## ")[0] ?? ""
+const notInSpointRows = new Map(
+  notInSpointSection
+    .split(/\n(?=U\d+\. )/)
+    .filter((row) => /^U\d+\. /.test(row))
+    .map((row) => [row.match(/^(U\d+)\./)[1], parityEntry(row)]),
 )
 counts.parityRows = parityRows.size
+const registerParitySource = (number) => {
+  if (number === 41) return "U41"
+  if (number === 67) return "U67"
+  if (number === 61) return 59
+  if (number === 1 || (number >= 62 && number <= 66)) return null
+  return number < 41 ? number - 1 : number - 2
+}
+const expectedUnranked = [1, 62, 63, 64, 65, 66]
+const unrankedRows = []
+const usedRanked = new Set()
 
 const gapLines = texts["JAYZEE-GAPS.md"].split("\n")
 const tableRows = gapLines
@@ -114,15 +131,24 @@ tableRows.forEach((cells, index) => {
   if (number !== index + 1) errors.push(`JAYZEE-GAPS.md: row ${numberText} is not sequential at position ${index + 1}`)
   if (!gapStatuses.has(status)) errors.push(`JAYZEE-GAPS.md: row ${number} status outside the allowed set: ${status}`)
   if (!gapTags.has(tag)) errors.push(`JAYZEE-GAPS.md: row ${number} tag outside the allowed set: ${tag}`)
-  const parity = parityRows.get(number)
-  if (!parity) {
-    errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin}`)
+  if ((status === "built") !== (tag === "none (built)")) errors.push(`JAYZEE-GAPS.md: row ${number} has status ${status} with tag ${tag}; a built row takes the none (built) tag and no other row does`)
+  const source = registerParitySource(number)
+  if (source === null) {
+    unrankedRows.push(number)
+    if (!cells.some((cell) => cell.includes(`Not ranked at \`${pin}\``))) errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin} and does not say so`)
+    if (tag === "required-in-jayzee") requiredRows++
+    else builtRows++
     return
   }
+  const parity = typeof source === "string" ? notInSpointRows.get(source) : parityRows.get(source)
+  if (!parity) {
+    errors.push(`JAYZEE-GAPS.md: row ${number} has no source at ${pin}`)
+    return
+  }
+  if (typeof source === "number") usedRanked.add(source)
   if (parity.status !== status) errors.push(`JAYZEE-GAPS.md: row ${number} status ${status} differs from ${pin} (${parity.status})`)
   const existing = parity.paths.filter((path) => jayzeeTree.has(path)).length
   if (jzCount !== `${existing}/${parity.paths.length}`) errors.push(`JAYZEE-GAPS.md: row ${number} path count ${jzCount} differs from ${pin} (${existing}/${parity.paths.length})`)
-  if ((status === "built") !== (tag === "none (built)")) errors.push(`JAYZEE-GAPS.md: row ${number} has status ${status} with tag ${tag}; a built row takes the none (built) tag and no other row does`)
   if (tag === "required-in-jayzee") {
     requiredRows++
     if (status === "open") {
@@ -136,7 +162,7 @@ tableRows.forEach((cells, index) => {
     builtRows++
   }
 })
-if (tableRows.length !== parityRows.size) errors.push(`JAYZEE-GAPS.md: ${tableRows.length} rows against ${parityRows.size} ranked rows at ${pin}`)
+if (usedRanked.size !== parityRows.size) errors.push(`JAYZEE-GAPS.md: ${usedRanked.size} register rows map to ${parityRows.size} ranked rows at ${pin}`)
 const rankedNumbers = [...parityRows.keys()].sort((a, b) => a - b)
 const numberedFromOne = (numbers) => numbers.every((n, i) => n === i + 1)
 if (!numberedFromOne(rankedNumbers)) errors.push(`ranked rows at ${pin} are not numbered 1 to ${rankedNumbers.length}`)
@@ -148,6 +174,7 @@ const expectedOpenWithoutTarget = []
 const expectedNamedNotCreated = []
 const sameList = (a, b) => a.length === b.length && a.every((n, i) => n === b[i])
 if (!sameList(openWithoutTarget, expectedOpenWithoutTarget)) errors.push(`JAYZEE-GAPS.md: feature-coverage rows citing no existing jayzee path are [${openWithoutTarget.join(", ")}], expected [${expectedOpenWithoutTarget.join(", ")}]`)
+if (!sameList(unrankedRows, expectedUnranked)) errors.push(`JAYZEE-GAPS.md: rows with no ranked row at ${pin} are [${unrankedRows.join(", ")}], expected [${expectedUnranked.join(", ")}]`)
 if (!sameList(namedNotCreated, expectedNamedNotCreated)) errors.push(`JAYZEE-GAPS.md: open required rows citing a jayzee path not created at ${pin} are [${namedNotCreated.join(", ")}], expected [${expectedNamedNotCreated.join(", ")}]`)
 counts.requiredInJayzee = requiredRows
 counts.builtRows = builtRows

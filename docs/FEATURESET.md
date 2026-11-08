@@ -84,7 +84,7 @@ Verified read-only at `d5e3860`, with spoint's own confirmation of the first fou
 - Game systems: `AbilityTree/QuestSystem/ProgressionSystem/StatsSystem/EventChainManager`; `src/animation/`; `src/pathfinding/` (`NavmeshQuery`, `ChartNavmeshQuery`, `RecastIntegration`).
 - Client surfaces: `client/editor/`, `client/hud/`, `client/xr/`, `client/core/` (WebGPU and WebGL postFX, shadow, cascade and quality governors), `client/landing/`.
 - Edge, deploy and shell: `edge/cf-do/`, `src-tauri/`, `bin/`, `scripts/`.
-- `.gm/witness-out/savi-spawn-feature-gap.md` is a 60-claim gap report: 47 implemented, 13 remaining. The 47 are not independently verified.
+- `.gm/witness-out/spawn-feature-gap.md` is a 60-claim gap report: 47 implemented, 13 remaining. The 47 are not independently verified.
 
 ## Jayzee parity rows and Tier B
 

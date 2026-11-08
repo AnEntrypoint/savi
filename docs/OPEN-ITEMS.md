@@ -161,7 +161,7 @@ Tag: required-in-jayzee
 ### OPEN-022
 Claim: the 13 unchecked savi/spawn gap-report claims remain open and the 47 checked claims are explicitly NOT independently verified.
 Status: UNVERIFIED
-Source paths: `/workspace/spoint/.gm/witness-out/savi-spawn-feature-gap.md`, `/workspace/jayzee/docs/PARITY.md`
+Source paths: `/workspace/spoint/.gm/witness-out/spawn-feature-gap.md`, `/workspace/jayzee/docs/PARITY.md`
 EPHEMERAL WITNESS POINTER (provenance, not a source): `/tmp/spoint-parity/parity-crossmap.json`
 Witness: command output `gap unchecked=13 checked=47 total=60 implemented=47`
 Detail: Terrain mark vocabulary and world-def wiring; named terrain field paint with PLAYER and CREATOR layers; decoration item layers and graphics-tier reach; rigged-model ragdoll activation; vibe pattern core and transport; PostFX look DSL and render-graph operators; private preview room and separate publish; browser readiness, fault and chat contract; declarative world tree and state scopes; shared spec parse boundary for all ctx.define* factories; surface the tick drop counter; SES availability preflight with distinct reason codes; fail-loud asset loading gate for model errors.

@@ -26,7 +26,7 @@ Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/scripts/openapi.j
 
 ## Documented featureset: /workspace/spoint
 
-Source paths: `/workspace/spoint/AGENTS.md`, `/workspace/spoint/DESIGN.md`, `/workspace/spoint/SKILL.md`, `/workspace/spoint/docs/`, `/workspace/spoint/src/`, `/workspace/spoint/client/`, `/workspace/spoint/apps/`, `/workspace/spoint/packages/`, `/workspace/spoint/bin/`, `/workspace/spoint/scripts/`, `/workspace/spoint/.gm/prd.yml`, `/workspace/spoint/.gm/witness-out/savi-spawn-feature-gap.md`. Verified read-only at `d5e3860`: 2,233 commits, 2,293 tracked files, 20 docs pages, 103 PRD rows (fixed 34 / refuted 28 / retired 26 / open 15), 142 files in `work/rows/`, 76 tracked verdict paths.
+Source paths: `/workspace/spoint/AGENTS.md`, `/workspace/spoint/DESIGN.md`, `/workspace/spoint/SKILL.md`, `/workspace/spoint/docs/`, `/workspace/spoint/src/`, `/workspace/spoint/client/`, `/workspace/spoint/apps/`, `/workspace/spoint/packages/`, `/workspace/spoint/bin/`, `/workspace/spoint/scripts/`, `/workspace/spoint/.gm/prd.yml`, `/workspace/spoint/.gm/witness-out/spawn-feature-gap.md`. Verified read-only at `d5e3860`: 2,233 commits, 2,293 tracked files, 20 docs pages, 103 PRD rows (fixed 34 / refuted 28 / retired 26 / open 15), 142 files in `work/rows/`, 76 tracked verdict paths.
 
 - Protocol: `MessageTypes.js` (WIRE_PROTOCOL_VERSION 5, opcodes 0x01..0xc7, unreliable set, disconnect reasons), `msgpack.js` WIRE_STRUCTURES, `InputCodec.js`, `ComponentSchema.js`, `CursorEventStream.js`, `EventEmitter.js`.
 - Netcode: `SnapshotBinFormat.js` (29-byte records, 22-byte player records, smallest-three quaternion), `SnapshotEncoder/Packer/NetworkState`, `ReplayFile` (magic `spointreplay`, v2), `LagCompensator/Hitscan/RewindSpatialIndex`, `CheatEjection/DesyncDetector/ConsensusVoter/EventLog/InputGuard/OutlierDetector/LockstepChecksum`, Lockstep* / Rollback* / `PeerSimSession` / `NetcodeProfile`, `ReplayRecorder/Player`, `TickSystem`, `PlayerManager`, `PhysicsIntegration`, `CollisionSystem`.
@@ -41,7 +41,7 @@ Source paths: `/workspace/spoint/AGENTS.md`, `/workspace/spoint/DESIGN.md`, `/wo
 - Game systems: `AbilityTree/QuestSystem/ProgressionSystem/StatsSystem/EventChainManager`; `src/animation/`; `src/pathfinding/` (`NavmeshQuery`, `ChartNavmeshQuery`, `RecastIntegration`).
 - Client: `client/editor/`, `client/hud/`, `client/xr/`, `client/core/` (WebGPU/WebGL postFX, shadow/cascade/quality governors), `client/landing/`.
 - Edge/deploy/shell: `edge/cf-do/`, `src-tauri/`, `bin/`, `scripts/` (193 top-level entries, 115 `witness*.mjs`, 6 `harness*.mjs`), 16 GLB maps in `apps/maps/`.
-- `.gm/witness-out/savi-spawn-feature-gap.md` is a 60-claim gap report: 47 implemented, 13 remaining. The 47 are not independently verified.
+- `.gm/witness-out/spawn-feature-gap.md` is a 60-claim gap report: 47 implemented, 13 remaining. The 47 are not independently verified.
 
 ## Documentation streams relayed from the spoint peer
 
