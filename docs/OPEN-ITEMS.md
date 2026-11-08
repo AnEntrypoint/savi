@@ -230,6 +230,7 @@ Claim: The drifted-head case for world `41cd4649…` stays OPEN. Its head.json n
 Status: OPEN
 Source paths: `/workspace/savi/docs/FEATURESET.md`, `/workspace/spawn/maps/spawn-learning-record.md`
 Witness: command output 2026-11-07: `GET https://play.spawn.co/world-store/manifests/3fa9a4345a66f3a4ed34d6b4a0169750fa9ac4f5951ce29e5af9d008d3a5f75a` returns 200 application/octet-stream 513116 bytes; `GET .../git/41cd46499614484ca9261ce32e257e22/head.json` returns 200 1673 bytes naming that manifest; `GET .../git/41cd46499614484ca9261ce32e257e22/head.jsn` returns 404 application/json 35 bytes `{"error":"unknown_world_store_key"}`.
+Live re-run 2026-11-08: manifests/3fa9a434… returns 200 application/octet-stream 513116 bytes, and head.jsn returns 404 35 bytes unknown_world_store_key. head.json now returns 200 at 4650 bytes and names manifest d49dac2b… with 3fa9a434… as its sheet field, so the Claim's statement that head.json names 3fa9… as its manifest is incorrect as written. The drifted-head case stays OPEN.
 Detail: the reproduction of `unknown_world_store_key` is the misspelled resource name `head.jsn` under the same world (404 35 bytes), with `head.json` as the control (200 1673 bytes). The drifted-head condition, for `manifests/3fa9a434…`, is not reproduced; this matches FINDINGS.md line 30.
 Tag: required-in-jayzee
 
