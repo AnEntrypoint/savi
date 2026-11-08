@@ -104,7 +104,7 @@ The durable equivalents are the /workspace paths above and `/workspace/spoint/.g
 - Stream 9: sandbox and static-serving surface. SES fails closed with `SandboxUnavailableError` at `src/sdk/SESCompartmentEvaluator.js:81` (verified). Timing-safe compare is at `src/sdk/authCompare.js:10` (verified). COEP `require-corp` is at `src/sdk/StaticHandler.js:108` (verified). Path containment is at `src/sdk/StaticHandler.js:149` (verified).
 - Stream 10: the final cross-map counts and refreshed witnesses. These are peer-reported witnesses. The PRD counts were reproduced above.
 
-### Stream 11: jayzee PARITY rows 6-10, 32, 33 (spoint-witnessed at `d5e3860`)
+### Stream 11: jayzee PARITY rows 6-10, 32, 33 at `17ce428` (spoint-witnessed at `d5e3860`)
 
 Rows are ranked rows in jayzee `docs/PARITY.md` at `17ce428`. Each line below is a spoint witness with a durable path and line number. Re-verify with `git -C /workspace/spoint show d5e3860:<path>`.
 

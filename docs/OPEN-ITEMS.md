@@ -241,4 +241,4 @@ Spawn learnings, witnessed in `docs/FEATURESET.md` with exact commands. Figures 
 - API types: 305 type files in `.spawn/reference/cli/types/`, plus 3 `_` meta files (308 files total). The live "308 types" claim needs a Bearer token and is UNVERIFIED (OPEN-002).
 - Tome: 68 distinct headings across 69 index rows, with `World Queries` appearing twice. 21 local builtin modules against the owner's 23 (OPEN-028, UNVERIFIED).
 - Reference index total of 208 is not reproduced: the tome bucket measures 75 files (73 `.md`), so the total is 207 or 209 depending on the rule (UNVERIFIED).
-- Jayzee PARITY rows 6-10, 32 and 33 are documented with durable spoint paths and line numbers in `docs/FEATURESET.md`, section "Stream 11". Their closure status is not verified here.
+- Jayzee PARITY rows 6-10, 32 and 33 at `17ce428` are documented with durable spoint paths and line numbers in `docs/FEATURESET.md`, section "Stream 11". Their closure status is not verified here.
