@@ -14,8 +14,7 @@ const counts = {}
 let claimsChecked = 0
 
 const registerStatuses = new Set(["OPEN", "INFERRED", "UNVERIFIED", "BEHAVIOUR", "DIFFERENT-DATASET", "HELD-OWNER"])
-const unrankedStatus = "not ranked at pin, unverified"
-const gapStatuses = new Set(["built", "partial", "open", unrankedStatus])
+const gapStatuses = new Set(["built", "partial", "open"])
 const gapTags = new Set(["required-in-jayzee", "none (built)"])
 const countStatusPrefixes = ["REPRODUCED", "UNVERIFIED", "MATCHES RELAY"]
 const jayzeePathPattern = /([A-Za-z0-9_./-]+\.(?:js|mjs|json|md|tsv|bin|ts))\s*\(jayzee[^)]*\)/g
@@ -90,7 +89,8 @@ const parityEntry = (row) => {
   const normalised = row.replace(/\n+/g, " ").trim()
   const paths = [...normalised.matchAll(jayzeePathPattern)].map((m) => m[1])
   const status = (normalised.match(/Status: ([a-z]+)/) || [])[1] || null
-  return { paths, status }
+  const title = normalised.replace(/^U?\d+\.\s*/, "").split(". ")[0]
+  return { paths, status, title }
 }
 const parityRows = new Map(
   rankedSection
@@ -106,15 +106,14 @@ const notInSpointRows = new Map(
     .map((row) => [row.match(/^(U\d+)\./)[1], parityEntry(row)]),
 )
 counts.parityRows = parityRows.size
+const reRankedRows = { 1: 60, 62: 61, 63: 62, 64: 63, 65: 64, 66: 65 }
 const registerParitySource = (number) => {
   if (number === 41) return "U41"
   if (number === 67) return "U67"
   if (number === 61) return 59
-  if (number === 1 || (number >= 62 && number <= 66)) return null
+  if (reRankedRows[number] !== undefined) return reRankedRows[number]
   return number < 41 ? number - 1 : number - 2
 }
-const expectedUnranked = [1, 62, 63, 64, 65, 66]
-const unrankedRows = []
 const usedRanked = new Set()
 
 const gapLines = texts["JAYZEE-GAPS.md"].split("\n")
@@ -134,15 +133,6 @@ tableRows.forEach((cells, index) => {
   if (!gapTags.has(tag)) errors.push(`JAYZEE-GAPS.md: row ${number} tag outside the allowed set: ${tag}`)
   if ((status === "built") !== (tag === "none (built)")) errors.push(`JAYZEE-GAPS.md: row ${number} has status ${status} with tag ${tag}; a built row takes the none (built) tag and no other row does`)
   const source = registerParitySource(number)
-  if (source === null) {
-    unrankedRows.push(number)
-    if (!cells.some((cell) => cell.includes(`Not ranked at \`${pin}\``))) errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin} and does not say so`)
-    if (status === "built") errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin} and may not be built`)
-    if (tag !== "required-in-jayzee") errors.push(`JAYZEE-GAPS.md: row ${number} has no ranked row at ${pin} and must carry the required-in-jayzee tag`)
-    if (tag === "required-in-jayzee") requiredRows++
-    else builtRows++
-    return
-  }
   const parity = typeof source === "string" ? notInSpointRows.get(source) : parityRows.get(source)
   if (!parity) {
     errors.push(`JAYZEE-GAPS.md: row ${number} has no source at ${pin}`)
@@ -177,15 +167,14 @@ const expectedOpenWithoutTarget = []
 const expectedNamedNotCreated = []
 const sameList = (a, b) => a.length === b.length && a.every((n, i) => n === b[i])
 if (!sameList(openWithoutTarget, expectedOpenWithoutTarget)) errors.push(`JAYZEE-GAPS.md: feature-coverage rows citing no existing jayzee path are [${openWithoutTarget.join(", ")}], expected [${expectedOpenWithoutTarget.join(", ")}]`)
-if (!sameList(unrankedRows, expectedUnranked)) errors.push(`JAYZEE-GAPS.md: rows with no ranked row at ${pin} are [${unrankedRows.join(", ")}], expected [${expectedUnranked.join(", ")}]`)
-const parityBrief = readFileSync(join(docs, "PARITY-BRIEF-FOR-JAYZEE.md"), "utf8")
-for (const number of expectedUnranked) {
-  const title = tableRows.find((cells) => Number(cells[0]) === number)?.[1] ?? ""
-  if (!title || !parityBrief.includes(`Row ${number} `) || !parityBrief.includes(title)) errors.push(`docs/PARITY-BRIEF-FOR-JAYZEE.md: row ${number} is missing, or its title differs from JAYZEE-GAPS.md`)
+const parityBrief = readFileSync(join(docs, "PARITY-BRIEF-FOR-JAYZEE.md"), "utf8").split("\n")
+for (const [registerRow, jayzeeRow] of Object.entries(reRankedRows)) {
+  const registerCells = tableRows.find((cells) => Number(cells[0]) === Number(registerRow))
+  const jayzeeTitle = parityRows.get(jayzeeRow)?.title ?? ""
+  const briefLine = parityBrief.find((line) => line.startsWith(`| ${registerRow} |`)) ?? ""
+  if (!registerCells || !jayzeeTitle || registerCells[1].slice(0, 14) !== jayzeeTitle.slice(0, 14) || !briefLine.includes(`| ${jayzeeRow} |`)) errors.push(`docs/PARITY-BRIEF-FOR-JAYZEE.md: register row ${registerRow} does not map to jayzee row ${jayzeeRow} at ${pin}`)
 }
-const unrankedStatuses = tableRows.filter((cells) => expectedUnranked.includes(Number(cells[0]))).map((cells) => cells[2])
-counts.unrankedStatuses = unrankedStatuses
-console.log(`UNRANKED AT jayzee ${pin}: rows [${unrankedRows.join(", ")}] with statuses [${unrankedStatuses.join("; ")}]`)
+console.log(`RE-RANKED ROWS AT jayzee ${pin}: ${Object.entries(reRankedRows).map(([r, j]) => `register ${r} to jayzee ${j}`).join("; ")}`)
 if (!sameList(namedNotCreated, expectedNamedNotCreated)) errors.push(`JAYZEE-GAPS.md: open required rows citing a jayzee path not created at ${pin} are [${namedNotCreated.join(", ")}], expected [${expectedNamedNotCreated.join(", ")}]`)
 counts.requiredInJayzee = requiredRows
 counts.builtRows = builtRows
