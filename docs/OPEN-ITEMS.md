@@ -44,6 +44,7 @@ Claim: 2416 verified /cdn/ GLB refs across 399 worlds and 2355 unique sha256 val
 Status: OPEN
 Source paths: `/workspace/spawn/maps/glb-urls-all.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `glb rows=2416 worlds=399 shas=2355 cdn=2416 ok=2416`
+Live re-run 2026-11-08 not performed at value level. Head and manifest probes cover the 3012 head-present feed worlds, but the manifest of world 41cd4649… lists 3234 value hashes, so a full value walk would be on the order of nine million requests at the measured 1 to 2 s each. The 2416, 399 and 2355 figures stay spawn-reported.
 Tag: required-in-jayzee
 
 ### OPEN-007
