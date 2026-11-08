@@ -132,6 +132,7 @@ Claim: with reorder>0, 1011/2000 jayzee transport-sim payloads arrived before mi
 Status: BEHAVIOUR
 Source paths: `/workspace/spoint/src/transport/NetworkSimTransport.js`, `/workspace/spoint/client/core/RenderControls.js`, `/workspace/jayzee/docs/PARITY.md`
 Witness: command output `transport-sim owner=1011/2000 reorder>0 min-latency-gate=reorder-off`
+Re-run 2026-11-08 of jayzee src/transport/simTransport.js with every reorder preset (2000 messages, seed 1): 0 or 1 delivery arrives before its minimum latency per run (wifiTypical 1, cellular4g 1, roadmapTarget 1, degradedWan 0, brutal 1). The 1011/2000 figure from spoint NetworkSimTransport.js is not reproduced here.
 Tag: required-in-jayzee
 
 ### OPEN-018
