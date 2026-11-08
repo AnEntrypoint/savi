@@ -9,6 +9,7 @@ Claim: the 62 in the ENDPOINTS.md header is the openapi spec path count, and the
 Status: OPEN
 Source paths: `/workspace/savi/ENDPOINTS.md`, `/workspace/savi/scripts/openapi.json`, `/workspace/savi/scripts/endpoints.mjs`
 Witness: command output `spec paths 62; ENDPOINTS.md header 62 paths, 93 named; buckets listed=39 per-game=21 partial=3 absent=30 (sum 93); spec paths named verbatim 42 of 62; npm run endpoints leaves git status clean`
+Resolution: `09332d3` records the counting-error finding, with the header unchanged because it already matches `npm run endpoints`; `check-featureset` gained the explicit no-status failure. Status is unchanged.
 
 ### OPEN-002
 Claim: 305 API type names in api-types.md and 308 in ASSET_SHAPES.md come from different fetches and scopes, not an error.

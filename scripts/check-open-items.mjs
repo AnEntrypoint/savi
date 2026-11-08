@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process"
 import { existsSync, readFileSync } from "node:fs"
 import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -57,6 +58,27 @@ const workspacePaths = [...new Set((text.match(/\/workspace\/[A-Za-z0-9_.\/-]+/g
 for (const path of workspacePaths) {
   if (!existsSync(path)) errors.push(`missing cited path: ${path}`)
 }
+
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..")
+const commitExists = (id) => {
+  try {
+    execFileSync("git", ["-C", repoRoot, "cat-file", "-e", `${id}^{commit}`], { stdio: "ignore" })
+    return true
+  } catch {
+    return false
+  }
+}
+const resolutionCommitErrors = (body) => body
+  .split("\n")
+  .filter((line) => line.startsWith("Resolution: "))
+  .flatMap((line) => [...line.matchAll(/`([0-9a-f]{7,40})`/g)].map((m) => m[1]))
+  .filter((id) => !commitExists(id))
+  .map((id) => `resolution cites a commit that does not exist: ${id}`)
+for (const item of items) errors.push(...resolutionCommitErrors(item.body.join("\n")))
+const resolutionNegative = resolutionCommitErrors("Resolution: `0000000000`")
+if (resolutionNegative.length !== 1) errors.push("negative witness failed: a resolution citing a nonexistent commit was not refused")
+const resolutionCount = items.filter((item) => item.body.some((line) => line.startsWith("Resolution: "))).length
+console.log(`RESOLUTION LINES: ${resolutionCount} items resolved with cited commits present; nonexistent commit refused: ${resolutionNegative.length === 1}`)
 
 const closedPointers = (body) => (body.match(/\/workspace\/gm\/closes\/[A-Za-z0-9_.\/-]+/g) || []).map((path) => path.replace(/[.,;:)\]]+$/, ""))
 const closedPointerErrors = (body) => closedPointers(body).filter((path) => !existsSync(path)).map((path) => `closed-row pointer does not resolve: ${path}`)
