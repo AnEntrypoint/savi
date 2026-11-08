@@ -36,6 +36,7 @@ Claim: savi FEED_SCOPE.md has 3421 projects and 66 engine versions by offset ste
 Status: DIFFERENT-DATASET
 Source paths: `/workspace/savi/spawn-engine/FEED_SCOPE.md`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
 Witness: command output `feed savi=3421/66 spawn=2848/1002`
+Live re-run 2026-11-08: the plain feed walk (offset step 22, 3890 rows) gives 3567 distinct projects and 66 engine versions; the three-sort union (limit 48) gives 3567 worlds and 1164 creators. The recorded 3421/66 and 2848/1002 are earlier snapshots, so the feed has grown.
 Tag: required-in-jayzee
 
 ### OPEN-006
