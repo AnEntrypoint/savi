@@ -108,6 +108,7 @@ Claim: owner-reported 84 first-seen status 0 and 82 resolved on retry are UNVERI
 Status: UNVERIFIED
 Source paths: `/workspace/spawn/maps/unverified-noncdn-refs.tsv`, `/workspace/spawn/maps/spawn-root-worlds-map.md`
 Witness: command output `noncdn owner=84/82 lines=84 rows=83 first0=83 retry200=81 open=2 ttf401=d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed mp4timeout=537d6321e14ca1fec788632ca4dcce598c8c901bdf123681d0119caab7815a2c`
+Live re-run 2026-11-08 over the 83 data rows: 82 return 200 and 1 returns 401, against the owner-reported 84/82 and the TSV's 81 retry-200. The owner-reported 84 and 82 stay unverified.
 
 ### OPEN-015
 Claim: world.assets/<xx>/ bucket rule is UNDETERMINED after 74 tested pairs and no hypothesis is promoted.
