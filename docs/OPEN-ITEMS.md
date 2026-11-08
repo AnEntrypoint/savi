@@ -222,6 +222,7 @@ Claim: `value_not_found` is reproduced for two absent 64-hex hashes. Values and 
 Status: OPEN
 Source paths: `/workspace/savi/docs/FEATURESET.md`, `/workspace/spawn/maps/spawn-learning-record.md`
 Witness: command output 2026-11-07: `GET https://play.spawn.co/world-store/values/<64 zeros>` and `<64 f>` each return 404 application/json 27 bytes `{"error":"value_not_found"}`; `GET .../manifests/<64 zeros>` and `<64 f>` each return 404 application/json 101 bytes `{"error":"value_not_found","hash":...}`. The present-hash 200 controls are spawn-reported in section 7 of its record and were not re-run here.
+Live re-run 2026-11-08: values/ with 64 zeros and with 64 f's each return 404 application/json 27 bytes {"error":"value_not_found"}; manifests/ with the same two hashes return 404 application/json 101 bytes with value_not_found. Reproduced.
 Tag: required-in-jayzee
 
 ### OPEN-030
