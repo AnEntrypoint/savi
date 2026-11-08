@@ -1,6 +1,6 @@
 # Engine 6.0.0 reference index
 
-Source: https://git.spawn.co/engine/6.0.0.git (shallow clone at /workspace/savi/.spawn/engine, pin semver 6.0.0, engine.yaml sha256 31a39ac2c2689403920f92bf1231e382cae87c7c3f0055769e5fb0797a60f419).
+Source: https://git.spawn.co/engine/6.0.0.git (shallow clone at /workspace/savi/.spawn/engine, pin semver 6.0.0, canonical api-reference.md sha256 a7d8fa98dddf13acbda7cb6bcff978c6cfa2fcd4daa827ca012b918347a004ed).
 Sizes are bytes as reported by ls -la on the copied files. Headings are every markdown heading in each file, in order; `#` is level 1, `##` level 2, `###` level 3.
 
 Copied from the clone (not symlinked): api-reference.md, README.md, skills.md (repo root), and skills/*.md (23 guide files). Not copied: keys.py (615 B code file at repo root, not a doc) and engine.yaml (pin, read directly).
@@ -9,7 +9,7 @@ Copied from the clone (not symlinked): api-reference.md, README.md, skills.md (r
 |---|---|---|
 | README.md | 554 | `# Spawn engine 6.0.0 — the vocabulary` |
 | skills.md | 1559 | `# Skills` |
-| api-reference.md | 119585 | see section below |
+| api-reference.md | 120797 | see section below |
 | 2d-mode.md | 7292 | `# 2D Mode` |
 | buyables.md | 3445 | `# Buyables`; `### Signatures (generated: do not edit)` |
 | cameras.md | 9259 | `# Cameras` |
@@ -34,7 +34,7 @@ Copied from the clone (not symlinked): api-reference.md, README.md, skills.md (r
 | vehicles.md | 7520 | `# Vehicles`; `## Gotchas` |
 | voxel-terrain.md | 9291 | `# Voxel Terrain` |
 
-## api-reference.md headings (119585 bytes)
+## api-reference.md headings (120797 bytes)
 
 - `# Spawn game API` (H1)
 - `## Identity`, `## State`, `## Properties`, `## Movement`, `## Terrain`, `## Splines`, `## Camera`, `## Selection`, `## Player`, `## Timing`, `## Jobs`, `## Database`, `## Clock`

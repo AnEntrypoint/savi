@@ -634,7 +634,7 @@ const candidates42 = [
 ]
 const candidate42Mismatch = candidates42.filter(([p, n, s]) => !spointShow(p).split("\n")[n - 1]?.includes(s))
 if (candidate42Mismatch.length !== 0) errors.push(`stream 42 candidates not at cited lines: ${candidate42Mismatch.map(([p, n]) => `${p}:${n}`).join(", ")}`)
-const docNoteSavi = [[".spawn/reference/engine/api-reference.md", 2198, "new LineBasicNodeMaterial({ color, linewidth: 3 })"], [".spawn/reference/engine-deep/api-b.md", 309, "linewidth` is in CSS pixels at every distance"]].every(([p, n, s]) => readFileSync(join(savi, p), "utf8").split("\n")[n - 1]?.includes(s))
+const docNoteSavi = [[".spawn/reference/engine/api-reference.md", 2201, "new LineBasicNodeMaterial({ color, linewidth: 3 })"], [".spawn/reference/engine-deep/api-b.md", 309, "linewidth` is in CSS pixels at every distance"]].every(([p, n, s]) => readFileSync(join(savi, p), "utf8").split("\n")[n - 1]?.includes(s))
 const docNoteJayzee = (() => { try { return execFileSync("git", ["-C", "/workspace/jayzee", "show", `${pin}:scripts/check-upstream-builtin-three.mjs`], { encoding: "utf8" }).split("\n")[92]?.includes("linewidth: 3") } catch { return false } })()
 if (!docNoteSavi) errors.push("documentation note: the savi LineBasicNodeMaterial or linewidth reference line is not where it is cited")
 if (!docNoteJayzee) errors.push(`documentation note: jayzee check-upstream-builtin-three.mjs:93 does not name LineBasicNodeMaterial linewidth 3 at ${pin}`)

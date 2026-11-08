@@ -172,7 +172,7 @@ ctx.world.settling
 
 ## Jobs
 
-The engine's jobs are llm:chat, llm:generate, llm:clear, jev:decide, mail:send, chat:send, chat:history, player:token, player:names, text:check, image:generate, and image:segment. image:generate paints one picture per player per game from that player's words: args { prompt, width, height, transparent, tile }, with width and height in pixels (1536 by 1024 when unset), and tile true for an opaque texture that repeats both ways with no seam; data { name, url, width, height }, where url is written as any texture. A player's next ask answers paint_spent, so keep the url in player.state. image:segment finds the things a picture shows: args { image, prompt, points }, with image a picture's address or a data URL, prompt the words that name what to find, and points [{ x, y, label }] in the picture's pixels; data { masks: [{ name, url, width, height, box, score }] }, one black-and-white PNG per thing found, white where it is, with box its bounds in the picture's pixels.
+The engine's jobs are llm:chat, llm:generate, llm:clear, jev:decide, mail:send, chat:send, chat:history, player:token, player:names, text:check, image:generate, image:segment, and video:generate. image:generate paints one picture per player per game from that player's words: args { prompt, width, height, transparent, tile }, with width and height in pixels (1536 by 1024 when unset), and tile true for an opaque texture that repeats both ways with no seam; data { name, url, width, height }, where url is written as any texture. A player's next ask answers paint_spent, so keep the url in player.state. image:segment finds the things a picture shows: args { image, prompt, points }, with image a picture's address or a data URL, prompt the words that name what to find, and points [{ x, y, label }] in the picture's pixels; data { masks: [{ name, url, width, height, box, score }] }, one black-and-white PNG per thing found, white where it is, with box its bounds in the picture's pixels. video:generate makes a clip from words with the model spawn video uses: args { prompt, seconds, aspect, image }, with seconds 5 to 15 and image an optional first frame; data { name, url, seconds, width, height }, where url is an .mp4 written as any screen's texture. A clip takes minutes, so ask it from a cron and wait there with await ctx.awaitJob(id).
 
 ```ts
 ctx.job<T>(jobId: string, args: Record<string, unknown>, callback?: (result: JobResult<T>) => void, options?: JobOptions): string
@@ -330,7 +330,7 @@ ctx.trade(mine: string, opts: { with: string; for: string } | null): TradeReceip
 ctx.self.joints[id] = { to, type, … }
 delete ctx.self.joints[id]
 ctx.self.joints[id].motor = { velocity, maxForce }
-ctx.self.joints[id].limits = [min, max]
+ctx.self.joints[id].limits = [min, max] or { min, max, stiffness, damping }
 ```
 
 ## Ragdoll
@@ -522,7 +522,7 @@ ObjectProperties = {
   collider2d?: { outline: [[x, y], ...] },
   ui?: str | null,
   press?: { radius: num, strength?: num, at?: [x, y, z], below?: num } | [{ radius: num, strength?: num, at?: [x, y, z], below?: num }, ...] | null,
-  fx?: { script: "scripts/file.js", params?: Record<string, any>, seed?: num, paused?: bool, enabled?: bool },
+  fx?: { script: "scripts/file.js", params?: Record<string, any>, seed?: num, paused?: bool, enabled?: bool, time?: num | null },
   voice?: { gain: 0-1 } | null,
   model?: "cdn/model.glb" | { id, offset?: [x, y, z] },
   mixer?: { <channelName>: { clip: string, weight?: num, speed?: num, loop?: "once"|"loop"|"pingpong", blendIn?: num, blendOut?: num, talking?: true } },
@@ -676,7 +676,7 @@ ActPayloads = {
   preload: { refs: string[] }, // warms each sound, texture or model before its first use on the machines that hear it (the acting player's by default), so a game loads ahead of a moment it sees coming: emit it when those assets become likely; only machines in the room when it is sent hear it, so a room with no player in it warms no player, and one that joins later is not warmed; fire-and-forget, nothing shown, the world unchanged
   fx: { position: Vec3; script: string; params?: Record<string, unknown>; seed?: number; tags?: string[]; attachTo?: string },
   decal: { position: Vec3; normal: Vec3; texture: string; size?: number | [number, number] | [number | [number, number], number | [number, number]] = 0.5; rotation?: number | [number, number]; lifetime?: number = 30; fade?: number; color?: Color; opacity?: number | [number, number] = 1; attachTo?: string },
-  slash: { position: Vec3; size?: number; shape?: "tightUniform" | "broadUniform" | "tightWidening" | "broadWidening" | "crescent" | "longCrescent" | "circle"; noise?: "none" | "forward" | "backward" | "stableDissolve"; glow?: "none" | "light" | "medium" | "intense" | "max"; timing?: "quick" | "standard" | "slow" | "verySlow"; body?: number; edge?: number; fade?: number; edgeColor?: Color; edgeAlpha?: number; bodyColor1?: Color; bodyColor1Alpha?: number; bodyColor2?: Color; bodyColor2Alpha?: number; bodyColor3?: Color; bodyColor3Alpha?: number; outwardGlow?: number; outwardGlowWidth?: number; outwardGlowSpeed?: number; rotation?: { yaw?: number; pitch?: number; roll?: number }; velocity?: { x?: number; y?: number; z?: number }; scaleVelocity?: number; rotationVelocity?: { yaw?: number; pitch?: number; roll?: number } },
+  slash: { position: Vec3; size?: number; shape?: "tightUniform" | "broadUniform" | "tightWidening" | "broadWidening" | "crescent" | "longCrescent" | "circle"; noise?: "none" | "forward" | "backward" | "stableDissolve"; glow?: "none" | "light" | "medium" | "intense" | "max"; timing?: "quick" | "standard" | "slow" | "verySlow"; body?: number; edge?: number; fade?: number; edgeColor?: Color; edgeAlpha?: number; bodyColor1?: Color; bodyColor1Alpha?: number; bodyColor2?: Color; bodyColor2Alpha?: number; bodyColor3?: Color; bodyColor3Alpha?: number; outwardGlow?: number; outwardGlowWidth?: number; outwardGlowSpeed?: number; rotation?: { yaw?: number; pitch?: number; roll?: number }; velocity?: { x?: number; y?: number; z?: number }; scaleVelocity?: number; rotationVelocity?: { yaw?: number; pitch?: number; roll?: number }; attachTo?: string },
   shockwave: { position: Vec3; speed?: number = 0.5; thickness?: number = 0.5; intensity?: number = 0.5; edgeFade?: number = 0.5; scale?: number = 1; easing?: "linear" | "easeOut" | "easeIn" = "linear" },
   screenShake: { intensity: number; duration?: number = 0.2 },
   screenFlash: { color?: Color; duration?: number = 0.15; intensity?: number = 0.35 },
@@ -699,6 +699,7 @@ ActPayloads = {
   voxelMarkSet: { markId: string; voxel: VoxelCoord; outline?: VoxelMarkOutlineOptions | null; fill?: VoxelMarkFillOptions | null; pulse?: VoxelMarkPulseOptions | null; duration?: number },
   voxelMarkClear: { markId: string },
   partyAdd: { player: string | { readonly id: string } },
+  partyCancel: { player: string | { readonly id: string } },
   partyLeave: {},
   partyJoin: { player: string | { readonly id: string } },
   partyPortal: {},
@@ -1059,7 +1060,7 @@ JointOptions = {
   anchor?: Vec3, // Anchor on THIS body: metres in its own frame, from its feet (default: [0,0,0])
   targetAnchor?: Vec3, // Anchor on the other body (`to`): metres in its own frame, from its feet (default: [0,0,0])
   axis?: Vec3,
-  limits?: [number, number] | { cone?: number; twist?: [number, number] }, // Min/max limits: revolute, radians `to` turns against this body about axis, 0 where the two frames agree (this body's own turn stops at -max); prismatic, metres along axis; spring, metres between the anchors. A spherical joint takes { cone, twist }, both measured from the pose the two bodies stand in when the form is set (at the mint for a joint made with it): cone the half-angle in radians `to` swings off that pose, twist [min, max] radians it turns about its line (a ragdoll shoulder: { cone: 1.2, twist: [-0.8, 0.8] }); a half left out stays free
+  limits?: [number, number] | { min: number; max: number; stiffness?: number; damping?: number } | { cone?: number; twist?: [number, number]; stiffness?: number; damping?: number }, // Min/max limits: revolute, radians `to` turns against this body about axis, 0 where the two frames agree (this body's own turn stops at -max); prismatic, metres along axis; spring, metres between the anchors; { min, max, stiffness, damping } is the same window. A spherical joint takes { cone, twist }, both measured from the pose the two bodies stand in when the form is set (at the mint for a joint made with it): cone the half-angle in radians `to` swings off that pose, twist [min, max] radians it turns about its line (a ragdoll shoulder: { cone: 1.2, twist: [-0.8, 0.8] }); a half left out stays free. On every joint, stiffness (N·m per radian past the stop, N per metre on a prismatic or spring joint) and damping (N·m·s per radian or N·s per metre, left out: critical) make the stops a spring that pushes back harder the further past
   motor?: { velocity: number; maxForce: number },
   target?: number | { x: number; y: number; z: number; w: number }, // The pose the joint's drive pulls to, measured as `limits` are: revolute, radians; prismatic, metres along axis; spherical, a rotation `{ x, y, z, w }` (a THREE.Quaternion works) from the pose the two bodies stand in when the first target is set. Spring and fixed joints take none.
   strength?: number, // 0..1: how firmly the joint pulls to its target (0 or absent: no drive). It eases there like a critically damped spring, with no overshoot; 1 holds firm. A driven joint keeps its bodies awake while its target moves, and they cost what any moving body costs, every tick; a still target lets them sleep.
@@ -1116,7 +1117,7 @@ LegacyCameraDef = CameraCommon & {
 
 LightAimSpec = "down" | "forward" | PositionSpec
 
-LightSpec = | { kind: "ambient"; color?: Color; intensity?: number } | { kind: "hemisphere"; skyColor?: Color; groundColor?: Color; intensity?: number } | { kind: "directional"; color?: Color; intensity?: number; aim?: LightAimSpec; shadow?: { enabled?: boolean; softness?: number }; followCamera?: boolean } | { kind: "point"; color?: Color; intensity?: number; distance?: number; decay?: number; fan?: [number, number][]; passes?: ("screen" | "camera")[]; shadow?: { enabled?: boolean } } | { kind: "spot"; color?: Color; intensity?: number; distance?: number; angle?: number; penumbra?: number; decay?: number; aim?: LightAimSpec; passes?: ("screen" | "camera")[]; shadow?: { enabled?: boolean } } | { kind: "rect"; color?: Color; intensity?: number; width?: number; height?: number; distance?: number; aim?: LightAimSpec; passes?: ("screen" | "camera")[] }
+LightSpec = | { kind: "ambient"; color?: Color; intensity?: number } | { kind: "hemisphere"; skyColor?: Color; groundColor?: Color; intensity?: number } | { kind: "directional"; color?: Color; intensity?: number; specular?: number; aim?: LightAimSpec; shadow?: { enabled?: boolean; softness?: number }; followCamera?: boolean } | { kind: "point"; color?: Color; intensity?: number; specular?: number; distance?: number; decay?: number; fan?: [number, number][]; passes?: ("screen" | "camera")[]; shadow?: { enabled?: boolean } } | { kind: "spot"; color?: Color; intensity?: number; specular?: number; distance?: number; angle?: number; penumbra?: number; decay?: number; aim?: LightAimSpec; passes?: ("screen" | "camera")[]; shadow?: { enabled?: boolean } } | { kind: "rect"; color?: Color; intensity?: number; specular?: number; width?: number; height?: number; distance?: number; aim?: LightAimSpec; passes?: ("screen" | "camera")[] }
 
 LinePrimitiveSpec = {
   kind: "line",
@@ -1370,6 +1371,7 @@ PlayerMailPerson = {
 PlayerParty = {
   id: string,
   leader: boolean,
+  size?: number,
 }
 
 PlayerProfile = {
@@ -1804,8 +1806,8 @@ ViewAPI = {
   drawCalls: number, // the draw calls this machine's picture made in its last frame, as three's renderer.info.render.calls counts them: every pass, the shadow maps included; read again once a second. 0 before the first second and on a machine with no picture (the server). Read-only.
   triangles: number, // the triangles this machine's picture drew in its last frame, in its view and its shadow maps. Read-only.
   cpuMs: number, // the milliseconds of CPU this machine's renderer spent on each frame, the mean over the frames its last second drew, fractional: the work before the GPU (the game's scripts and physics run apart and are not counted). A second that drew no frame keeps the reading before it. 0 before the first second and on a machine with no picture (the server). Read-only.
-  gpuMs: number, // the milliseconds each frame of this machine's picture took on the GPU, the mean over the frames its last second drew by the GPU's own timer, fractional, kept as cpuMs is. 0 where the adapter has no GPU timer (timestamp queries), before the first second and on a machine with no picture. Read-only.
-  frames: { cpuMs: number; gpuMs?: number }[], // each frame this machine's picture drew since this handle's last read, oldest first, as `{ cpuMs, gpuMs }`: its CPU milliseconds as cpuMs measures them, and its GPU milliseconds by the GPU's own timer, absent where the adapter has no GPU timer or the timer did not read that frame. Frames arrive about once a second, so a read between arrivals is `[]`. A read empties this handle's list. A handle unread for about a second holds nothing and starts over at its next read. [] on a machine with no picture. Read-only.
+  gpuMs: number, // the milliseconds each frame of this machine's picture took on the GPU, the mean over the frames its last second drew by the GPU's own timer counted at its full clock, fractional, kept as cpuMs is. 0 where the adapter has no GPU timer (timestamp queries), before the first second and on a machine with no picture. Read-only.
+  frames: { cpuMs: number; gpuMs?: number }[], // each frame this machine's picture drew since this handle's last read, oldest first, as `{ cpuMs, gpuMs }`: its CPU milliseconds as cpuMs measures them, and its GPU milliseconds by the GPU's own timer counted at its full clock, absent where the adapter has no GPU timer or the timer did not read that frame. Frames arrive about once a second, so a read between arrivals is `[]`. A read empties this handle's list. A handle unread for about a second holds nothing and starts over at its next read. [] on a machine with no picture. Read-only.
   memoryMB: number | null, // the memory Spawn uses, in whole megabytes, at the engine's newest reading: in the Spawn app, all of the app's memory on this machine; in Chrome and Edge, only the game page's JavaScript memory, which can be a minute or more old. null in Safari, on iPhone and iPad, in Firefox, before the first reading and on the server. Read-only.
   gpuMemoryMB: number, // the GPU memory this machine's picture holds, in whole megabytes: every texture and buffer its renderer made, as the engine counts what it asked the GPU for, read again once a second. 0 before the first second and on a machine with no picture (the server). Read-only.
   renderScale: number, // the share, on each side, of this machine's full picture at which the engine draws the world: 1 at full, 0.5 at half the width and height, below 1 while it draws smaller to keep frames fast. Full is the engine's own full picture, on a dense screen fewer pixels than the screen. The HUD (ui.js) is not scaled. Read again once a second, to a thousandth. 0 before the first second and on a machine with no picture (the server). Read-only.
@@ -1816,7 +1818,7 @@ ViewAPI = {
   site: string | null, // the site whose page holds this machine's picture when it is not Spawn's own: the host of the page framing the game, as the browser names that page ("x.com" under a page at x.com, "platform.twitter.com" under X's embedded post on another site, a creator's own domain on their site); "" when the browser names no page around the frame. null on spawn.co's own pages, in the Spawn app, and on a machine with no picture (the server). Read-only.
 }
 
-ViewCamera = "mirror" | { mirror: true; layers?: string[] } | (ViewCameraPose & { place?: string }) | { parent: string; eye?: Vec3; aim?: Vec3 | "forward" | string; fov?: number; projection?: "perspective" | "orthographic"; orthoSize?: number; layers?: string[]; place?: string }
+ViewCamera = | "mirror" | { mirror: true; layers?: string[] } | (ViewCameraPose & { place?: string }) | { eye: Vec3; corners: [Vec3, Vec3, Vec3]; place?: string; layers?: string[] } | { parent: string; eye?: Vec3; aim?: Vec3 | "forward" | string; fov?: number; projection?: "perspective" | "orthographic"; orthoSize?: number; layers?: string[]; place?: string }
 
 ViewCameraPose = {
   eye: Vec3,
@@ -1949,6 +1951,7 @@ traverseCheck(world: PhysicsWorld, from, to, { body?: PhysicsBody, includeDynami
 jumpCheck(world: PhysicsWorld, from, to, { speed, jumpSpeed, body?, includeDynamicBodies?, ignoreEntities? })
 getInputRay(world: PhysicsWorld, input?)
 PhysicsBody.position: Vec3; PhysicsBody.rotation: Quat; PhysicsBody.velocity: Vec3; PhysicsBody.angularVelocity: Vec3
+PhysicsBody.passThrough: PhysicsBody[]
 ```
 
 ## builtin/tween
@@ -2171,7 +2174,7 @@ rgb(r, g, b): vec3
 Shader time is seconds: (ctx.now() / 1000) % 3600. uv() reads the first UV set; uv(1) through uv(3) select later sets. A primitive's UV coordinates normally span 0 to 1. A requested attribute must exist on the geometry. audioLevel and audioSpectrum(x) read the sound this player hears (music and world sounds), each 0 to 1, in a material or a look; x runs from 20 Hz at 0 to 20 kHz at 1. objectWorldMatrix(id), objectPosition(id), objectScale(id) and objectDirection(id) read the thing with that id where this frame renders it: the interpolated pose on screen, not its last tick. A thing not here reads 0. The atomics act on an int or uint instancedArray element inside a compute body. atomicAdd, atomicSub, atomicMax, atomicMin, atomicAnd, atomicOr and atomicXor return the element's previous value.
 
 ```ts
-inputs: uv(), uv(1), uv(2), uv(3), positionLocal, positionMorphed, positionWorld, positionView, normalLocal, normalWorld, cameraPosition, screenUV, screenSize, time, vertexColor(), attribute(name, type), instanceIndex, vertexIndex, frontFacing, sceneDepth, depthFade(metres), viewportSharedTexture(uv = screenUV)
+inputs: uv(), uv(1), uv(2), uv(3), positionLocal, positionMorphed, positionWorld, positionView, normalLocal, normalWorld, cameraPosition, screenUV, screenSize, time, vertexColor(), attribute(name, type), instanceIndex, vertexIndex, frontFacing, sceneDepth, sceneDepthAt(uv), depthFade(metres), viewportSharedTexture(uv = screenUV)
 material inputs: materialColor (vec3), materialOpacity (float), materialEmissive (vec3)
 audio: audioLevel (float), audioSpectrum(x) (float)
 billboarding({ position, horizontal, vertical })
@@ -2270,7 +2273,7 @@ grade(color, { exposure, saturation, contrast, brightness, lift, gamma, gain, te
 vignette(color, intensity, { color, roundness, feather }): color
 grain(color, intensity): color; film(color, intensity): color; tint(color, "oklch(L C H)", amount): color; scanlines(color, intensity, count): color; dotScreen(color, angle, scale): color
 chromaticAberration(color, strength): color; dof(color, viewZ, focusDistance, focusRange, bokehScale): color; pixelate(scene, size): color; blur(scene, amount): color
-ctx.scene: vec3; ctx.depth: texture; ctx.viewZ: float; ctx.viewZAt(uv): float; ctx.normal(uv): vec3; ctx.worldPosition(uv): vec3; ctx.skyVisibility(P, N?): float; ctx.previousUv(P): vec2; ctx.velocity: vec2; ctx.target(name, options): target; ctx.pass(target, (uv) => vec3 | vec4): texture; ctx.cube: texture; ctx.cover: texture
+ctx.scene: vec3; ctx.depth: texture; ctx.viewZ: float; ctx.viewZAt(uv): float; ctx.normal(uv, { shading?, liquid? }): vec3; ctx.worldPosition(uv): vec3; ctx.skyVisibility(P, N?): float; ctx.previousUv(P): vec2; ctx.velocity: vec2; ctx.target(name, options): target; ctx.pass(target, (uv) => vec3 | vec4): texture; ctx.cube: texture; ctx.cover: texture
 ctx.data: texture
 bloom(color): color
 ```

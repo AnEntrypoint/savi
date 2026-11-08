@@ -29,7 +29,7 @@ Total indexed: tome 74, skills 47, engine 27, cli 39, http 18 top-level, guide 3
 
 ## Engine
 
-- Found 27 files: [engine/INDEX.md](engine/INDEX.md), README, skills.md, api-reference.md (119,585 bytes), and 23 skill guides.
+- Found 27 files: [engine/INDEX.md](engine/INDEX.md), README, skills.md, api-reference.md (120,797 bytes), and 23 skill guides.
 - The pin file `engine.yaml` is not copied. The engine INDEX records its sha256, and the engine job reports that hash as unverified.
 
 ## CLI
